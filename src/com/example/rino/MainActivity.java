@@ -100,9 +100,8 @@ public class MainActivity extends Activity implements OnClickListener{
 			Log.d(TAG, this.getLocalClassName());
 			
 			// should be replaced with proper handling
-			String[] words = data.getStringArrayExtra("words");
-			for (String w: words)
-				commandsHistory.add(0, w);
+			String command = data.getStringExtra("command");
+				commandsHistory.add(0, command);
 			// end remove
 			
 			commandsHistoryView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commandsHistory));
