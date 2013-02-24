@@ -1,4 +1,4 @@
 Rino
 ====
 
-a base for virtual personal assistant system
+A base for virtual personal assistant system.
