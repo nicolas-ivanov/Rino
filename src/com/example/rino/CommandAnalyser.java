@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 public class CommandAnalyser extends Activity {
 
@@ -23,19 +24,19 @@ public class CommandAnalyser extends Activity {
 
 	    command = getIntent().getStringExtra("command");
 		Log.d(MainActivity.TAG, this.getLocalClassName() + ": command = '" + command + "'");
-	    
+		
+
 		// Applications' launcher should be here 
 		// Classes 'pattern' and 'matcher' should be used for command analyzing 
-		
-		
+			
 		// Direct use of Pattern:
-		Pattern phoneCallPattern_1 = Pattern.compile("hi (\\S+)");
-		Matcher m = phoneCallPattern_1.matcher(command);
+		Pattern phoneDialPattern_1 = Pattern.compile("позвони");
+		Matcher m = phoneDialPattern_1.matcher(command);
 
 		Log.d(MainActivity.TAG, this.getLocalClassName() + ": m.matches() = '" + m.matches() + "'");
 		
-		if (m.matches() && m.group(1).equals("позвони")) {
-			Log.d(MainActivity.TAG, this.getLocalClassName() + ": m.group(1) = '" + m.group(1) + "'");
+		if (m.matches()) {
+			// Log.d(MainActivity.TAG, this.getLocalClassName() + ": m.group(1) = '" + m.group(1) + "'");
 			
 			Uri number = Uri.parse("tel:100");
 			Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
@@ -46,9 +47,12 @@ public class CommandAnalyser extends Activity {
 			Intent resIntent = new Intent();
 			setResult(RESULT_OK, resIntent);
 			resIntent.putExtra("command", command); 
+
+	        Toast.makeText(this, "No matches", Toast.LENGTH_LONG).show();
 		    
 			finish();	
 		}
+
 	}
 	
 	
@@ -56,17 +60,14 @@ public class CommandAnalyser extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(MainActivity.TAG, this.getLocalClassName() + ": got result, requestCode=" + requestCode + ", resultCode=" + resultCode);
 		
-		switch (requestCode) {
-		case COMMAND_ANALYSER_REQUEST_CODE:
+		if (requestCode == COMMAND_ANALYSER_REQUEST_CODE) {
 			Log.d(MainActivity.TAG, this.getLocalClassName() + ": got result, resultCode = '" + resultCode + "'");
 
+			Intent resultIntent = new Intent();
+			setResult(resultCode, resultIntent);
+			resultIntent.putExtra("command", command); 
 			
-			break;
 		}
-
-		Intent resIntent = new Intent();
-		setResult(RESULT_OK, resIntent);
-		resIntent.putExtra("command", command); 
 		
 		super.onActivityResult(requestCode, resultCode, data);
 		finish();
