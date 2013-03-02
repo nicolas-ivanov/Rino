@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity implements OnClickListener{
@@ -87,25 +88,32 @@ public class MainActivity extends Activity implements OnClickListener{
 		case SpeakButton.SPEAK_BUTTON_REQUEST_CODE:
 		case TextButton.TEXT_BUTTON_REQUEST_CODE:
 			
-			ArrayList<String> resList = data.getStringArrayListExtra("res");
-			String res = resList.get(0);		
-			Log.d(TAG, this.getLocalClassName() + ": res = '" + res + "'");
-			
-			Intent recognizeIntent = new Intent(this, CommandAnalyser.class);
-			recognizeIntent.putExtra("command", res);
-			startActivityForResult(recognizeIntent, CommandAnalyser.COMMAND_ANALYSER_REQUEST_CODE);
+			if (resultCode == RESULT_OK) {	
+				ArrayList<String> resList = data.getStringArrayListExtra("res");
+				String res = resList.get(0);		
+				Log.d(TAG, this.getLocalClassName() + ": res = '" + res + "'");
+				
+				Intent recognizeIntent = new Intent(this, CommandAnalyser.class);
+				recognizeIntent.putExtra("command", res);
+				startActivityForResult(recognizeIntent, CommandAnalyser.COMMAND_ANALYSER_REQUEST_CODE);
+			}
+				
 			break;
 			
 		case CommandAnalyser.COMMAND_ANALYSER_REQUEST_CODE:
-			Log.d(TAG, this.getLocalClassName());
-			
-			// should be replaced with proper handling
-			String[] words = data.getStringArrayExtra("words");
-			for (String w: words)
-				commandsHistory.add(0, w);
-			// end remove
-			
-			commandsHistoryView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commandsHistory));
+			switch (resultCode) {
+			case RESULT_OK:
+				// should be replaced with proper handling
+				String command = data.getStringExtra("command");
+				commandsHistory.add(0, command);
+				// end replace
+				commandsHistoryView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commandsHistory));				
+				break;
+				
+			case RESULT_CANCELED:
+		        Toast.makeText(this, "The program execution process is canceled", Toast.LENGTH_LONG).show();
+		        break;
+			}
 			
 			break;
 		}
