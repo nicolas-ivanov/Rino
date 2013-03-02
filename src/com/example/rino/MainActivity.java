@@ -101,16 +101,13 @@ public class MainActivity extends Activity implements OnClickListener{
 			break;
 			
 		case CommandAnalyser.COMMAND_ANALYSER_REQUEST_CODE:
-			
-			// should be replaced with proper handling
-			String command = data.getStringExtra("command");
-			commandsHistory.add(0, command);
-			// end replace
-			commandsHistoryView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commandsHistory));
-			
 			switch (resultCode) {
 			case RESULT_OK:
-				// do something here
+				// should be replaced with proper handling
+				String command = data.getStringExtra("command");
+				commandsHistory.add(0, command);
+				// end replace
+				commandsHistoryView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commandsHistory));				
 				break;
 				
 			case RESULT_CANCELED:
