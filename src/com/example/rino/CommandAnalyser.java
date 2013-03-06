@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -17,8 +18,16 @@ public class CommandAnalyser extends Activity {
 
 	public static final int COMMAND_ANALYSER_REQUEST_CODE = 41;
 	public static final int SUB_ACTIVITY_CALL_REQUEST_CODE = 401;
-	private static final Pattern commonPattern = Pattern.compile("(\\d*)#([^#]*)#(.*)");
+	
+	private static final Pattern commonPattern = Pattern.compile("(\\d+)\\t(.+)\\t~\\t(.+)");
+	// group1 - pattern id
+	// group2 - command
+	// group3 - parameters list
+	// common pattern example: "1	позвони (\+?[\d\s]+)	~	number1 number2"
+	
+	private int patternID;
 	private String command;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,50 +37,69 @@ public class CommandAnalyser extends Activity {
 	    command = getIntent().getStringExtra("command");
 		Log.d(MainActivity.TAG, this.getLocalClassName() + ": command = '" + command + "'");
 		
-		
-		InputStream patternsStream = this.getApplicationContext().getResources().openRawResource(R.raw.patterns);  // Why not to buffer input?
+		InputStream patternsStream = this.getApplicationContext().getResources().openRawResource(R.raw.patterns);  // Why not to use FileInputStream or BufferedInputStream instead?
 		BufferedReader patternsReader = new BufferedReader(new InputStreamReader(patternsStream));
 		
 		try {
 			String line;
-			while ((line = patternsReader.readLine()) != null) {
+			boolean found = false;
+			
+			while (!found && ((line = patternsReader.readLine()) != null)) 
+			{
 				String rawPattern = line;
 				Matcher commonMatcher = commonPattern.matcher(rawPattern);			
 				Log.d(MainActivity.TAG, this.getLocalClassName() + ": commonMatcher = '" + commonMatcher.matches() + "'" + rawPattern);
 				
-				if (commonMatcher.matches()) {
+				// work only with correct raw patterns 
+				if (commonMatcher.matches()) 
+				{
 					Log.d(MainActivity.TAG, this.getLocalClassName() + ": group(1) = '" + commonMatcher.group(1) + 
 							"' group(2) = '" + commonMatcher.group(2) + "' group(3) = '" + commonMatcher.group(3) + "'");
 					
+					// extract command pattern from raw pattern
 					Pattern commandPattern = Pattern.compile(commonMatcher.group(2));
 					Matcher commandMatcher = commandPattern.matcher(command);
 					Log.d(MainActivity.TAG, this.getLocalClassName() + ": commandMatcher = '" + commandMatcher.matches() + "'");
 					
-					if (commandMatcher.matches()) {
-						Log.d(MainActivity.TAG, this.getLocalClassName() + ": group(1) = '" + commandMatcher.group(1) + "'");
+					found = commandMatcher.matches();
+					
+					if (found) 
+					{
+						patternID = Integer.parseInt(commonMatcher.group(1));
+						Log.d(MainActivity.TAG, this.getLocalClassName() + ": pattern ID = '" + patternID + "'");
 						
-						Intent resIntent = new Intent();
-						setResult(RESULT_OK, resIntent);
-						resIntent.putExtra("command", command); 
-
-				        Toast.makeText(this, "Matches some pattern", Toast.LENGTH_LONG).show();
-				        
-						// Applications' launcher should be here? 
-					    
-						finish();
+				        Toast.makeText(this, "Command is recognized", Toast.LENGTH_LONG).show();
+				        			        
+						// Applications' launcher:	        
+				        switch (patternID) {
+				        case 1:
+				        	String number = commandMatcher.group(1);
+							Log.d(MainActivity.TAG, this.getLocalClassName() + ": number = '" + number + "'");
+							
+				        	Uri numUri = Uri.parse("tel:" + number);
+							Intent callIntent = new Intent(Intent.ACTION_DIAL, numUri);
+							startActivityForResult(callIntent, COMMAND_ANALYSER_REQUEST_CODE);
+							
+				        	break;
+				        }
+					 
 					}
-				} else {
+				} 
+				else {
 					Log.d(MainActivity.TAG, this.getLocalClassName() + ": Pattern '" + rawPattern + "' is incorrect");
 				}
 			}
 			
-			Intent resIntent = new Intent();
-			setResult(RESULT_OK, resIntent);
-			resIntent.putExtra("command", command); 
+			if (!found)	
+			{
+		        Toast.makeText(this, "No matches :(", Toast.LENGTH_LONG).show();
+				
+				Intent resIntent = new Intent();
+				setResult(RESULT_OK, resIntent);
+				resIntent.putExtra("command", command);
 
-	        Toast.makeText(this, "No matches", Toast.LENGTH_LONG).show();
-		    
-			finish();
+				finish();
+			}
 			
 		} catch (IOException e) {
 			Intent resIntent = new Intent();
@@ -102,14 +130,16 @@ public class CommandAnalyser extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(MainActivity.TAG, this.getLocalClassName() + ": got result, requestCode=" + requestCode + ", resultCode=" + resultCode);
-		
-		if (requestCode == COMMAND_ANALYSER_REQUEST_CODE) {
-			Log.d(MainActivity.TAG, this.getLocalClassName() + ": got result, resultCode = '" + resultCode + "'");
 
+		if (requestCode == COMMAND_ANALYSER_REQUEST_CODE) 
+		{			
 			Intent resultIntent = new Intent();
-			setResult(resultCode, resultIntent);
+			setResult(RESULT_OK, resultIntent);
 			resultIntent.putExtra("command", command); 
 			
+			if (resultCode == RESULT_CANCELED) {
+		        Toast.makeText(this, "The app execution process is canceled", Toast.LENGTH_LONG).show();
+			}		
 		}
 		
 		super.onActivityResult(requestCode, resultCode, data);

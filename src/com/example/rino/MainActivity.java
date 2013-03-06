@@ -19,12 +19,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 
 public class MainActivity extends Activity implements OnClickListener{
 
-	public static final String TAG = "Recognizer";
+	public static final String TAG = "Rino";
 	private ArrayList<String> commandsHistory;
 	private ListView commandsHistoryView;
 	private EditText textField;
@@ -101,18 +100,13 @@ public class MainActivity extends Activity implements OnClickListener{
 			break;
 			
 		case CommandAnalyser.COMMAND_ANALYSER_REQUEST_CODE:
-			switch (resultCode) {
-			case RESULT_OK:
+			
+			if (resultCode == RESULT_OK) {	
 				// should be replaced with proper handling
 				String command = data.getStringExtra("command");
 				commandsHistory.add(0, command);
 				// end replace
 				commandsHistoryView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, commandsHistory));				
-				break;
-				
-			case RESULT_CANCELED:
-		        Toast.makeText(this, "The program execution process is canceled", Toast.LENGTH_LONG).show();
-		        break;
 			}
 			
 			break;
