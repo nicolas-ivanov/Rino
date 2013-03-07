@@ -17,15 +17,15 @@ import android.widget.Toast;
 public class CommandAnalyser extends Activity {
 
 	public static final int COMMAND_ANALYSER_REQUEST_CODE = 41;
-	public static final int SUB_ACTIVITY_CALL_REQUEST_CODE = 401;
+	public static final int SUB_ACTIVITY_REQUEST_CODE = 401;
 	
-	private static final Pattern commonPattern = Pattern.compile("(\\d+)\\t(.+)\\t~\\t(.+)");
+	private static final Pattern structurePattern = Pattern.compile("(\\w+)\\t+([^\\t~]+)(\\t~\\t(.+))?");
 	// group1 - pattern id
 	// group2 - command
 	// group3 - parameters list
-	// common pattern example: "1	позвони (\+?[\d\s]+)	~	number1 number2"
+	// structurePattern example: "call_num	позвони (\+?[\d\s]+)	~	number1"
 	
-	private int patternID;
+	private String patternID;
 	private String command;
 	
 	
@@ -47,41 +47,97 @@ public class CommandAnalyser extends Activity {
 			while (!found && ((line = patternsReader.readLine()) != null)) 
 			{
 				String rawPattern = line;
-				Matcher commonMatcher = commonPattern.matcher(rawPattern);			
-				Log.d(MainActivity.TAG, this.getLocalClassName() + ": commonMatcher = '" + commonMatcher.matches() + "'" + rawPattern);
+				Matcher structureMatcher = structurePattern.matcher(rawPattern);			
+				Log.d(MainActivity.TAG, this.getLocalClassName() + ": structureMatcher = " + structureMatcher.matches() + ": '" + rawPattern + "'");
 				
 				// work only with correct raw patterns 
-				if (commonMatcher.matches()) 
-				{
-					Log.d(MainActivity.TAG, this.getLocalClassName() + ": group(1) = '" + commonMatcher.group(1) + 
-							"' group(2) = '" + commonMatcher.group(2) + "' group(3) = '" + commonMatcher.group(3) + "'");
+				if (structureMatcher.matches()) 
+				{					
+					int groupsNum = structureMatcher.groupCount();
+					Log.d(MainActivity.TAG, this.getLocalClassName() + ": groupsNum = " + groupsNum);
+					for (int i = 0; i < groupsNum; i++ )
+						Log.d(MainActivity.TAG, this.getLocalClassName() + ": group(" + i + ") = '" + structureMatcher.group(i) + "'");
 					
 					// extract command pattern from raw pattern
-					Pattern commandPattern = Pattern.compile(commonMatcher.group(2));
+					Pattern commandPattern = Pattern.compile(structureMatcher.group(2));
 					Matcher commandMatcher = commandPattern.matcher(command);
-					Log.d(MainActivity.TAG, this.getLocalClassName() + ": commandMatcher = '" + commandMatcher.matches() + "'");
+					Log.d(MainActivity.TAG, this.getLocalClassName() + ": commandMatcher = " + commandMatcher.matches() + ": '" + structureMatcher.group(2) + "'");
 					
 					found = commandMatcher.matches();
 					
 					if (found) 
 					{
-						patternID = Integer.parseInt(commonMatcher.group(1));
+						patternID = structureMatcher.group(1);
 						Log.d(MainActivity.TAG, this.getLocalClassName() + ": pattern ID = '" + patternID + "'");
 						
-				        Toast.makeText(this, "Command is recognized", Toast.LENGTH_LONG).show();
-				        			        
-						// Applications' launcher:	        
-				        switch (patternID) {
-				        case 1:
-				        	String number = commandMatcher.group(1);
-							Log.d(MainActivity.TAG, this.getLocalClassName() + ": number = '" + number + "'");
+				        Toast.makeText(this, "Command is recognized", Toast.LENGTH_LONG).show();        
+
+						// Applications' launcher:	 
+				        
+				        //! These variables should rather be declared somewhere else
+				        String number;
+				        Uri numUri;
+				        Intent intent;
+				        			           
+				        
+				        if (patternID.equals("call_num")) 
+				        {				        	
+				        	number = commandMatcher.group(2);		
+				        	numUri = Uri.parse("tel:" + number);
+							intent = new Intent(android.content.Intent.ACTION_CALL, numUri);
+							startActivityForResult(intent, SUB_ACTIVITY_REQUEST_CODE);
 							
-				        	Uri numUri = Uri.parse("tel:" + number);
-							Intent callIntent = new Intent(Intent.ACTION_DIAL, numUri);
-							startActivityForResult(callIntent, COMMAND_ANALYSER_REQUEST_CODE);
+				        } 
+				        
+				        else if (patternID.equals("dial_num")) 
+				        {				        	
+				        	number = commandMatcher.group(2);	
+				        	numUri = Uri.parse("tel:" + number);
+							intent = new Intent(android.content.Intent.ACTION_DIAL, numUri);
+							startActivityForResult(intent, SUB_ACTIVITY_REQUEST_CODE);
 							
-				        	break;
+				        } 
+				        
+				        else if (patternID.equals("run_ussd")) 
+				        {				        	
+							Log.d(MainActivity.TAG, this.getLocalClassName() + ": commandMatcher.group(4) = '" + commandMatcher.group(4) + "'");
+							
+				        	String ussd = "*" + commandMatcher.group(4) + Uri.encode("#");	
+				        	numUri = Uri.parse("tel:" + ussd);				        	
+							intent = new Intent(android.content.Intent.ACTION_CALL, numUri);
+							startActivityForResult(intent, SUB_ACTIVITY_REQUEST_CODE);
+							
+				        	//numUri = Uri.fromParts("tel", "*" + commandMatcher.group(4), "");
+							
 				        }
+				        
+				        else if (patternID.equals("balance")) 
+				        {				        
+				        	// for MTS users only
+				        	String ussd = "*100" + Uri.encode("#");	
+				        	numUri = Uri.parse("tel:" + ussd);				        	
+							intent = new Intent(android.content.Intent.ACTION_CALL, numUri);
+							startActivityForResult(intent, SUB_ACTIVITY_REQUEST_CODE);
+														
+				        } 
+				        
+				        else if (patternID.equals("send_sms")) {
+				        	
+//				        	manager = SmsManager.getDefault();
+//			            	intent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0);
+//			            	
+//					        manager.sendTextMessage(number, null, message, null, null);
+//					        
+//					        Toast.makeText(CommandAnalyzer.this, "SMS sent", Toast.LENGTH_LONG).show();
+//					        
+//					        Intent data = new Intent();
+//							data.putExtra("matches", matches);
+//							setResult(RESULT_OK, data);
+//
+//					        this.onActivityResult(SUB_ACTIVITY_SMS_REQUEST_CODE, RESULT_OK, data);
+	        						        
+				        }
+							
 					 
 					}
 				} 
@@ -106,7 +162,7 @@ public class CommandAnalyser extends Activity {
 			setResult(RESULT_CANCELED, resIntent);
 			resIntent.putExtra("command", command);
 			
-			Log.e(MainActivity.TAG, "Reading file with patterns failed", e);
+			Log.d(MainActivity.TAG, "Reading file with patterns failed", e);
 			
 			finish();
 			
@@ -131,15 +187,15 @@ public class CommandAnalyser extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(MainActivity.TAG, this.getLocalClassName() + ": got result, requestCode=" + requestCode + ", resultCode=" + resultCode);
 
-		if (requestCode == COMMAND_ANALYSER_REQUEST_CODE) 
+		if (requestCode == SUB_ACTIVITY_REQUEST_CODE) 
 		{			
 			Intent resultIntent = new Intent();
 			setResult(RESULT_OK, resultIntent);
 			resultIntent.putExtra("command", command); 
 			
-			if (resultCode == RESULT_CANCELED) {
-		        Toast.makeText(this, "The app execution process is canceled", Toast.LENGTH_LONG).show();
-			}		
+//			if (resultCode == RESULT_CANCELED) {
+//		        Toast.makeText(this, "The app execution process is canceled", Toast.LENGTH_LONG).show();
+//			}		
 		}
 		
 		super.onActivityResult(requestCode, resultCode, data);
