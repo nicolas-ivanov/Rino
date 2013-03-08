@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.AlarmClock;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -229,7 +230,36 @@ public class CommandAnalyser extends Activity {
 						        finish();
 				        	}
 				        	
-				        } */			
+				        } */		
+				        
+				        else if (patternID.equals("set_alarm")) 
+				        {			
+							Log.d(MainActivity.TAG, this.getLocalClassName() + ": commandMatcher.group(1) = '" + commandMatcher.group(1) + "'");
+							Log.d(MainActivity.TAG, this.getLocalClassName() + ": commandMatcher.group(2) = '" + commandMatcher.group(2) + "'");
+							Log.d(MainActivity.TAG, this.getLocalClassName() + ": commandMatcher.group(3) = '" + commandMatcher.group(3) + "'");
+							Log.d(MainActivity.TAG, this.getLocalClassName() + ": commandMatcher.group(4) = '" + commandMatcher.group(4) + "'");
+							Log.d(MainActivity.TAG, this.getLocalClassName() + ": commandMatcher.group(5) = '" + commandMatcher.group(5) + "'");
+
+				        	int hour = Integer.parseInt(commandMatcher.group(3));
+				        	int minutes = Integer.parseInt(commandMatcher.group(5));
+				        	
+				        	intent = new Intent(AlarmClock.ACTION_SET_ALARM);
+				        	intent.putExtra(AlarmClock.EXTRA_HOUR, hour);
+				        	intent.putExtra(AlarmClock.EXTRA_MINUTES, minutes);
+				            intent.putExtra(AlarmClock.EXTRA_MESSAGE, "Rino alarm");
+				            
+				        	PackageManager packageManager = getPackageManager();
+				        	List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+				        	
+				        	// Check, whether the intent can be handled by some activity
+				        	//! This check should be led for every launch attempt 
+				        	if (activities.size() > 0)				        	
+				        		startActivityForResult(intent, SUB_ACTIVITY_REQUEST_CODE);
+				        	else {
+						        Toast.makeText(this, "Your phone can not handle this action", Toast.LENGTH_LONG).show();
+						        finish();
+				        	}
+				        }
 					 
 					}
 				} 
