@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,10 +70,6 @@ public class CommandAnalyser extends Activity {
 			while (!found && ((line = patternsReader.readLine()) != null)) {
 				String rawPattern = line;
 				Matcher structureMatcher = structurePattern.matcher(rawPattern);
-				Log.d(MainActivity.TAG, this.getLocalClassName()
-						+ ": structureMatcher = " + structureMatcher.matches()
-						+ ": '" + rawPattern + "'");
-
 				// work only with correct raw patterns
 				if (structureMatcher.matches()) {
 					/*int groupsNum = structureMatcher.groupCount();
@@ -124,17 +122,29 @@ public class CommandAnalyser extends Activity {
 										SUB_ACTIVITY_REQUEST_CODE);
 							} else if ((groupNum = findGroupNum("contact", structureMatcher)) != null){
 								String name = commandMatcher.group(groupNum);
-								number = ContactsDatabase.getInstance().getContact(name);
-								if (number == null) {
+								Collection<String> numbers = ContactsDatabase.getInstance().getContact(name);
+								if (numbers == null){
 									Toast.makeText(this, "Contact not found",
 											Toast.LENGTH_LONG).show();
 									finish();
 								} else {
-									numUri = Uri.parse("tel:" + number);
-									intent = new Intent(
-											android.content.Intent.ACTION_CALL, numUri);
-									startActivityForResult(intent,
-											SUB_ACTIVITY_REQUEST_CODE);
+									Iterator<String> iterNumbers = numbers.iterator();
+									if (iterNumbers.hasNext()){
+										//We take only first phone number, we should fix it
+										number = iterNumbers.next();
+										//Here we should check that number is proper
+										if (number != null) {
+											numUri = Uri.parse("tel:" + number);
+											intent = new Intent(
+													android.content.Intent.ACTION_CALL, numUri);
+											startActivityForResult(intent,
+													SUB_ACTIVITY_REQUEST_CODE);
+										}
+									} else {
+										Toast.makeText(this, "Contact is found, but it has no phone numbers",
+												Toast.LENGTH_LONG).show();
+										finish();
+									}
 								}
 							}
 						}
