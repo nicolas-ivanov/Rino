@@ -10,7 +10,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.PhoneLookup;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +33,21 @@ public class MainActivity extends Activity implements OnClickListener{
 
 	public static final SimpleDateFormat format = new SimpleDateFormat("dd_MM_yyyy HH_mm_ss", Locale.US);
 	
+	private void retrieveContacts() {
+		Cursor people = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+
+		while(people.moveToNext()) {
+			int nameFieldColumnIndex = people.getColumnIndex(PhoneLookup.DISPLAY_NAME);
+			String contact = people.getString(nameFieldColumnIndex);
+			int numberFieldColumnIndex = people.getColumnIndex(PhoneLookup.NUMBER);
+			String number = people.getString(numberFieldColumnIndex);
+			Log.d(MainActivity.TAG, this.getLocalClassName() + ": new contact name = " + contact
+					+ "; number = " + number);
+			ContactsDatabase.getInstance().addContact(contact, number);
+		}
+
+		people.close();
+	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +66,8 @@ public class MainActivity extends Activity implements OnClickListener{
 		textField = (EditText) findViewById(R.id.text_field);
 		textField.requestFocus();
 		
+		//Get contacts from phone
+		retrieveContacts();
 
 		// Check to see if a recognition activity is present
 		PackageManager pm = getPackageManager();

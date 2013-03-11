@@ -122,6 +122,20 @@ public class CommandAnalyser extends Activity {
 										android.content.Intent.ACTION_CALL, numUri);
 								startActivityForResult(intent,
 										SUB_ACTIVITY_REQUEST_CODE);
+							} else if ((groupNum = findGroupNum("contact", structureMatcher)) != null){
+								String name = commandMatcher.group(groupNum);
+								number = ContactsDatabase.getInstance().getContact(name);
+								if (number == null) {
+									Toast.makeText(this, "Contact not found",
+											Toast.LENGTH_LONG).show();
+									finish();
+								} else {
+									numUri = Uri.parse("tel:" + number);
+									intent = new Intent(
+											android.content.Intent.ACTION_CALL, numUri);
+									startActivityForResult(intent,
+											SUB_ACTIVITY_REQUEST_CODE);
+								}
 							}
 						}
 
