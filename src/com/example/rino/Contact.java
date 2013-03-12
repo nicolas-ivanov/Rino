@@ -1,12 +1,14 @@
 package com.example.rino;
 
+import java.util.Collection;
+
 public class Contact {
 	private String name;
-	private String number;
+	private Collection<String> numbers;
 	
-	public Contact(String name, String number) {
+	public Contact(String name, Collection<String> numbers) {
 		this.name = name;
-		this.number = number;
+		this.numbers = numbers;
 	}
 	public String getName() {
 		return name;
@@ -14,10 +16,7 @@ public class Contact {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getNumber() {
-		return number;
-	}
-	public void setNumber(String number) {
-		this.number = number;
-	}	
+	public Collection<String> getNumbers() {
+		return numbers;
+	}		
 }

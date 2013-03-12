@@ -2,6 +2,7 @@ package com.example.rino;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 public class ContactsDatabase {
 	private Collection<Contact> contacts;
@@ -17,14 +18,14 @@ public class ContactsDatabase {
 		return instance;
 	}
 	
-	public void addContact(String name, String number) {
-		contacts.add(new Contact(name, number));
+	public void addContact(String name, Collection<String> numbers) {
+		contacts.add(new Contact(name.toLowerCase(Locale.getDefault()), numbers));
 	}
 	
-	public String getContact(String name) {
+	public Collection<String> getContact(String name) {
 		for (Contact person : contacts) {
 			if (person.getName().equals(name)) {
-				return person.getNumber(); 
+				return person.getNumbers(); 
 			}
 		}
 		return null;

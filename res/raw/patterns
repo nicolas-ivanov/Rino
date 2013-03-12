@@ -1,9 +1,9 @@
-call_num	(\w*звон\w+) (\+?[\d\s]+)	~	null,number
-call_num	(\w*звон\w+) (\w+)	~	null,contact
-dial_num	(набер\w+|набрать|набир\w+) (\+?[\d\s]+)	~	null,number
-run_ussd	(набер\w+|набрать|набир\w+) ((\*|звездочка )(\d+) ?(#|решетка))	~	null,null,null,number,null
-balance		((\w+ )?баланс)|((\w+ )?сколько денег (\w+ )?на (\w+ )?телефоне)
-web_page	откр\w+ ((\w+.)+(ru|com|org|net|su))	~	webpage
-send_email	отправ\w+ (письмо|email) (\w+ )*([^S]+@[^S]+) ((\w+)*)	~	null,null,email,text
-send_sms	отправ\w+ (sms|смс) ([^\d]+((\+)?[\d ]+)) ((\w+)*)	~	null,number,null,null,text
-set_alarm	(\w+ )?будильник (на )?(\d+)( час\w*)? (\d+)( минут\w*)?	~	null,null,hours,null,minutes,null
+call_num	(\w*звон\w+)\s(\+?[\d\s]+)	~	null,number
+call_num	(\w*звон\w+)\s(((\w+)\s){0,2}(\w+))	~	null,contact
+dial_num	(набер\w+|набрать|набир\w+)\s(\+?[\d\s]+)	~	null,number
+run_ussd	(набер\w+|набрать|набир\w+)\s((\*|звездочка\s)(\d+)\s?(#|решетка))	~	null,null,null,number,null
+balance		((\w+\s)?баланс)|((\w+\s)?сколько денег\s(\w+\s)?на\s(\w+\s)?телефоне)
+web_page	откр\w+\s((\w+.)+(ru|com|org|net|su))	~	webpage
+send_email	отправ\w+\s(письмо|email)\s(\w+\s)*([^S]+@[^S]+)\s((\w+)*)	~	null,null,email,text
+send_sms	отправ\w+\s(sms|смс)\s([^\d]+((\+)?[\d\s]+))\s((\w+)*)	~	null,number,null,null,text
+set_alarm	(\w+\s)?будильник\s(на\s)?(\d+)(\sчас\w*)?\s(\d+)(\sминут\w*)?	~	null,null,hours,null,minutes,null
