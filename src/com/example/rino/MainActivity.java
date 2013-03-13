@@ -44,6 +44,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			if (people.getColumnIndex(PhoneLookup.HAS_PHONE_NUMBER) != 0) {
 				Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
 						null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+				phones.moveToFirst();
 				Collection<String> numbers = new ArrayList<String>();
 				while (phones.moveToNext()) {
 					String number = phones.getString(phones.getColumnIndex(
