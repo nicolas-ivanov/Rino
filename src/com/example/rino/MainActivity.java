@@ -36,7 +36,9 @@ public class MainActivity extends Activity implements OnClickListener {
 	private void retrieveContacts() {
 		Cursor people = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 		people.moveToFirst();
+		int i = 0;
 		while (people.moveToNext()) {
+			i++;
 			int nameFieldColumnIndex = people.getColumnIndex(PhoneLookup.DISPLAY_NAME);
 			if (nameFieldColumnIndex == -1)	continue;
 			String contact = people.getString(nameFieldColumnIndex);
@@ -49,6 +51,7 @@ public class MainActivity extends Activity implements OnClickListener {
 					String number = phones.getString(phones.getColumnIndex(
 							ContactsContract.CommonDataKinds.Phone.NUMBER));
 					Log.d(MainActivity.TAG, this.getLocalClassName()
+							+ " " + i 
 							+ ": new contact name = " + contact + "; number = "
 							+ number);
 					numbers.add(number);
