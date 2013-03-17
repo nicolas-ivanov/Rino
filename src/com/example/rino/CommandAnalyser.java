@@ -100,42 +100,44 @@ public class CommandAnalyser extends Activity {
 								Toast.LENGTH_LONG).show();
 
 						// Applications' launcher:
-
-						// ! These variables should rather be declared somewhere
-						// else
-						String number;
-						Uri numUri;
-						Intent intent;
-						Integer groupNum;
-
 						if (patternID.equals("call_num")) {
-							if ((groupNum = findGroupNum("number", structureMatcher)) != null){
-								number = commandMatcher.group(groupNum);
-								// ! Uri.parse can return rubbish or throw something
-								// if the input is incorrect
-								// ! Handle this somehow
-								// It can't be incorrect, we check it with regexp and know exactly what to find
-								numUri = Uri.parse("tel:" + number);
-								intent = new Intent(
+							Integer numberNum, contactNum;
+							if ((numberNum = findGroupNum("number", structureMatcher)) != null){
+								String number = commandMatcher.group(numberNum);
+								//TODO: check that number is proper
+								Uri numUri = Uri.parse("tel:" + number);
+								Intent intent = new Intent(
 										android.content.Intent.ACTION_CALL, numUri);
 								startActivityForResult(intent,
 										SUB_ACTIVITY_REQUEST_CODE);
-							} else if ((groupNum = findGroupNum("contact", structureMatcher)) != null){
-								String name = commandMatcher.group(groupNum);
-								Collection<String> numbers = ContactsDatabase.getInstance().getContact(name);
-								if (numbers == null){
+							} else if ((contactNum = findGroupNum("contact", structureMatcher)) != null){
+								String name = commandMatcher.group(contactNum);
+								Collection<Contact> contacts = ContactsDatabase.getInstance().getContacts(name);
+								Contact contact;
+								if (contacts.size() == 0) {
+									//no contacts found
 									Toast.makeText(this, "Contact not found",
+											Toast.LENGTH_LONG).show();
+									finish();
+									continue;
+								} else {
+									//found one or more than one contact
+									contact = contacts.iterator().next(); 
+								}
+								Collection<String> numbers = contact.getNumbers();
+								if (numbers == null){
+									Toast.makeText(this, "Contact has no numbers",
 											Toast.LENGTH_LONG).show();
 									finish();
 								} else {
 									Iterator<String> iterNumbers = numbers.iterator();
 									if (iterNumbers.hasNext()){
-										//We take only first phone number, we should fix it
-										number = iterNumbers.next();
-										//Here we should check that number is proper
+										//TODO: take not only first phone number
+										String number = iterNumbers.next();
+										//TODO: check that number is proper
 										if (number != null) {
-											numUri = Uri.parse("tel:" + number);
-											intent = new Intent(
+											Uri numUri = Uri.parse("tel:" + number);
+											Intent intent = new Intent(
 													android.content.Intent.ACTION_CALL, numUri);
 											startActivityForResult(intent,
 													SUB_ACTIVITY_REQUEST_CODE);
@@ -148,12 +150,36 @@ public class CommandAnalyser extends Activity {
 								}
 							}
 						}
-
+						
+						else if (patternID.equals("find")){
+							Integer contactNum;
+							if ((contactNum = findGroupNum("contact", structureMatcher)) != null){
+								String name = commandMatcher.group(contactNum);
+								Collection<Contact> contacts = ContactsDatabase.getInstance().getContacts(name);
+								Contact contact;
+								if (contacts.size() == 0) {
+									//no contacts found
+									Toast.makeText(this, "Contact not found",
+											Toast.LENGTH_LONG).show();
+									finish();
+									break;
+								} else {
+									//found one or more than one contact
+									contact = contacts.iterator().next(); 
+								}
+								Toast.makeText(this, "Contact is found: " + contact.getName(),
+										Toast.LENGTH_LONG).show();
+								finish();
+								break;
+							}
+						}
+						
 						else if (patternID.equals("dial_num")) {
-							if ((groupNum = findGroupNum("number", structureMatcher)) != null){
-								number = commandMatcher.group(groupNum);
-								numUri = Uri.parse("tel:" + number);
-								intent = new Intent(
+							Integer numberNum;
+							if ((numberNum = findGroupNum("number", structureMatcher)) != null){
+								String number = commandMatcher.group(numberNum);
+								Uri numUri = Uri.parse("tel:" + number);
+								Intent intent = new Intent(
 										android.content.Intent.ACTION_DIAL, numUri);
 								startActivityForResult(intent,
 										SUB_ACTIVITY_REQUEST_CODE);
@@ -162,29 +188,27 @@ public class CommandAnalyser extends Activity {
 						}
 
 						else if (patternID.equals("run_ussd")) {
-							if ((groupNum = findGroupNum("number", structureMatcher)) != null){
+							Integer numberNum;
+							if ((numberNum = findGroupNum("number", structureMatcher)) != null){
 								Log.d(MainActivity.TAG, this.getLocalClassName()
 										+ ": commandMatcher.group('number') = '"
-										+ commandMatcher.group(groupNum) + "'");
+										+ commandMatcher.group(numberNum) + "'");
 	
-								String ussd = "*" + commandMatcher.group(groupNum)
+								String ussd = "*" + commandMatcher.group(numberNum)
 										+ Uri.encode("#");
-								numUri = Uri.parse("tel:" + ussd);
-								intent = new Intent(
+								Uri numUri = Uri.parse("tel:" + ussd);
+								Intent intent = new Intent(
 										android.content.Intent.ACTION_CALL, numUri);
 								startActivityForResult(intent,
 										SUB_ACTIVITY_REQUEST_CODE);
-	
-								// numUri = Uri.fromParts("tel", "*" +
-								// commandMatcher.group(4), "");
 							}
 						}
 
 						else if (patternID.equals("balance")) {
-							// for MTS users only
+							// TODO: check balance not only for MTS users
 							String ussd = "*100" + Uri.encode("#");
-							numUri = Uri.parse("tel:" + ussd);
-							intent = new Intent(
+							Uri numUri = Uri.parse("tel:" + ussd);
+							Intent intent = new Intent(
 									android.content.Intent.ACTION_CALL, numUri);
 							startActivityForResult(intent,
 									SUB_ACTIVITY_REQUEST_CODE);
@@ -192,14 +216,15 @@ public class CommandAnalyser extends Activity {
 						}
 
 						else if (patternID.equals("web_page")) {
-							if ((groupNum = findGroupNum("webpage", structureMatcher)) != null){
+							Integer webpageNum;
+							if ((webpageNum = findGroupNum("webpage", structureMatcher)) != null){
 								Log.d(MainActivity.TAG, this.getLocalClassName()
 										+ ": commandMatcher.group('webpage') = '"
-										+ commandMatcher.group(groupNum) + "'");
+										+ commandMatcher.group(webpageNum) + "'");
 	
 								Uri webpageUri = Uri.parse("http://www."
-										+ commandMatcher.group(groupNum));
-								intent = new Intent(Intent.ACTION_VIEW, webpageUri);
+										+ commandMatcher.group(webpageNum));
+								Intent intent = new Intent(Intent.ACTION_VIEW, webpageUri);
 								startActivityForResult(intent,
 										SUB_ACTIVITY_REQUEST_CODE);
 							}
@@ -219,7 +244,7 @@ public class CommandAnalyser extends Activity {
 								String email = commandMatcher.group(emailNum);
 								String message = commandMatcher.group(textNum);
 								Uri emailUri = Uri.parse("mailto:" + email);
-								intent = new Intent(Intent.ACTION_SENDTO, emailUri);
+								Intent intent = new Intent(Intent.ACTION_SENDTO, emailUri);
 								intent.putExtra(Intent.EXTRA_SUBJECT,
 										"Hello from Rino");
 								intent.putExtra(Intent.EXTRA_TEXT,
@@ -261,8 +286,8 @@ public class CommandAnalyser extends Activity {
 								String tel = commandMatcher.group(numberNum);
 								String text = commandMatcher.group(textNum);
 								// The standard application is used here
-								numUri = Uri.parse("smsto:" + tel);
-								intent = new Intent(Intent.ACTION_SENDTO, numUri);
+								Uri numUri = Uri.parse("smsto:" + tel);
+								Intent intent = new Intent(Intent.ACTION_SENDTO, numUri);
 								intent.putExtra("sms_body", text);
 	
 								PackageManager packageManager = getPackageManager();
@@ -282,59 +307,9 @@ public class CommandAnalyser extends Activity {
 											"Your phone can not handle this action",
 											Toast.LENGTH_LONG).show();
 									finish();
-								}
-	
-								// Send sms directly from your app
-								// manager = SmsManager.getDefault();
-								// intent = PendingIntent.getActivity(this, 0, new
-								// Intent(this, MainActivity.class), 0);
-								//
-								// manager.sendTextMessage(number, null, message,
-								// null, null);
-								//
-								// Toast.makeText(CommandAnalyzer.this, "SMS sent",
-								// Toast.LENGTH_LONG).show();
-								//
-								// Intent data = new Intent();
-								// data.putExtra("matches", matches);
-								// setResult(RESULT_OK, data);
-								//
-								// this.onActivityResult(SUB_ACTIVITY_SMS_REQUEST_CODE,
-								// RESULT_OK, data);
+								}								
 							}
-						}
-
-						/*
-						 * else if (patternID.equals("choose_data_sender")) {
-						 * 
-						 * intent = new Intent();
-						 * intent.setAction(Intent.ACTION_SEND);
-						 * intent.putExtra(Intent.EXTRA_SUBJECT,
-						 * "Hello from Rino");
-						 * intent.putExtra(Intent.EXTRA_TEXT,
-						 * "This is a sample message." + nl + nl +
-						 * "Best regards," + nl + "Rino");
-						 * intent.setType("vnd.android-dir/mms-sms");
-						 * 
-						 * PackageManager packageManager = getPackageManager();
-						 * List<ResolveInfo> activities =
-						 * packageManager.queryIntentActivities(intent, 0);
-						 * 
-						 * // Check, whether the intent can be handled by some
-						 * activity //! This check should be led for every
-						 * launch attempt if (activities.size() > 0) { //
-						 * startActivityForResult(intent,
-						 * SUB_ACTIVITY_REQUEST_CODE);
-						 * startActivity(Intent.createChooser(intent,
-						 * "Send data from Rino")); } else {
-						 * Toast.makeText(this,
-						 * "Your phone can not handle this action",
-						 * Toast.LENGTH_LONG).show(); finish(); }
-						 * 
-						 * }
-						 */
-
-						else if (patternID.equals("set_alarm")) {
+						} else if (patternID.equals("set_alarm")) {
 							Integer hoursNum, minutesNum;
 							if ((hoursNum = findGroupNum("hours", structureMatcher)) != null) {
 							
@@ -353,7 +328,7 @@ public class CommandAnalyser extends Activity {
 											.group(minutesNum));
 								}
 								
-								intent = new Intent(AlarmClock.ACTION_SET_ALARM);
+								Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM);
 								intent.putExtra(AlarmClock.EXTRA_HOUR, hour);
 								intent.putExtra(AlarmClock.EXTRA_MINUTES, minutes);
 								intent.putExtra(AlarmClock.EXTRA_MESSAGE,
@@ -433,6 +408,7 @@ public class CommandAnalyser extends Activity {
 			setResult(RESULT_OK, resultIntent);
 			resultIntent.putExtra("command", command);
 
+			// TODO: check if RESULT_CANCELED is needed to process 
 			// if (resultCode == RESULT_CANCELED) {
 			// Toast.makeText(this, "The app execution process is canceled",
 			// Toast.LENGTH_LONG).show();
