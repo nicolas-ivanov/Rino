@@ -169,8 +169,12 @@ public class CommandAnalyser extends Activity {
 								}
 								Toast.makeText(this, "Contact is found: " + contact.getName(),
 										Toast.LENGTH_LONG).show();
+								
+								Intent resIntent = new Intent();
+								setResult(RESULT_OK, resIntent);
+								resIntent.putExtra("command", command);
+								
 								finish();
-								break;
 							}
 						}
 						
