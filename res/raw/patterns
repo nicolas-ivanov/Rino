@@ -7,3 +7,4 @@ web_page	откр\w+\s((\w+.)+(ru|com|org|net|su))	~	webpage
 send_email	отправ\w+\s(письмо|email)\s(\w+\s)*([^S]+@[^S]+)\s((\w+)*)	~	null,null,email,text
 send_sms	отправ\w+\s(sms|смс)\s([^\d]+((\+)?[\d\s]+))\s((\w+)*)	~	null,number,null,null,text
 set_alarm	(\w+\s)?будильник\s(на\s)?(\d+)(\sчас\w*)?\s(\d+)(\sминут\w*)?	~	null,null,hours,null,minutes,null
+find		(найди|найти)\s((\w+\s)*(\w+))	~	null,contact

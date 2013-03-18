@@ -59,7 +59,27 @@ public class MainActivity extends Activity implements OnClickListener {
 				}
 				phones.close();
 				
-				ContactsDatabase.getInstance().addContact(contact, numbers);
+				String whereName = ContactsContract.Data.MIMETYPE + " = ? AND " + ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID + " = ?";
+				String[] whereNameParams = new String[] { ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE, contactId };
+				Cursor nameCur = getContentResolver().query(ContactsContract.Data.CONTENT_URI, null, whereName, whereNameParams, ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME);
+				String givenName = null, familyName = null, middleName = null;
+				nameCur.moveToFirst();
+				//TODO: fix bug
+				//Strange: doesn't find all first names and last names which are written and used on phone
+				while (nameCur.moveToNext()) {
+					givenName = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME));
+					familyName = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME));
+					middleName = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.MIDDLE_NAME));
+					Log.d(MainActivity.TAG, this.getLocalClassName()
+							+ ": new full contact"
+							+ "; FN = " + givenName
+							+ "; LN = " + familyName 
+							+ "; MN = " + middleName 
+							+ "; name = " + contact);
+				}
+				nameCur.close();
+				
+				ContactsDatabase.getInstance().addContact(contact, givenName, familyName, middleName, numbers);
 			} else {
 				Log.d(MainActivity.TAG, this.getLocalClassName()
 						+ ": No numbers");
