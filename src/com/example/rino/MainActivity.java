@@ -22,16 +22,17 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
+
 
 public class MainActivity extends Activity implements OnClickListener {
 
+	public static final int VOICE_RECOGNITION_REQUEST_CODE = 11;
+	
 	public static final String TAG = "Rino";
 	private ArrayList<String> commandsHistory;
 	private ListView commandsHistoryView;
 	private EditText textField;
-
-	public static final SimpleDateFormat format = new SimpleDateFormat(
-			"dd_MM_yyyy HH_mm_ss", Locale.US);
 
 	private void retrieveContacts() {
 		Cursor people = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
@@ -89,6 +90,27 @@ public class MainActivity extends Activity implements OnClickListener {
 		people.close();
 	}
 
+	
+	
+	private void startVoiceRecognitionActivity() {		
+		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+
+		intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getClass().getPackage().getName());
+		intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ru-RU");
+		
+		startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);				
+	}
+	
+	
+	private void analyseCommand(String command) {	
+		Intent recognizeIntent = new Intent(this, CommandAnalyser.class);
+		recognizeIntent.putExtra("command", command);
+		startActivityForResult(recognizeIntent,	
+		CommandAnalyser.COMMAND_ANALYSER_REQUEST_CODE);
+	}
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -107,7 +129,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		textField.requestFocus();
 
 		// Get contacts from phone
-		retrieveContacts();
+//		retrieveContacts();
 
 		// Check to see if a recognition activity is present
 		PackageManager pm = getPackageManager();
@@ -125,18 +147,14 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	public void onClick(View v) {
 		if (v.getId() == R.id.speak_button) {
-			Intent recognizeIntent = new Intent(this, SpeakButton.class);
-			startActivityForResult(recognizeIntent,
-					SpeakButton.SPEAK_BUTTON_REQUEST_CODE);
-		} else if (v.getId() == R.id.text_button) {
+			startVoiceRecognitionActivity();
+		} 
+		else if (v.getId() == R.id.text_button) {
 			EditText textField = (EditText) findViewById(R.id.text_field);
 			String str = textField.getText().toString();
 			textField.setText("");
-
-			Intent getTextIntent = new Intent(this, TextButton.class);
-			getTextIntent.putExtra("text", str);
-			startActivityForResult(getTextIntent,
-					TextButton.TEXT_BUTTON_REQUEST_CODE);
+			
+			analyseCommand(str);
 		}
 	}
 
@@ -146,20 +164,25 @@ public class MainActivity extends Activity implements OnClickListener {
 				+ requestCode + ", resultCode=" + resultCode);
 
 		switch (requestCode) {
-		case SpeakButton.SPEAK_BUTTON_REQUEST_CODE:
-		case TextButton.TEXT_BUTTON_REQUEST_CODE:
-
-			if (resultCode == RESULT_OK) {
-				ArrayList<String> resList = data.getStringArrayListExtra("res");
+		case VOICE_RECOGNITION_REQUEST_CODE:
+			
+			switch (resultCode) {
+			case RESULT_OK:
+				// Fill the list view with the strings the recognizer thought it could have heard
+				ArrayList<String> resList = data.getStringArrayListExtra(
+						RecognizerIntent.EXTRA_RESULTS);
 				String res = resList.get(0);
 				Log.d(TAG, this.getLocalClassName() + ": res = '" + res + "'");
-
-				Intent recognizeIntent = new Intent(this, CommandAnalyser.class);
-				recognizeIntent.putExtra("command", res);
-				startActivityForResult(recognizeIntent,
-						CommandAnalyser.COMMAND_ANALYSER_REQUEST_CODE);
+				
+				analyseCommand(res);
+				
+				break;
+				
+			case RESULT_CANCELED:
+		        Toast.makeText(this, "The recognition process is canceled", Toast.LENGTH_LONG).show();
+		        break;
 			}
-
+			
 			break;
 
 		case CommandAnalyser.COMMAND_ANALYSER_REQUEST_CODE:
@@ -178,4 +201,5 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		super.onActivityResult(requestCode, resultCode, data);
 	}
+	
 }
