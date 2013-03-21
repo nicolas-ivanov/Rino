@@ -1,10 +1,11 @@
 package com.example.rino;
 
-import java.text.SimpleDateFormat;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,17 +23,21 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
 public class MainActivity extends Activity implements OnClickListener {
 
 	public static final int VOICE_RECOGNITION_REQUEST_CODE = 11;
+	public static final int SUB_ACTIVITY_REQUEST_CODE = 12;
 	
 	public static final String TAG = "Rino";
 	private ArrayList<String> commandsHistory;
 	private ListView commandsHistoryView;
 	private EditText textField;
+	public static TextView historyLabel;
+	private CommandAnalyser mt;
 
 	private void retrieveContacts() {
 		Cursor people = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
@@ -91,6 +96,11 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	
+	private void addToHistoryList(String str) {
+		commandsHistory.add(0, str);
+		commandsHistoryView.setAdapter(new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, commandsHistory));
+	}
 	
 	private void startVoiceRecognitionActivity() {		
 		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -103,11 +113,34 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	
 	
-	private void analyseCommand(String command) {	
-		Intent recognizeIntent = new Intent(this, CommandAnalyser.class);
-		recognizeIntent.putExtra("command", command);
-		startActivityForResult(recognizeIntent,	
-		CommandAnalyser.COMMAND_ANALYSER_REQUEST_CODE);
+	private void analyseCommand(String command) {
+		PackageManager packageManager = getPackageManager();
+		InputStream patternsStream = 
+				this.getApplicationContext().getResources().openRawResource(R.raw.patterns);
+		
+		addToHistoryList(command);
+		
+	    mt = new CommandAnalyser(patternsStream, packageManager);
+	    mt.execute(command);
+	    Intent intent;
+	    
+	    try {
+	    	intent = mt.get();
+	    	
+	    	if(intent != null) {
+				addToHistoryList("command is recognised");
+	    		startActivityForResult(intent, SUB_ACTIVITY_REQUEST_CODE);	
+	    	} else {
+				addToHistoryList("command not found");
+	    	}
+	    } 
+	    catch (InterruptedException e) {
+	    	e.printStackTrace();
+	    } 
+	    catch (ExecutionException e) {
+	    	e.printStackTrace();
+	    }
+		
 	}
 	
 	
@@ -119,6 +152,8 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		Button speakButton = (Button) findViewById(R.id.speak_button);
 
+		historyLabel = (TextView) findViewById(R.id.history_label);
+		
 		commandsHistory = new ArrayList<String>();
 		commandsHistoryView = (ListView) findViewById(R.id.history_list);
 
@@ -126,7 +161,6 @@ public class MainActivity extends Activity implements OnClickListener {
 		textButton.setOnClickListener(this);
 
 		textField = (EditText) findViewById(R.id.text_field);
-		textField.requestFocus();
 
 		// Get contacts from phone
 //		retrieveContacts();
@@ -139,8 +173,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			speakButton.setOnClickListener(this);
 		} else {
 			speakButton.setEnabled(false);
-			speakButton
-					.setText("Recognizer doesn't present\n Use the form below");
+			speakButton.setText("Recognizer not present\n Use the form below");
 		}
 
 	}
@@ -150,10 +183,8 @@ public class MainActivity extends Activity implements OnClickListener {
 			startVoiceRecognitionActivity();
 		} 
 		else if (v.getId() == R.id.text_button) {
-			EditText textField = (EditText) findViewById(R.id.text_field);
 			String str = textField.getText().toString();
 			textField.setText("");
-			
 			analyseCommand(str);
 		}
 	}
@@ -169,33 +200,33 @@ public class MainActivity extends Activity implements OnClickListener {
 			switch (resultCode) {
 			case RESULT_OK:
 				// Fill the list view with the strings the recognizer thought it could have heard
-				ArrayList<String> resList = data.getStringArrayListExtra(
+				ArrayList<String> commands = data.getStringArrayListExtra(
 						RecognizerIntent.EXTRA_RESULTS);
-				String res = resList.get(0);
-				Log.d(TAG, this.getLocalClassName() + ": res = '" + res + "'");
-				
-				analyseCommand(res);
-				
+				String command = commands.get(0);
+				Log.d(TAG, this.getLocalClassName() + ": res = '" + command + "'");
+				analyseCommand(command);
 				break;
 				
 			case RESULT_CANCELED:
-		        Toast.makeText(this, "The recognition process is canceled", Toast.LENGTH_LONG).show();
+				addToHistoryList("The recognition process is cancelled");
 		        break;
 			}
-			
 			break;
 
-		case CommandAnalyser.COMMAND_ANALYSER_REQUEST_CODE:
+		case SUB_ACTIVITY_REQUEST_CODE:
 
-			if (resultCode == RESULT_OK) {
-				// should be replaced with proper handling
-				String command = data.getStringExtra("command");
-				commandsHistory.add(0, command);
-				// end replace
-				commandsHistoryView.setAdapter(new ArrayAdapter<String>(this,
-						android.R.layout.simple_list_item_1, commandsHistory));
+			switch (resultCode) {
+			case RESULT_OK:
+				// find cases, when this code is returned 
+				// do something
+				break;
+				
+			case RESULT_CANCELED:
+				// find cases, when this code is returned 
+				// do something
+				break;
 			}
-
+			
 			break;
 		}
 

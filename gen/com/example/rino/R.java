@@ -14,7 +14,7 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int historyLabel=0x7f080003;
+        public static final int history_label=0x7f080003;
         public static final int history_list=0x7f080004;
         public static final int menu_settings=0x7f080005;
         public static final int speak_button=0x7f080000;
