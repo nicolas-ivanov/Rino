@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -19,12 +19,13 @@ import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 public class MainActivity extends Activity implements OnClickListener {
@@ -35,12 +36,17 @@ public class MainActivity extends Activity implements OnClickListener {
 	public static final String TAG = "Rino";
 	private ArrayList<String> dialogList;
 	private ArrayList<String> commands;
-	private ListView dialogListView;
+	
+	private Button speakButton;
+	private Button textButton;
 	private EditText textField;
-	public static TextView historyLabel;
+	private ProgressBar progress;
+	private ListView dialogListView;
 	
 	private CommandAnalyser analyserTask;
 	private PackageManager packageManager;
+	private InputMethodManager inputManager;
+	
 
 	private void retrieveContacts() {
 		Cursor people = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
@@ -99,6 +105,16 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	
+	private void hideSoftKeyboard() {
+		InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+	    inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),0);
+	}
+	
+	private void showSoftKeyboard(EditText editText) {
+		inputManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+	}
+	
+	
 	private String getStr(int strCode)	{
 		return String.format(getResources().getString(strCode));
 	}
@@ -111,10 +127,11 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	
 	public void addAnswer(String answer) {
-		dialogList.add(0, answer);
+		dialogList.add(0, "\t – " + answer);
 		dialogListView.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, dialogList));
 	}
+	
 	
 	private void startVoiceRecognitionActivity() {		
 		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -127,38 +144,46 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	
 	
-	private void analyseCommand(String command) {	
-	    try {	
-			addRequest(command);    
+	private void startCommandAnalysing(String command) {	
+		addRequest(command);    
+		
+		if (analyserTask != null) {
+			analyserTask.cancel(true);
+	    }
+		InputStream patternsStream = this.getApplicationContext().getResources().
+				openRawResource(R.raw.patterns);
+
+	    textButton.setVisibility(View.GONE);
+	    progress.setVisibility(View.VISIBLE);
+	    
+	    analyserTask = new CommandAnalyser(this, patternsStream);
+	    analyserTask.execute(command);
+	}
+	
+	
+	public void endCommandAnalysing() {
+		try {
+			Intent intent = analyserTask.get();
 			
-			if (analyserTask != null) {
-			      analyserTask.cancel(true);
-		    }
-			InputStream patternsStream = this.getApplicationContext().getResources().
-					openRawResource(R.raw.patterns);
-			
-		    analyserTask = new CommandAnalyser(this, patternsStream);
-		    analyserTask.execute(command);
-	    	Intent intent = analyserTask.get();
+		    progress.setVisibility(View.GONE);
+		    textButton.setVisibility(View.VISIBLE);
 	    	
-	    	if(intent != null) {
-				
+	    	if(intent != null) {				
 				// Check, whether the intent can be handled by some activity
 				List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
 				if (activities.size() == 0) {
 				    addAnswer(getStr(R.string.unknown_action));
+				} else {
+					startActivityForResult(intent, SUB_ACTIVITY_REQUEST_CODE);
 				}
-				
-	    		startActivityForResult(intent, SUB_ACTIVITY_REQUEST_CODE);	
 	    	}
-	    } 
-	    catch (InterruptedException e) {
-			addAnswer(getStr(R.string.analyzing_is_stopped));
-	    	e.printStackTrace();
-	    } 
-	    catch (ExecutionException e) {
-	    	e.printStackTrace();
-	    }
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -168,19 +193,21 @@ public class MainActivity extends Activity implements OnClickListener {
 		Log.d(MainActivity.TAG, this.getLocalClassName() + ": created");
 		
 		setContentView(R.layout.activity_main);
-		Button speakButton = (Button) findViewById(R.id.speak_button);
-		Button textButton = (Button) findViewById(R.id.text_button);
+		speakButton = (Button) findViewById(R.id.speak_button);
+		progress = (ProgressBar) findViewById(R.id.progressBar);
 		textField = (EditText) findViewById(R.id.text_field);
-		historyLabel = (TextView) findViewById(R.id.history_label);
+		textButton = (Button) findViewById(R.id.text_button);
 		dialogListView = (ListView) findViewById(R.id.history_list);
 		dialogList = new ArrayList<String>();
 
+		inputManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+		textField.setOnClickListener(this);
+		
 		// Get contacts from phone
 //		retrieveContacts();
 
-		packageManager = getPackageManager();
-
 		// Check to see if a recognition activity is present
+		packageManager = getPackageManager();
 		List<ResolveInfo> activities = packageManager.queryIntentActivities(new Intent(
 				RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
 		if (activities.size() != 0) {
@@ -192,15 +219,22 @@ public class MainActivity extends Activity implements OnClickListener {
 		textButton.setOnClickListener(this);
 	}
 
+
+	
 	
 	public void onClick(View v) {
 		if (v.getId() == R.id.speak_button) {
 			startVoiceRecognitionActivity();
+			hideSoftKeyboard();
 		} 
 		else if (v.getId() == R.id.text_button) {
 			String str = textField.getText().toString();
-			analyseCommand(str);
+			startCommandAnalysing(str);
 			textField.setText("");
+			hideSoftKeyboard();
+		}
+		else if (v.getId() == R.id.text_field) {
+			showSoftKeyboard(textField);
 		}
 	}
 
@@ -218,7 +252,7 @@ public class MainActivity extends Activity implements OnClickListener {
 				commands = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 				String command = commands.get(0);
 				Log.d(TAG, this.getLocalClassName() + ": res = '" + command + "'");
-				analyseCommand(command);
+				startCommandAnalysing(command);
 				break;
 				
 			case RESULT_CANCELED:

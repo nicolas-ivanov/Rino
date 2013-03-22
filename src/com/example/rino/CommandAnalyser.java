@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -63,8 +64,16 @@ public class CommandAnalyser extends AsyncTask<String, String, Intent> {
     @Override
     protected Intent doInBackground(String... commands) {
 		Intent resIntent = null;
+
+		// Imitate a heavy task that needs a couple of seconds to run 
+        try {
+			TimeUnit.SECONDS.sleep(2);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
-    	try {            
+    	try {                        
     		boolean found = false;
     		String line;
     		
@@ -123,6 +132,10 @@ public class CommandAnalyser extends AsyncTask<String, String, Intent> {
 											//TODO: check that number is proper
 											if (number != null) {
 												Uri numUri = Uri.parse("tel:" + number);
+
+												publishProgress(getStr(R.string.calling_number) 
+														+ numUri.getSchemeSpecificPart());
+
 												resIntent = new Intent(
 														android.content.Intent.ACTION_CALL, numUri);
 												return resIntent;
@@ -161,8 +174,8 @@ public class CommandAnalyser extends AsyncTask<String, String, Intent> {
 								String number = commandMatcher.group(numberNum);
 								Uri numUri = Uri.parse("tel:" + number);
 
-								publishProgress(getStr(R.string.dialing_number) 
-										+ " \"" + numUri.getSchemeSpecificPart() +"\"");
+								publishProgress(getStr(R.string.dialing_number)
+										+ numUri.getSchemeSpecificPart());
 							    
 								resIntent = new Intent(android.content.Intent.ACTION_DIAL, numUri);
 								return resIntent;
@@ -178,6 +191,10 @@ public class CommandAnalyser extends AsyncTask<String, String, Intent> {
 								String ussd = "*" + commandMatcher.group(numberNum)
 										+ Uri.encode("#");
 								Uri numUri = Uri.parse("tel:" + ussd);
+
+								publishProgress(getStr(R.string.running_ussd)
+										+ numUri.getSchemeSpecificPart());
+								
 								resIntent = new Intent(android.content.Intent.ACTION_CALL, numUri);
 								return resIntent;
 							}
@@ -187,6 +204,9 @@ public class CommandAnalyser extends AsyncTask<String, String, Intent> {
 							// TODO: check balance not only for MTS users
 							String ussd = "*100" + Uri.encode("#");
 							Uri numUri = Uri.parse("tel:" + ussd);
+							
+							publishProgress(getStr(R.string.checking_balance));
+							
 							resIntent = new Intent(android.content.Intent.ACTION_CALL, numUri);
 							return resIntent;
 
@@ -200,6 +220,10 @@ public class CommandAnalyser extends AsyncTask<String, String, Intent> {
 	
 								Uri webpageUri = Uri.parse("http://www."
 										+ commandMatcher.group(webpageNum));
+
+								publishProgress(getStr(R.string.loading_webpage)
+										+ webpageUri.getSchemeSpecificPart());
+								
 								resIntent = new Intent(Intent.ACTION_VIEW, webpageUri);
 								return resIntent;
 							}
@@ -217,6 +241,10 @@ public class CommandAnalyser extends AsyncTask<String, String, Intent> {
 								String email = commandMatcher.group(emailNum);
 								String message = commandMatcher.group(textNum);
 								Uri emailUri = Uri.parse("mailto:" + email);
+
+								publishProgress(getStr(R.string.sending_email)
+										+ emailUri.getSchemeSpecificPart());
+								
 								resIntent = new Intent(Intent.ACTION_SENDTO, emailUri);
 								resIntent.putExtra(Intent.EXTRA_SUBJECT,
 										"Hello from Rino");
@@ -239,6 +267,12 @@ public class CommandAnalyser extends AsyncTask<String, String, Intent> {
 								String text = commandMatcher.group(textNum);
 								// The standard application is used here
 								Uri numUri = Uri.parse("smsto:" + tel);
+								
+
+								publishProgress(getStr(R.string.sending_sms)
+										+ numUri.getSchemeSpecificPart()
+										+ getStr(R.string.with_text) + text);
+								
 								resIntent = new Intent(Intent.ACTION_SENDTO, numUri);
 								resIntent.putExtra("sms_body", text);
 								return resIntent;
@@ -252,13 +286,16 @@ public class CommandAnalyser extends AsyncTask<String, String, Intent> {
 								Log.d(MainActivity.TAG, "AsyncTask: commandMatcher.group('hours') = '"
 										+ commandMatcher.group(hoursNum) + "'");								
 	
-								int hour = Integer.parseInt(commandMatcher.group(3));
-								int minutes = 0;
+								Integer hour = Integer.parseInt(commandMatcher.group(3));
+								Integer minutes = 0;
 								if ((minutesNum = findGroupNum("minutes", structureMatcher)) != null) {
 									Log.d(MainActivity.TAG, "AsyncTask: commandMatcher.group('minutes') = '"
 											+ commandMatcher.group(minutesNum) + "'");
 									minutes = Integer.parseInt(commandMatcher.group(minutesNum));
 								}
+
+								publishProgress(getStr(R.string.setting_alarm)
+										+ hour.toString() + ":" + minutes.toString());
 								
 								resIntent = new Intent(AlarmClock.ACTION_SET_ALARM);
 								resIntent.putExtra(AlarmClock.EXTRA_HOUR, hour);
@@ -306,6 +343,7 @@ public class CommandAnalyser extends AsyncTask<String, String, Intent> {
     protected void onPostExecute(Intent resIntent) {
     	Log.d(MainActivity.TAG, "AsyncTask: finished");
 	    super.onPostExecute(resIntent);
+	    mainActivity.endCommandAnalysing();
 	}
     
 }
