@@ -33,11 +33,14 @@ public class MainActivity extends Activity implements OnClickListener {
 	public static final int SUB_ACTIVITY_REQUEST_CODE = 12;
 	
 	public static final String TAG = "Rino";
-	private ArrayList<String> commandsHistory;
-	private ListView commandsHistoryView;
+	private ArrayList<String> dialogList;
+	private ArrayList<String> commands;
+	private ListView dialogListView;
 	private EditText textField;
 	public static TextView historyLabel;
-	private CommandAnalyser mt;
+	
+	private CommandAnalyser analyserTask;
+	private PackageManager packageManager;
 
 	private void retrieveContacts() {
 		Cursor people = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
@@ -96,10 +99,21 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	
-	private void addToHistoryList(String str) {
-		commandsHistory.add(0, str);
-		commandsHistoryView.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, commandsHistory));
+	private String getStr(int strCode)	{
+		return String.format(getResources().getString(strCode));
+	}
+	
+	
+	public void addRequest(String request) {
+		dialogList.add(0, request);
+		dialogListView.setAdapter(new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, dialogList));
+	}
+	
+	public void addAnswer(String answer) {
+		dialogList.add(0, answer);
+		dialogListView.setAdapter(new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, dialogList));
 	}
 	
 	private void startVoiceRecognitionActivity() {		
@@ -113,34 +127,38 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	
 	
-	private void analyseCommand(String command) {
-		PackageManager packageManager = getPackageManager();
-		InputStream patternsStream = 
-				this.getApplicationContext().getResources().openRawResource(R.raw.patterns);
-		
-		addToHistoryList(command);
-		
-	    mt = new CommandAnalyser(patternsStream, packageManager);
-	    mt.execute(command);
-	    Intent intent;
-	    
-	    try {
-	    	intent = mt.get();
+	private void analyseCommand(String command) {	
+	    try {	
+			addRequest(command);    
+			
+			if (analyserTask != null) {
+			      analyserTask.cancel(true);
+		    }
+			InputStream patternsStream = this.getApplicationContext().getResources().
+					openRawResource(R.raw.patterns);
+			
+		    analyserTask = new CommandAnalyser(this, patternsStream);
+		    analyserTask.execute(command);
+	    	Intent intent = analyserTask.get();
 	    	
 	    	if(intent != null) {
-				addToHistoryList("command is recognised");
+				
+				// Check, whether the intent can be handled by some activity
+				List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+				if (activities.size() == 0) {
+				    addAnswer(getStr(R.string.unknown_action));
+				}
+				
 	    		startActivityForResult(intent, SUB_ACTIVITY_REQUEST_CODE);	
-	    	} else {
-				addToHistoryList("command not found");
 	    	}
 	    } 
 	    catch (InterruptedException e) {
+			addAnswer(getStr(R.string.analyzing_is_stopped));
 	    	e.printStackTrace();
 	    } 
 	    catch (ExecutionException e) {
 	    	e.printStackTrace();
 	    }
-		
 	}
 	
 	
@@ -148,44 +166,41 @@ public class MainActivity extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(MainActivity.TAG, this.getLocalClassName() + ": created");
-		setContentView(R.layout.activity_main);
-
-		Button speakButton = (Button) findViewById(R.id.speak_button);
-
-		historyLabel = (TextView) findViewById(R.id.history_label);
 		
-		commandsHistory = new ArrayList<String>();
-		commandsHistoryView = (ListView) findViewById(R.id.history_list);
-
+		setContentView(R.layout.activity_main);
+		Button speakButton = (Button) findViewById(R.id.speak_button);
 		Button textButton = (Button) findViewById(R.id.text_button);
-		textButton.setOnClickListener(this);
-
 		textField = (EditText) findViewById(R.id.text_field);
+		historyLabel = (TextView) findViewById(R.id.history_label);
+		dialogListView = (ListView) findViewById(R.id.history_list);
+		dialogList = new ArrayList<String>();
 
 		// Get contacts from phone
 //		retrieveContacts();
 
+		packageManager = getPackageManager();
+
 		// Check to see if a recognition activity is present
-		PackageManager pm = getPackageManager();
-		List<ResolveInfo> activities = pm.queryIntentActivities(new Intent(
+		List<ResolveInfo> activities = packageManager.queryIntentActivities(new Intent(
 				RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
 		if (activities.size() != 0) {
 			speakButton.setOnClickListener(this);
 		} else {
 			speakButton.setEnabled(false);
-			speakButton.setText("Recognizer not present\n Use the form below");
+			speakButton.setText("@string/recognizer_is_absent");
 		}
-
+		textButton.setOnClickListener(this);
 	}
 
+	
 	public void onClick(View v) {
 		if (v.getId() == R.id.speak_button) {
 			startVoiceRecognitionActivity();
 		} 
 		else if (v.getId() == R.id.text_button) {
 			String str = textField.getText().toString();
-			textField.setText("");
 			analyseCommand(str);
+			textField.setText("");
 		}
 	}
 
@@ -200,15 +215,14 @@ public class MainActivity extends Activity implements OnClickListener {
 			switch (resultCode) {
 			case RESULT_OK:
 				// Fill the list view with the strings the recognizer thought it could have heard
-				ArrayList<String> commands = data.getStringArrayListExtra(
-						RecognizerIntent.EXTRA_RESULTS);
+				commands = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 				String command = commands.get(0);
 				Log.d(TAG, this.getLocalClassName() + ": res = '" + command + "'");
 				analyseCommand(command);
 				break;
 				
 			case RESULT_CANCELED:
-				addToHistoryList("The recognition process is cancelled");
+				addAnswer(getStr(R.string.recognition_is_cancelled));
 		        break;
 			}
 			break;
@@ -217,16 +231,15 @@ public class MainActivity extends Activity implements OnClickListener {
 
 			switch (resultCode) {
 			case RESULT_OK:
-				// find cases, when this code is returned 
+				// TODO: find cases, when this code is returned 
 				// do something
 				break;
 				
 			case RESULT_CANCELED:
-				// find cases, when this code is returned 
+				// TODO: find cases, when this code is returned 
 				// do something
 				break;
 			}
-			
 			break;
 		}
 
