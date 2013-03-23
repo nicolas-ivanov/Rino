@@ -2,19 +2,14 @@ package com.example.rino;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.PhoneLookup;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +20,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 
 public class MainActivity extends Activity implements OnClickListener {
@@ -47,8 +41,9 @@ public class MainActivity extends Activity implements OnClickListener {
 	private PackageManager packageManager;
 	private InputMethodManager inputManager;
 	
-
-	private void retrieveContacts() {
+	
+	// retrieving all contacts at once should be avoided as too expensive operation
+	/*private void retrieveContacts() {
 		Cursor people = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 		people.moveToFirst();
 		int i = 0;
@@ -102,7 +97,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 
 		people.close();
-	}
+	}*/
 
 	
 	private void hideSoftKeyboard() {
