@@ -57,7 +57,7 @@ public class CommandAnalyser extends AsyncTask<String, String, Intent> {
     @Override
     protected void onPreExecute() {
     	super.onPreExecute();      
-		Log.d(MainActivity.TAG, "AsyncTask: created");	
+		Log.d(MainActivity.TAG, "AsyncTask: created");
     }
 
     

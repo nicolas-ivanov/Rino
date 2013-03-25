@@ -40,6 +40,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private CommandAnalyser analyserTask;
 	private PackageManager packageManager;
 	private InputMethodManager inputManager;
+	private DialogDBHelper dialogDBHelper;
 	
 	
 	// retrieving all contacts at once should be avoided as too expensive operation
@@ -193,13 +194,13 @@ public class MainActivity extends Activity implements OnClickListener {
 		textField = (EditText) findViewById(R.id.text_field);
 		textButton = (Button) findViewById(R.id.text_button);
 		dialogListView = (ListView) findViewById(R.id.history_list);
-		dialogList = new ArrayList<String>();
 
 		inputManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-		textField.setOnClickListener(this);
 		
-		// Get contacts from phone
-//		retrieveContacts();
+		dialogDBHelper = new DialogDBHelper(this);
+		dialogList = dialogDBHelper.getDialogHistory();
+		dialogListView.setAdapter(new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, dialogList));
 
 		// Check to see if a recognition activity is present
 		packageManager = getPackageManager();
@@ -211,10 +212,22 @@ public class MainActivity extends Activity implements OnClickListener {
 			speakButton.setEnabled(false);
 			speakButton.setText("@string/recognizer_is_absent");
 		}
+		
 		textButton.setOnClickListener(this);
+		textField.setOnClickListener(this);
+		
+		// Get contacts from phone
+//		retrieveContacts();
 	}
 
-
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Log.d(TAG, this.getLocalClassName() + ": on pause");
+		dialogDBHelper.saveDialogHistory(dialogList);
+	}
+	
 	
 	
 	public void onClick(View v) {
@@ -233,6 +246,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 	}
 
+	  
+	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(TAG, this.getLocalClassName() + ": got result, requestCode="

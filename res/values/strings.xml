@@ -27,5 +27,7 @@
     <string name="sending_sms">Отправляю SMS на номер&#160;</string>
     <string name="with_text">&#160;с текстом&#160;</string>
     <string name="setting_alarm">Ставлю будильник на&#160;</string>
+    
+    <string name="dialog_history_is_empty">История диалога пуста</string>
 
 </resources>

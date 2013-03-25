@@ -45,6 +45,7 @@ public final class R {
         public static final int contact_is_found=0x7f05000b;
         public static final int contact_is_not_found=0x7f05000c;
         public static final int dialing_number=0x7f05000f;
+        public static final int dialog_history_is_empty=0x7f050018;
         public static final int loading_webpage=0x7f050013;
         public static final int menu_settings=0x7f050001;
         public static final int no_pnohes_in_contact=0x7f05000d;
