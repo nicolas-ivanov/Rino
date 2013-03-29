@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -65,13 +64,13 @@ public class CommandAnalyser extends AsyncTask<String, String, Intent> {
     protected Intent doInBackground(String... commands) {
 		Intent resIntent = null;
 
-		// Imitate a heavy task that needs a couple of seconds to run 
+/*		// Imitate a heavy task that needs a couple of seconds to run 
         try {
 			TimeUnit.SECONDS.sleep(2);
 		} catch (InterruptedException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
+		}*/
 		
     	try {                        
     		boolean found = false;

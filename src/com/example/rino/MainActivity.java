@@ -29,6 +29,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	public static final String TAG = "Rino";
 	private ArrayList<String> dialogList;
+	private ArrayList<String> newPhraseList;
 	private ArrayList<String> commands;
 	
 	private Button speakButton;
@@ -41,6 +42,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private PackageManager packageManager;
 	private InputMethodManager inputManager;
 	private DialogDBHelper dialogDBHelper;
+	
 	
 	
 	// retrieving all contacts at once should be avoided as too expensive operation
@@ -117,13 +119,16 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	
 	public void addRequest(String request) {
+		newPhraseList.add(0, request);
 		dialogList.add(0, request);
 		dialogListView.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, dialogList));
 	}
 	
 	public void addAnswer(String answer) {
-		dialogList.add(0, "\t – " + answer);
+		String str = "- " + answer;
+		newPhraseList.add(str);
+		dialogList.add(0, str);
 		dialogListView.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, dialogList));
 	}
@@ -199,6 +204,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		
 		dialogDBHelper = new DialogDBHelper(this);
 		dialogList = dialogDBHelper.getDialogHistory();
+		newPhraseList = new ArrayList<String>();
 		dialogListView.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, dialogList));
 
@@ -225,7 +231,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	protected void onPause() {
 		super.onPause();
 		Log.d(TAG, this.getLocalClassName() + ": on pause");
-		dialogDBHelper.saveDialogHistory(dialogList);
+		dialogDBHelper.saveDialogHistory(newPhraseList);
+		newPhraseList.clear();
 	}
 	
 	

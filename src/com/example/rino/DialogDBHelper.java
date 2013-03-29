@@ -2,7 +2,6 @@ package com.example.rino;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.concurrent.TimeUnit;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -45,13 +44,13 @@ class DialogDBHelper extends SQLiteOpenHelper {
 		Cursor c = db.query("dialogDB", null, null, null, null, null, null);
 		ArrayList<String> dialog = new ArrayList<String>();
 
-		if (c.moveToFirst()) {
+		if (c.moveToLast()) {
 			int phraseIndex = c.getColumnIndex("phrase");
 
 			do {
 				dialog.add(c.getString(phraseIndex));
 				Log.d(MainActivity.TAG, "DBHelper: added to dialog list \"" + c.getString(phraseIndex));
-			} while (c.moveToNext());
+			} while (c.moveToPrevious());
 		} else {
 			Log.d(MainActivity.TAG, "DBHelper: dialog history is empty");
 			dialog.add("История пуста");
@@ -64,12 +63,12 @@ class DialogDBHelper extends SQLiteOpenHelper {
     
     public void saveDialogHistory(ArrayList<String> dialog) {
 		Log.d(MainActivity.TAG, "DBHelper: save dialog history");
-        String str;
-//		String str = dialog.get(0);
+        
 		Iterator<String> dialogIter = dialog.iterator();
+        String str;
         
 	    while (dialogIter.hasNext()) {	        
-	    	str = dialogIter.next();
+	    	str = dialogIter.next();       	    	
 	    	
 		    ContentValues cv = new ContentValues();
 	        cv.put("phrase", str);
