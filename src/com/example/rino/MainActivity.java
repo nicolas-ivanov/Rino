@@ -37,8 +37,9 @@ public class MainActivity extends Activity implements OnClickListener {
 	private EditText textField;
 	private ProgressBar progress;
 	private ListView dialogListView;
-	
+
 	private CommandAnalyser analyserTask;
+	private TypeTagger taggerTask;
 	private PackageManager packageManager;
 	private InputMethodManager inputManager;
 	private DialogDBHelper dialogDBHelper;
@@ -188,6 +189,43 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	
 	
+	private void startTypeTagger(String command) {	
+		
+		if (taggerTask != null) {
+			taggerTask.cancel(true);
+	    }
+		InputStream patternsStream = this.getApplicationContext().getResources().
+				openRawResource(R.raw.phmm);
+	    
+	    taggerTask = new TypeTagger(this, patternsStream);
+	    taggerTask.execute(command);
+	}
+	
+	
+	public void endTypeTagger() {
+		try {
+			ArrayList<ArrayList<Boolean>> obsSeq = taggerTask.get();
+			
+			for (ArrayList<Boolean> vector: obsSeq) {
+				System.out.print("(");
+				
+				for (Boolean value: vector)
+					System.out.print(value + ", ");
+
+				System.out.println(")");
+			}
+			
+		
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -244,7 +282,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		} 
 		else if (v.getId() == R.id.text_button) {
 			String str = textField.getText().toString();
-			startCommandAnalysing(str);
+//			startCommandAnalysing(str);
+			startTypeTagger(str);
 			textField.setText("");
 			hideSoftKeyboard();
 		}
