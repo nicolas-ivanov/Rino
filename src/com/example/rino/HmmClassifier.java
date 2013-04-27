@@ -6,11 +6,11 @@ package com.example.rino;
 
 import java.util.ArrayList;
 
+import android.util.Log;
 import be.ac.ulg.montefiore.run.jahmm.Hmm;
 import be.ac.ulg.montefiore.run.jahmm.ObservationVector;
+import be.ac.ulg.montefiore.run.jahmm.OpdfMultiGaussian;
 import be.ac.ulg.montefiore.run.jahmm.OpdfMultiGaussianFactory;
-import be.ac.ulg.montefiore.run.jahmm.ViterbiCalculator;
-import be.ac.ulg.montefiore.run.jahmm.draw.GenericHmmDrawerDot;
 
 
 public class HmmClassifier 
@@ -18,22 +18,12 @@ public class HmmClassifier
 	public int[] getStatesSequence(ArrayList<ObservationVector> sequence) 
 	throws java.io.IOException
 	{			
-		Hmm<ObservationVector> learntHmm = buildInitHmm();		
-		
-		/* Write the final result to a 'dot' (graphviz) file. */
-//		(new GenericHmmDrawerDot()).write(learntHmm, "learntHmm.dot");
-		
+		Hmm<ObservationVector> learntHmm = buildInitHmm();				
 		System.out.println("Sequence probability: " + learntHmm.probability(sequence));
+
+		Log.d("learntHMM", learntHmm.toString());
 		
-		/* Use Viterbi algorith to find out the most likely hidden sequence */
-		ViterbiCalculator vc = new ViterbiCalculator(sequence, learntHmm);
-		int[] statesSeq = vc.stateSequence();
-
-		for (int i: statesSeq) {
-			System.out.println("State = " + i );			
-		}
-		return statesSeq;
-
+		return learntHmm.mostLikelyStateSequence(sequence);
 	}
 	
 
@@ -45,35 +35,31 @@ public class HmmClassifier
 		hmm.setPi(0, 0.20);
 		hmm.setPi(1, 0.20);
 		hmm.setPi(2, 0.20);
-		hmm.setPi(3, 0.25);
-		hmm.setPi(4, 0.25);
-		hmm.setPi(5, 0.25);
-
+		hmm.setPi(3, 0.20);
+		hmm.setPi(4, 0.20);
+		hmm.setPi(5, 0.20);
 		
-//		double [] mean = {2. , 4.};
-//		double [][] covariance = { {3. , 2} , {2. , 4.} };
-//		
-//		OpdfMultiGaussian omg = new OpdfMultiGaussian ( mean, covariance );
-//		ObservationReal [] obs = new ObservationReal [10000];
-//		
-//		for ( int i = 0; i < obs . length ; i ++)
-//			obs [i] = omg.generate() ;
-//		
-//		omg.fit(obs);
-//
-//		
-//		hmm.setOpdf(0, omg);
-//		hmm.setOpdf(0, new Opdf(new double[] { 0.9, 0, 0, 0, 0, 0, 0.1 }));
-//		hmm.setOpdf(1, new OpdfInteger(new double[] { 0, 0.9, 0, 0, 0, 0, 0.1 }));
-//		hmm.setOpdf(2, new OpdfInteger(new double[] { 0, 0, 0.9, 0, 0, 0, 0.1 }));
-//		hmm.setOpdf(3, new OpdfInteger(new double[] { 0, 0, 0, 0.9, 0, 0, 0.1 }));
-//		hmm.setOpdf(4, new OpdfInteger(new double[] { 0, 0, 0, 0, 0.9, 0, 0.1 }));
-//		hmm.setOpdf(5, new OpdfInteger(new double[] { 0, 0, 0, 0, 0, 0.9, 0.1 }));
-//		hmm.setOpdf(6, new OpdfInteger(new double[] { 0.1, 0, 0, 0, 0, 0, 0.9 }));
+//		double [] mean = {0.5, 0.5, 0.5, 0.5, 0.5, 0.5};
+		
+		double [][] covariance = new double[6][6];;
+		for (int i = 0; i < 6; i++)
+			for (int j = 0; j < 6; j++)
+				if ( i == j)
+					covariance[i][j] = 1;
+				else
+					covariance[i][j] = 0.1;
 
+		hmm.setOpdf(0, new OpdfMultiGaussian(new double[] {0.9, 0.1, 0.1, 0.1, 0.1, 0.1}, covariance));
+		hmm.setOpdf(1, new OpdfMultiGaussian(new double[] {0.1, 0.9, 0.1, 0.1, 0.1, 0.1}, covariance));
+		hmm.setOpdf(2, new OpdfMultiGaussian(new double[] {0.1, 0.1, 0.9, 0.1, 0.1, 0.1}, covariance));
+		hmm.setOpdf(3, new OpdfMultiGaussian(new double[] {0.1, 0.1, 0.1, 0.9, 0.1, 0.1}, covariance));
+		hmm.setOpdf(4, new OpdfMultiGaussian(new double[] {0.1, 0.1, 0.1, 0.1, 0.9, 0.1}, covariance));
+		hmm.setOpdf(5, new OpdfMultiGaussian(new double[] {0.1, 0.1, 0.1, 0.1, 0.1, 0.9}, covariance));
+		
+		
 		hmm.setAij(0, 0, 0.1);
 		hmm.setAij(0, 1, 0.1);
-		hmm.setAij(0, 2, 0.1);
+		hmm.setAij(0, 2, 0.9);
 		hmm.setAij(0, 3, 0.1);
 		hmm.setAij(0, 4, 0.1);
 		hmm.setAij(0, 5, 0.1);

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.SimpleAdapter;
 
 
 public class MainActivity extends Activity implements OnClickListener {
@@ -39,7 +41,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private ListView dialogListView;
 
 	private CommandAnalyser analyserTask;
-	private TypeTagger taggerTask;
+	private TaggerTask taggerTask;
 	private PackageManager packageManager;
 	private InputMethodManager inputManager;
 	private DialogDBHelper dialogDBHelper;
@@ -131,6 +133,13 @@ public class MainActivity extends Activity implements OnClickListener {
 				android.R.layout.simple_list_item_1, dialogList));
 	}
 	
+	public void addRequest(Token request) {
+		newPhraseList.add(0, request.lexem);
+		dialogList.add(0, request.lexem);
+		dialogListView.setAdapter(new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, dialogList));
+	}
+	
 	public void addAnswer(String answer) {
 		String str = "- " + answer;
 		newPhraseList.add(str);
@@ -204,24 +213,13 @@ public class MainActivity extends Activity implements OnClickListener {
 	    textButton.setVisibility(View.GONE);
 	    progress.setVisibility(View.VISIBLE);
 	    
-	    taggerTask = new TypeTagger(this);
+	    taggerTask = new TaggerTask(this);
 	    taggerTask.execute(command);
 	}
 	
 	
 	public void endTypeTagger() {
-		try {
-/*			ArrayList<ArrayList<Boolean>> obsSeq = taggerTask.get();
-			
-			for (ArrayList<Boolean> vector: obsSeq) {
-				System.out.print("(");
-				
-				for (Boolean value: vector)
-					System.out.print(value + ", ");
-
-				System.out.println(")");
-			}*/
-			
+		try {			
 			ArrayList<Token> list = taggerTask.get();
 			for (Token t: list) {
 				Log.d(TAG, this.getLocalClassName() + ": Token: " + t.lexem + ", " + t.label);
