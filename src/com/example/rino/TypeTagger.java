@@ -1,30 +1,23 @@
 package com.example.rino;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import be.ac.ulg.montefiore.run.jahmm.ObservationVector;
+
+import com.example.rino.MainActivity.Token;
 
 
-public class TypeTagger extends AsyncTask<String, String, ArrayList<ArrayList<Boolean>>> {
+public class TypeTagger extends AsyncTask<String, String, ArrayList<MainActivity.Token>> {
 
 	
 	private MainActivity mainActivity;
-	private InputStream patternsStream;
-	private BufferedReader patternsReader;
 
-	private static final Pattern structurePattern = Pattern.compile("(\\w+)\\t+([^\\t]+)");
 	
-	TypeTagger(MainActivity main, InputStream stream){
+	TypeTagger(MainActivity main){
 		mainActivity = main;
-		patternsStream = stream;
-		patternsReader = new BufferedReader(new InputStreamReader(patternsStream));
 	}
 		
 	
@@ -36,53 +29,32 @@ public class TypeTagger extends AsyncTask<String, String, ArrayList<ArrayList<Bo
 
     
     @Override
-    protected ArrayList<ArrayList<Boolean>> doInBackground(String... commands) 
+    protected ArrayList<MainActivity.Token> doInBackground(String... commands) 
     {    	
+    	Tagger tagger = new Tagger(mainActivity); 
+    	ArrayList<ObservationVector> obsSeq = tagger.getTags(commands[0]);
+    	
+    	HmmClassifier hmm = new HmmClassifier();
+    	ArrayList<MainActivity.Token> tokenList = null; 
+    	
     	try {
-        	String[] lexSeq = commands[0].split(" ");
-        	ArrayList<ArrayList<Boolean>> obsSeq = new ArrayList<ArrayList<Boolean>>();
-
-        	if (patternsReader.markSupported())
-        		patternsReader.mark(1);
-    		
-    		for (String lex: lexSeq) 
-    		{
-				String rawPattern;
-    			patternsReader.reset();
-		    	ArrayList<Boolean> obs = new ArrayList<Boolean>();
-				
-    			while ((rawPattern = patternsReader.readLine()) != null) 
-    			{
-    				Matcher structureMatcher = structurePattern.matcher(rawPattern);
-    				
-    				// work only with correct type patterns
-    				if (structureMatcher.matches()) 
-    				{
-    					Pattern typePattern = Pattern.compile(structureMatcher.group(2));
-    					Matcher typeMatcher = typePattern.matcher(lex);
-    					obs.add(typeMatcher.matches());
-    					
-    				}	
-    				else {
-    					Log.d(MainActivity.TAG, "AsyncTask: Pattern '" + rawPattern + "' is incorrect");
-    					return null;
-    				}
-    			}
-				obsSeq.add(obs);
-    		}
-    		return obsSeq;
-
+			tokenList = new ArrayList<MainActivity.Token>();
+			int[] states = hmm.getStatesSequence(obsSeq);
+	    	String[] words = commands[0].split(" ");
+	    	
+	    	for (int i = 0; i < words.length; i++) {
+	    		MainActivity.Token t = new Token();
+	    		t.lexem = words[i];
+	    		t.label = states[i];
+	    		tokenList.add(t);
+	    	}
+	    	
 		} catch (IOException e) {
-			Log.d(MainActivity.TAG, "Reading file with patterns failed", e);
-		} finally {
-			try {
-				patternsReader.close();
-				patternsStream.close();
-			} catch (IOException e) {
-				Log.e(MainActivity.TAG, "Closing patternsReader or patternsStream failed", e);
-			}
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return null;
+    	
+    	return tokenList;
 	}
 
     
@@ -94,7 +66,7 @@ public class TypeTagger extends AsyncTask<String, String, ArrayList<ArrayList<Bo
     
     
     @Override
-    protected void onPostExecute(ArrayList<ArrayList<Boolean>> res) {
+    protected void onPostExecute(ArrayList<MainActivity.Token> res) {
     	Log.d(MainActivity.TAG, "AsyncTask: finished");
 	    super.onPostExecute(res);
 	    mainActivity.endTypeTagger();

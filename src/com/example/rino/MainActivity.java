@@ -45,6 +45,11 @@ public class MainActivity extends Activity implements OnClickListener {
 	private DialogDBHelper dialogDBHelper;
 	
 	
+	static public class Token {
+		String lexem;
+		Integer label;
+	};
+	
 	
 	// retrieving all contacts at once should be avoided as too expensive operation
 	/*private void retrieveContacts() {
@@ -190,21 +195,23 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	
 	private void startTypeTagger(String command) {	
+		addRequest(command);    
 		
 		if (taggerTask != null) {
 			taggerTask.cancel(true);
 	    }
-		InputStream patternsStream = this.getApplicationContext().getResources().
-				openRawResource(R.raw.phmm);
+
+	    textButton.setVisibility(View.GONE);
+	    progress.setVisibility(View.VISIBLE);
 	    
-	    taggerTask = new TypeTagger(this, patternsStream);
+	    taggerTask = new TypeTagger(this);
 	    taggerTask.execute(command);
 	}
 	
 	
 	public void endTypeTagger() {
 		try {
-			ArrayList<ArrayList<Boolean>> obsSeq = taggerTask.get();
+/*			ArrayList<ArrayList<Boolean>> obsSeq = taggerTask.get();
 			
 			for (ArrayList<Boolean> vector: obsSeq) {
 				System.out.print("(");
@@ -213,8 +220,17 @@ public class MainActivity extends Activity implements OnClickListener {
 					System.out.print(value + ", ");
 
 				System.out.println(")");
-			}
+			}*/
 			
+			ArrayList<Token> list = taggerTask.get();
+			for (Token t: list) {
+				Log.d(TAG, this.getLocalClassName() + ": Token: " + t.lexem + ", " + t.label);
+			}
+//			color(list);
+				
+		    progress.setVisibility(View.GONE);
+		    textButton.setVisibility(View.VISIBLE);
+	   
 		
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
