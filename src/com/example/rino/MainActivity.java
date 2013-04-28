@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,7 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 
 public class MainActivity extends Activity implements OnClickListener {
@@ -38,6 +38,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private Button textButton;
 	private EditText textField;
 	private ProgressBar progress;
+	private TextView coloredTextView;
 	private ListView dialogListView;
 
 	private CommandAnalyser analyserTask;
@@ -129,16 +130,36 @@ public class MainActivity extends Activity implements OnClickListener {
 	public void addRequest(String request) {
 		newPhraseList.add(0, request);
 		dialogList.add(0, request);
+		
 		dialogListView.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, dialogList));
 	}
 	
-	public void addRequest(Token request) {
+/*	public void addRequest(Token request) {
 		newPhraseList.add(0, request.lexem);
 		dialogList.add(0, request.lexem);
-		dialogListView.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, dialogList));
-	}
+
+		TextView tv = new TextView(this);
+		tv.setText(request.lexem);
+		
+		int label = request.label;
+		if (label == 0)
+			tv.setTextColor(Color.RED);
+		else if (label == 1)
+			tv.setTextColor(Color.YELLOW);
+		else if (label == 2)
+			tv.setTextColor(Color.GREEN);
+		else if (label == 3)
+			tv.setTextColor(Color.BLUE);
+		else if (label == 4)
+			tv.setTextColor(Color.CYAN);
+		else if (label == 5)
+			tv.setTextColor(Color.MAGENTA);
+
+		dialogTVList.add(0, tv);
+		dialogListView.setAdapter(new ArrayAdapter<TextView>(this,
+				android.R.layout.simple_list_item_1, dialogTVList));
+	}*/
 	
 	public void addAnswer(String answer) {
 		String str = "- " + answer;
@@ -203,8 +224,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	
 	
-	private void startTypeTagger(String command) {	
-		addRequest(command);    
+	private void startTaggerTask(String command) {	
+//		addRequest(command);    
 		
 		if (taggerTask != null) {
 			taggerTask.cancel(true);
@@ -218,13 +239,43 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	
 	
-	public void endTypeTagger() {
+	public void endTaggerTask() {
 		try {			
 			ArrayList<Token> list = taggerTask.get();
-			for (Token t: list) {
+			String textRequest = "";
+			String coloredRequest = "";
+			
+			for (Token t: list) 
+			{
 				Log.d(TAG, this.getLocalClassName() + ": Token: " + t.lexem + ", " + t.label);
+				textRequest += t.lexem;
+				
+				int label = t.label;
+				if (label == 0) {
+					textRequest += ":COM ";
+					coloredRequest += "<font color='#EE0000'>";
+				} else if (label == 1) {
+					textRequest += ":NAME ";
+					coloredRequest += "<font color='#EEEE00'>";
+				} else if (label == 2) {
+					textRequest += ":TEL ";
+					coloredRequest += "<font color='#00EE00'>";
+				} else if (label == 3) {
+					textRequest += ":EMAIL ";
+					coloredRequest += "<font color='#00EEEE'>";
+				} else if (label == 4) {
+					textRequest += ":URL ";
+					coloredRequest += "<font color='#0000EE'>";
+				} else if (label == 5) {
+					textRequest += ":TIME ";
+					coloredRequest += "<font color='#EE00EE'>";
+				}
+				
+				coloredRequest += t.lexem + "</font> ";
 			}
-//			color(list);
+
+			addRequest(textRequest);		
+			coloredTextView.setText(Html.fromHtml(coloredRequest));
 				
 		    progress.setVisibility(View.GONE);
 		    textButton.setVisibility(View.VISIBLE);
@@ -250,6 +301,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		progress = (ProgressBar) findViewById(R.id.progressBar);
 		textField = (EditText) findViewById(R.id.text_field);
 		textButton = (Button) findViewById(R.id.text_button);
+		coloredTextView = (TextView) findViewById(R.id.colored_textview);
 		dialogListView = (ListView) findViewById(R.id.history_list);
 
 		inputManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -259,6 +311,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		newPhraseList = new ArrayList<String>();
 		dialogListView.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, dialogList));
+
 
 		// Check to see if a recognition activity is present
 		packageManager = getPackageManager();
@@ -297,7 +350,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		else if (v.getId() == R.id.text_button) {
 			String str = textField.getText().toString();
 //			startCommandAnalysing(str);
-			startTypeTagger(str);
+			startTaggerTask(str);
 			textField.setText("");
 			hideSoftKeyboard();
 		}
@@ -322,7 +375,8 @@ public class MainActivity extends Activity implements OnClickListener {
 				commands = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 				String command = commands.get(0);
 				Log.d(TAG, this.getLocalClassName() + ": res = '" + command + "'");
-				startCommandAnalysing(command);
+//				startCommandAnalysing(command);
+				startTaggerTask(command);
 				break;
 				
 			case RESULT_CANCELED:

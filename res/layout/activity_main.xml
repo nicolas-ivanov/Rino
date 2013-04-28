@@ -48,13 +48,17 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/history_label"
-        android:layout_width="wrap_content"
+        android:id="@+id/colored_textview"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="15dp"
-        android:text="@string/results_label"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:background="#cdcdcd"
+        android:padding="5dp"
+        android:text="@string/colored_label"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="18sp" />
 
     <ListView
         android:id="@+id/history_list"

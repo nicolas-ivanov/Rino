@@ -47,7 +47,7 @@ public class HmmClassifier
 				if ( i == j)
 					covariance[i][j] = 1;
 				else
-					covariance[i][j] = 0.1;
+					covariance[i][j] = 0.9;
 
 		hmm.setOpdf(0, new OpdfMultiGaussian(new double[] {0.9, 0.1, 0.1, 0.1, 0.1, 0.1}, covariance));
 		hmm.setOpdf(1, new OpdfMultiGaussian(new double[] {0.1, 0.9, 0.1, 0.1, 0.1, 0.1}, covariance));

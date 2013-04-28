@@ -5,7 +5,7 @@
     <string name="menu_settings">Настройки</string>
     <string name="speak_button">Нажми меня</string>
     <string name="text_field">введи команду</string>
-    <string name="results_label">История диалога:</string>
+    <string name="colored_label">Последняя команда</string>
     <string name="text_button">OK</string>
     
     <string name="recognizer_is_absent">Распознаватель речи не найден&#8230;</string>

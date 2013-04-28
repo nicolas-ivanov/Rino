@@ -31,7 +31,7 @@ public class TaggerTask extends AsyncTask<String, String, ArrayList<MainActivity
     @Override
     protected ArrayList<MainActivity.Token> doInBackground(String... commands) 
     {    	
-    	SimpleTagger tagger = new SimpleTagger(mainActivity); 
+    	NaiveTagger tagger = new NaiveTagger(mainActivity); 
     	ArrayList<ObservationVector> obsSeq = tagger.getTags(commands[0]);
     	
     	HmmClassifier hmm = new HmmClassifier();
@@ -62,7 +62,7 @@ public class TaggerTask extends AsyncTask<String, String, ArrayList<MainActivity
     protected void onPostExecute(ArrayList<MainActivity.Token> res) {
     	Log.d(MainActivity.TAG, "AsyncTask: finished");
 	    super.onPostExecute(res);
-	    mainActivity.endTypeTagger();
+	    mainActivity.endTaggerTask();
 	}
     
 }
