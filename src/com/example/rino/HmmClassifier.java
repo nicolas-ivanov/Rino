@@ -4,29 +4,89 @@ package com.example.rino;
  * Licensed under the New BSD license.  See the LICENSE file.
  */
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
-import android.util.Log;
 import be.ac.ulg.montefiore.run.jahmm.Hmm;
 import be.ac.ulg.montefiore.run.jahmm.ObservationVector;
 import be.ac.ulg.montefiore.run.jahmm.OpdfMultiGaussian;
 import be.ac.ulg.montefiore.run.jahmm.OpdfMultiGaussianFactory;
+import be.ac.ulg.montefiore.run.jahmm.io.FileFormatException;
+import be.ac.ulg.montefiore.run.jahmm.io.HmmReader;
+import be.ac.ulg.montefiore.run.jahmm.io.HmmWriter;
+import be.ac.ulg.montefiore.run.jahmm.io.OpdfMultiGaussianReader;
+import be.ac.ulg.montefiore.run.jahmm.io.OpdfMultiGaussianWriter;
 
 
 public class HmmClassifier 
 {	
-	public int[] getStatesSequence(ArrayList<ObservationVector> sequence) 
-	throws java.io.IOException
+	Hmm<ObservationVector> learntHmm;
+	
+	
+	public int[] getStatesSequence(ArrayList<ObservationVector> sequence)
 	{			
-		Hmm<ObservationVector> learntHmm = buildInitHmm();				
-		System.out.println("Sequence probability: " + learntHmm.probability(sequence));
-
-		Log.d("learntHMM", learntHmm.toString());
-		
 		return learntHmm.mostLikelyStateSequence(sequence);
 	}
 	
+	
+	public void load(File hmmFile) 
+	{
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(hmmFile));
+			OpdfMultiGaussianReader opdfReader = new OpdfMultiGaussianReader();
+			learntHmm = HmmReader.read(reader, opdfReader);
+			reader.close();
 
+		} catch (FileFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void save(File hmmFile) 
+	{
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(hmmFile));
+			OpdfMultiGaussianWriter opdfWriter = new OpdfMultiGaussianWriter();
+			HmmWriter.write(writer, opdfWriter, learntHmm);
+			writer.flush();
+			writer.close();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}
+		
+	
+	static void saveInit(File hmmFile) 
+	{
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter(hmmFile));
+			OpdfMultiGaussianWriter opdfWriter = new OpdfMultiGaussianWriter();
+			Hmm<ObservationVector> initHmm = buildInitHmm();
+			HmmWriter.write(writer, opdfWriter, initHmm);
+			writer.flush();
+			writer.close();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}
+	
 	
 	static Hmm<ObservationVector> buildInitHmm()
 	{	
@@ -38,9 +98,7 @@ public class HmmClassifier
 		hmm.setPi(3, 0.20);
 		hmm.setPi(4, 0.20);
 		hmm.setPi(5, 0.20);
-		
-//		double [] mean = {0.5, 0.5, 0.5, 0.5, 0.5, 0.5};
-		
+				
 		double [][] covariance = new double[6][6];;
 		for (int i = 0; i < 6; i++)
 			for (int j = 0; j < 6; j++)
@@ -101,6 +159,5 @@ public class HmmClassifier
 		
 		return hmm;
 	}
-	
 
 }
