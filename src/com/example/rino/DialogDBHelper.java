@@ -49,7 +49,7 @@ class DialogDBHelper extends SQLiteOpenHelper {
 
 			do {
 				dialog.add(c.getString(phraseIndex));
-				Log.d(MainActivity.TAG, "DBHelper: added to dialog list \"" + c.getString(phraseIndex));
+//				Log.d(MainActivity.TAG, "DBHelper: added to dialog list \"" + c.getString(phraseIndex));
 			} while (c.moveToPrevious());
 		} else {
 			Log.d(MainActivity.TAG, "DBHelper: dialog history is empty");

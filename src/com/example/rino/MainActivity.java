@@ -51,7 +51,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	private File hmmModel;
 	private HmmClassifier hmmClassifier;
-	
+	private InputStream trainDataStream;
 	
 	static public class Token {
 		String lexem;
@@ -83,10 +83,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		dialogListView.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, dialogList));
 
-		hmmModel = getHmmModelFile(HMM);
+ 		hmmModel = getHmmModelFile(HMM);
 		hmmClassifier = new HmmClassifier();
 		hmmClassifier.load(hmmModel);
-		hmmClassifier.save(getHmmModelFile(HMM + "2"));
+		
+		trainDataStream = getApplicationContext().getResources().openRawResource(R.raw.train);
+		hmmClassifier.train(trainDataStream);
 		
 		// Check to see if a recognition activity is present
 		packageManager = getPackageManager();
@@ -334,14 +336,18 @@ public class MainActivity extends Activity implements OnClickListener {
 	    File file = getBaseContext().getFileStreamPath(fileName);
 	    Boolean exists = file.exists();
 	    
-	    if(exists) {
-	    	return file;
-	    }
-	    else {
-	    	File hmmFile = new File(this.getFilesDir(), fileName);
-	    	HmmClassifier.saveInit(hmmFile);
-	    	return hmmFile;
-	    }
+	    File hmmFile = new File(this.getFilesDir(), fileName);
+    	HmmClassifier.saveInit(hmmFile);
+    	return hmmFile;
+    	
+//	    if(exists) {
+//	    	return file;
+//	    }
+//	    else {
+//	    	File hmmFile = new File(this.getFilesDir(), fileName);
+//	    	HmmClassifier.saveInit(hmmFile);
+//	    	return hmmFile;
+//	    }
 	}
 	
 

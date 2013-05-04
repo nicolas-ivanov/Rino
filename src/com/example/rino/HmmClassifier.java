@@ -11,7 +11,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import be.ac.ulg.montefiore.run.jahmm.Hmm;
 import be.ac.ulg.montefiore.run.jahmm.ObservationVector;
@@ -20,8 +23,12 @@ import be.ac.ulg.montefiore.run.jahmm.OpdfMultiGaussianFactory;
 import be.ac.ulg.montefiore.run.jahmm.io.FileFormatException;
 import be.ac.ulg.montefiore.run.jahmm.io.HmmReader;
 import be.ac.ulg.montefiore.run.jahmm.io.HmmWriter;
+import be.ac.ulg.montefiore.run.jahmm.io.ObservationSequencesReader;
+import be.ac.ulg.montefiore.run.jahmm.io.ObservationVectorReader;
 import be.ac.ulg.montefiore.run.jahmm.io.OpdfMultiGaussianReader;
 import be.ac.ulg.montefiore.run.jahmm.io.OpdfMultiGaussianWriter;
+import be.ac.ulg.montefiore.run.jahmm.learn.BaumWelchLearner;
+import be.ac.ulg.montefiore.run.jahmm.toolbox.KullbackLeiblerDistanceCalculator;
 
 
 public class HmmClassifier 
@@ -55,6 +62,7 @@ public class HmmClassifier
 		}
 	}
 	
+	
 	public void save(File hmmFile) 
 	{
 		try {
@@ -69,7 +77,39 @@ public class HmmClassifier
 			e.printStackTrace();
 		}	
 	}
-		
+	
+	
+	public void train(InputStream trainDataStream)
+	{
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(trainDataStream));
+			List<List<ObservationVector>> sequences = ObservationSequencesReader
+					.readSequences(new ObservationVectorReader(), reader);
+			reader.close();
+
+			BaumWelchLearner bwl = new BaumWelchLearner();
+			KullbackLeiblerDistanceCalculator klc = new KullbackLeiblerDistanceCalculator();
+			
+			Hmm<ObservationVector> prevHmm = learntHmm;
+			// Incrementally improve the solution
+			for (int i = 0; i < 10; i++) {
+				learntHmm = bwl.iterate(learntHmm, sequences);
+//				System.out.println("Distance at iteration " + i + ": " + klc.distance(learntHmm, prevHmm));
+//				prevHmm = learntHmm;
+			}
+		} 
+		catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	
 	static void saveInit(File hmmFile) 
 	{
