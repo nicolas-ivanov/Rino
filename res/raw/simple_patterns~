@@ -1,0 +1,5 @@
+number#(\+?[\d\s]+)
+contact#(((\w+)\s){0,2}(\w+))
+webpage#((\w+.)+(ru|com|org|net|su))
+email#(\w+\s)*([^S]+@[^S]+)\s((\w+)*)
+time#(\d+)(\sчас\w*)?\s(\d+)(\sминут\w*)?

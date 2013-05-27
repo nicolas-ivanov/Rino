@@ -32,8 +32,10 @@ public final class R {
         public static final int activity_text_button=0x7f070003;
     }
     public static final class raw {
-        public static final int dictionary_names=0x7f040000;
-        public static final int patterns=0x7f040001;
+        public static final int keywords_dict=0x7f040000;
+        public static final int names_dict=0x7f040001;
+        public static final int patterns=0x7f040002;
+        public static final int simple_patterns=0x7f040003;
     }
     public static final class string {
         public static final int analyzing_is_stopped=0x7f050009;

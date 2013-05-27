@@ -1,7 +1,7 @@
 package com.example.rino;
 
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -9,7 +9,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.PhoneLookup;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.View;
@@ -38,7 +41,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private ProgressBar progress;
 	private ListView dialogListView;
 	
-	private CommandAnalyser analyserTask;
+	private FSMCommandAnalyzer analyserTask;
 	private PackageManager packageManager;
 	private InputMethodManager inputManager;
 	private DialogDBHelper dialogDBHelper;
@@ -46,7 +49,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	
 	// retrieving all contacts at once should be avoided as too expensive operation
-	/*private void retrieveContacts() {
+	private void retrieveContacts() {
 		Cursor people = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 		people.moveToFirst();
 		int i = 0;
@@ -100,7 +103,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 
 		people.close();
-	}*/
+	}
 
 	
 	private void hideSoftKeyboard() {
@@ -151,13 +154,13 @@ public class MainActivity extends Activity implements OnClickListener {
 		if (analyserTask != null) {
 			analyserTask.cancel(true);
 	    }
-		InputStream patternsStream = this.getApplicationContext().getResources().
+		/*InputStream patternsStream = this.getApplicationContext().getResources().
 				openRawResource(R.raw.patterns);
-
+		 */
 	    textButton.setVisibility(View.GONE);
 	    progress.setVisibility(View.VISIBLE);
 	    
-	    analyserTask = new CommandAnalyser(this, patternsStream);
+	    analyserTask = new FSMCommandAnalyzer(this);
 	    analyserTask.execute(command);
 	}
 	
@@ -223,7 +226,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		textField.setOnClickListener(this);
 		
 		// Get contacts from phone
-//		retrieveContacts();
+		retrieveContacts();
 	}
 
 	

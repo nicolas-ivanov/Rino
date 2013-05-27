@@ -1,0 +1,4 @@
+number#(\+?[\d\s]+)
+webpage#((\w+.)+(ru|com|org|net|su))
+email#(\w+\s)*([^S]+@[^S]+)\s((\w+)*)
+
