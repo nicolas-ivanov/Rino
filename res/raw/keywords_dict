@@ -3,31 +3,29 @@
 вызов#call
 набери#call sms_skip email_skip
 набрать#call sms_skip email_skip
-на номер#num
-по номеру#num
+на#num email_skip
+по#num email_skip
+номеру#num
 номер#num
-короткий номер#num
-по короткому номеру#num
+короткий#num_skip
+короткому#num_skip
 напиши#sms_skip email_skip
 отправь#sms_skip email_skip
 написать#sms_skip email_skip
 ответь#sms_skip email_skip
 отправить#sms_skip email_skip
 смс#sms
-смс сообщение#sms
 сообщение#sms
-новое сообщение#sms
-новое смс#sms
+новое#sms_skip email_skip
 sms#sms
-на почту#email
-на мыло#email
-новое письмо#email
+почту#email
+мыло#email
 письмо#email
 e-mail#email
 email#email
-по почте#email
-по электронной почте#email
-с текстом#text
+почте#email
+электронной#email_skip
+текстом#text
 текст#text
 найди#find
 найти#find
@@ -40,11 +38,18 @@ email#email
 попиликай#alarm
 поставь#alarm_skip
 поставить#alarm_skip
-меня#skip
 через#timer
 на#time_skip
 в#time_skip
 баланс#balance
 остаток#balance
-текущий баланс#balance
-баланс средств#balance
+текущий#balance_skip
+средств#balance_skip
+меня#skip
+пожалуйста#skip
+мне#skip
+хотелось#skip
+бы#skip
+я#skip
+хотел#skip
+хотела#skip

@@ -1,4 +1,4 @@
-number#(\+?[\d\s]+)
-webpage#((\w+.)+(ru|com|org|net|su))
-email#(\w+\s)*([^S]+@[^S]+)\s((\w+)*)
-
+num_start#\+\d+?|плюс|
+number#\d+
+webpage#((\w+\.)+(ru|com|org|net|su))
+email#([^@]+)@(\w*\d*\.)*

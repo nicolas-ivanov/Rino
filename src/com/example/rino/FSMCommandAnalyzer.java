@@ -3,10 +3,13 @@ package com.example.rino;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -25,9 +28,9 @@ public class FSMCommandAnalyzer extends AsyncTask<String, String, Intent> {
 	private CommandsParser commandParser;
 	private static final String TAG = "FSMCommandAnalyzer: ";
 
-	/*private String getStr(int strCode) {
+	private String getStr(int strCode) {
 		return String.format(mainActivity.getResources().getString(strCode));
-	}*/
+	}
 
 	public FSMCommandAnalyzer(MainActivity main) {//, InputStream stream) {
 		//nl = System.getProperty("line.separator");
@@ -71,6 +74,10 @@ public class FSMCommandAnalyzer extends AsyncTask<String, String, Intent> {
 		//try {
 			String command = commands[0];
 			CommandTokenizer tokenizer = new CommandTokenizer(command);
+			State start = new State(0);
+			Collection<State> states = new ArrayList<State>();
+			states.add(start);
+			FSM fsm = new FSM();
 			while (tokenizer.hasNextToken()){
 				//boolean found = false;
 				//String line;
@@ -83,12 +90,77 @@ public class FSMCommandAnalyzer extends AsyncTask<String, String, Intent> {
 					for (String keywordType : keywordTypes){
 						Log.d(MainActivity.TAG, FSMCommandAnalyzer.TAG + "Word: " + word + " Keyword type: " + keywordType);
 					}
+					Collection<State> newStates = new ArrayList<State>();
+					for (State state : states){
+						Collection<State> newStatesOne = fsm.getNextState(state, word, wordType, keywordTypes);
+						for (State newState : newStatesOne){
+							newStates.add(newState);
+							Log.d(MainActivity.TAG, FSMCommandAnalyzer.TAG + "New state: " + newState.getId() + " isFinite: " + newState.isFinite());
+						}
+					}
+					states = newStates;
 				}
-				/*
-				while (!found && (line = keywordsReader.readLine()) != null) {
-					
-				}*/
 			}
+			for (State state : states){
+				if (state.isFinite()){
+					Log.d(MainActivity.TAG, FSMCommandAnalyzer.TAG + "Finite state: " + state);
+					if (state.getCommandType().equals("call_num")){
+						if (state.getParameter("number") != null) {
+							String number = state.getParameter("number").replace("плюс", "+");
+							// TODO: check that number is proper
+							Uri numUri = Uri.parse("tel:" + number);
+							resIntent = new Intent(
+									android.content.Intent.ACTION_DIAL,//CALL,
+									numUri);
+							return resIntent;
+
+						} else if (state.getParameter("contact") != null) {
+							String name = state.getParameter("contact");
+							Collection<Contact> contacts = ContactsDatabase
+									.getInstance().getContacts(name);
+							Contact contact;
+							if (contacts.size() == 0) {
+								// no contacts found
+								publishProgress(getStr(R.string.contact_is_not_found));
+								continue; // why to continue?
+							} else {
+								// found one or more than one contact
+								contact = contacts.iterator().next();
+								Collection<String> numbers = contact
+										.getNumbers();
+								if (numbers == null) {
+									publishProgress(getStr(R.string.no_pnohes_in_contact));
+								} else {
+									Iterator<String> iterNumbers = numbers
+											.iterator();
+									if (iterNumbers.hasNext()) {
+										// TODO: take not only first phone number
+										String number = iterNumbers.next();
+										// TODO: check that number is proper
+										if (number != null) {
+											Uri numUri = Uri.parse("tel:"
+													+ number);
+
+											publishProgress(getStr(R.string.calling_number)
+													+ numUri.getSchemeSpecificPart());
+
+											resIntent = new Intent(
+													android.content.Intent.ACTION_CALL,
+													numUri);
+											return resIntent;
+										}
+									} else {
+										publishProgress(getStr(R.string.no_pnohes_in_contact));
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			//command not recognized
+			publishProgress(getStr(R.string.command_is_not_found));
+			return null;
 			/*
 			boolean found = false;
 			String line;
@@ -408,7 +480,6 @@ public class FSMCommandAnalyzer extends AsyncTask<String, String, Intent> {
 						"Closing patternsReader or patternsStream failed", e);
 			}
 		}*/
-		return null;
 	}
 
 	@Override
