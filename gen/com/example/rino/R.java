@@ -32,9 +32,10 @@ public final class R {
         public static final int activity_text_button=0x7f070003;
     }
     public static final class raw {
-        public static final int patterns=0x7f040000;
-        public static final int phmm=0x7f040001;
-        public static final int train=0x7f040002;
+        public static final int model=0x7f040000;
+        public static final int patterns=0x7f040001;
+        public static final int psvm=0x7f040002;
+        public static final int range=0x7f040003;
     }
     public static final class string {
         public static final int analyzing_is_stopped=0x7f050009;

@@ -1,7 +1,10 @@
 package com.example.rino;
 
-import java.io.InputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -11,8 +14,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.speech.RecognizerIntent;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -31,7 +34,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	public static final int SUB_ACTIVITY_REQUEST_CODE = 12;
 
 	public static final String TAG = "Rino";
-	public static final String HMM = "hmmModel";
+	public static final String SVM = "svmModel";
 	private ArrayList<String> dialogList;
 	private ArrayList<String> newPhraseList;
 	private ArrayList<String> commands;
@@ -44,14 +47,14 @@ public class MainActivity extends Activity implements OnClickListener {
 	private ListView dialogListView;
 
 	private CommandAnalyser analyserTask;
-	private TaggerTask taggerTask;
+	private FramingTask framingTask;
+	
 	private PackageManager packageManager;
 	private InputMethodManager inputManager;
 	private DialogDBHelper dialogDBHelper;
 	
-	private File hmmModel;
-	private HmmClassifier hmmClassifier;
-	private InputStream trainDataStream;
+	private SvmClassifier svmClassifier;
+	private enum Type {model, range};
 	
 	static public class Token {
 		String lexem;
@@ -59,7 +62,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	};
 	
 
-//////////////// Common Methods //////////////////////////////////////////////////////////////////////
+//////////////// Common Methods ////////////////////////////////////////////////////////////////////
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -83,12 +86,11 @@ public class MainActivity extends Activity implements OnClickListener {
 		dialogListView.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, dialogList));
 
- 		hmmModel = getHmmModelFile(HMM);
-		hmmClassifier = new HmmClassifier();
-		hmmClassifier.load(hmmModel);
-		
-		trainDataStream = getApplicationContext().getResources().openRawResource(R.raw.train);
-		hmmClassifier.train(trainDataStream);
+
+
+		File model = getSvmFile(Type.model);
+		File range = getSvmFile(Type.range);
+		svmClassifier = new SvmClassifier(model.getPath(), range.getPath());
 		
 		// Check to see if a recognition activity is present
 		packageManager = getPackageManager();
@@ -112,7 +114,6 @@ public class MainActivity extends Activity implements OnClickListener {
 		Log.d(TAG, this.getLocalClassName() + ": on pause");
 		dialogDBHelper.saveDialogHistory(newPhraseList);
 		newPhraseList.clear();
-		hmmClassifier.save(hmmModel);
 	}
 	
 	
@@ -122,9 +123,9 @@ public class MainActivity extends Activity implements OnClickListener {
 			hideSoftKeyboard();
 		} 
 		else if (v.getId() == R.id.text_button) {
-			String str = textField.getText().toString();
+			String command = textField.getText().toString();
 //			startCommandAnalysing(str);
-			startTaggerTask(str);
+			startFramingTask(command);
 			textField.setText("");
 			hideSoftKeyboard();
 		}
@@ -147,7 +148,7 @@ public class MainActivity extends Activity implements OnClickListener {
 				String command = commands.get(0);
 				Log.d(TAG, this.getLocalClassName() + ": res = '" + command + "'");
 //				startCommandAnalysing(command);
-				startTaggerTask(command);
+				startFramingTask(command);
 				break;
 				
 			case RESULT_CANCELED:
@@ -183,31 +184,6 @@ public class MainActivity extends Activity implements OnClickListener {
 			android.R.layout.simple_list_item_1, dialogList));
 	}
 	
-	/*	public void addRequest(Token request) {
-		newPhraseList.add(0, request.lexem);
-		dialogList.add(0, request.lexem);
-		
-		TextView tv = new TextView(this);
-		tv.setText(request.lexem);
-		
-		int label = request.label;
-		if (label == 0)
-		tv.setTextColor(Color.RED);
-		else if (label == 1)
-		tv.setTextColor(Color.YELLOW);
-		else if (label == 2)
-		tv.setTextColor(Color.GREEN);
-		else if (label == 3)
-		tv.setTextColor(Color.BLUE);
-		else if (label == 4)
-		tv.setTextColor(Color.CYAN);
-		else if (label == 5)
-		tv.setTextColor(Color.MAGENTA);
-		
-		dialogTVList.add(0, tv);
-		dialogListView.setAdapter(new ArrayAdapter<TextView>(this,
-			android.R.layout.simple_list_item_1, dialogTVList));
-	}*/
 	
 	public void addAnswer(String answer) {
 		String str = "- " + answer;
@@ -264,57 +240,24 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 //////////////// Tagging Task //////////////////////////////////////////////////////////////////////
 	
-	private void startTaggerTask(String command) {	
-//		addRequest(command);    
+	private void startFramingTask(String command) {	
+		addRequest(command);    
 		
-		if (taggerTask != null) {
-			taggerTask.cancel(true);
+		if (framingTask != null) {
+			framingTask.cancel(true);
 	    }
 
 	    textButton.setVisibility(View.GONE);
 	    progress.setVisibility(View.VISIBLE);
 	    
-	    taggerTask = new TaggerTask(this, hmmClassifier);
-	    taggerTask.execute(command);
+	    framingTask = new FramingTask(this, svmClassifier);
+	    framingTask.execute(command);
 	}
 	
-	public void endTaggerTask() {
+	public void endFramingTask() {
 		try {			
-			ArrayList<Token> list = taggerTask.get();
-			String textRequest = "";
-			String coloredRequest = "";
-			
-			for (Token t: list) 
-			{
-				Log.d(TAG, this.getLocalClassName() + ": Token: " + t.lexem + ", " + t.label);
-				textRequest += t.lexem;
-				
-				int label = t.label;
-				if (label == 0) {
-					textRequest += ":COM ";
-					coloredRequest += "<font color='#EE0000'>";
-				} else if (label == 1) {
-					textRequest += ":NAME ";
-					coloredRequest += "<font color='#EEEE00'>";
-				} else if (label == 2) {
-					textRequest += ":TEL ";
-					coloredRequest += "<font color='#00EE00'>";
-				} else if (label == 3) {
-					textRequest += ":EMAIL ";
-					coloredRequest += "<font color='#00EEEE'>";
-				} else if (label == 4) {
-					textRequest += ":URL ";
-					coloredRequest += "<font color='#0000EE'>";
-				} else if (label == 5) {
-					textRequest += ":TIME ";
-					coloredRequest += "<font color='#EE00EE'>";
-				}
-				
-				coloredRequest += t.lexem + "</font> ";
-			}
-
-			addRequest(textRequest);		
-			coloredTextView.setText(Html.fromHtml(coloredRequest));
+			String res = framingTask.get();
+		    addAnswer(res);
 				
 		    progress.setVisibility(View.GONE);
 		    textButton.setVisibility(View.VISIBLE);
@@ -329,32 +272,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 	}
 	
-	
-//////////////// HMM Initialization ////////////////////////////////////////////////////////////////
-	
-	public File getHmmModelFile(String fileName) {		
-	    File file = getBaseContext().getFileStreamPath(fileName);
-	    Boolean exists = file.exists();
-	    
-	    File hmmFile = new File(this.getFilesDir(), fileName);
-    	HmmClassifier.saveInit(hmmFile);
-    	return hmmFile;
-    	
-//	    if(exists) {
-//	    	return file;
-//	    }
-//	    else {
-//	    	File hmmFile = new File(this.getFilesDir(), fileName);
-//	    	HmmClassifier.saveInit(hmmFile);
-//	    	return hmmFile;
-//	    }
-	}
-	
 
-////////////////Auxiliary Methods /////////////////////////////////////////////////////////////////
+//////////////// Auxiliary Methods /////////////////////////////////////////////////////////////////
 
 	private void hideSoftKeyboard() {
-		InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Activity.INPUT_METHOD_SERVICE);
+		InputMethodManager inputManager = (InputMethodManager) this.
+				getSystemService(Activity.INPUT_METHOD_SERVICE);
 		inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(),0);
 	}
 		
@@ -366,4 +289,46 @@ public class MainActivity extends Activity implements OnClickListener {
 		return String.format(getResources().getString(strCode));
 	}
 	
+	
+//////////////// HMM Initialization ////////////////////////////////////////////////////////////////
+	
+	public File getSvmFile(Type type) 
+	{
+	    try {
+	    	String path = Environment.getExternalStorageDirectory().getPath();
+	        File file = new File(path, type.toString() + ".txt");
+		    
+		    if (file.exists())
+		    	return file;
+		    else {
+		    	file = new File(path + "/" + type.toString() + ".txt");
+		        InputStream is = null;
+		        OutputStream os = new FileOutputStream(file);
+		    	
+		    	switch (type) {
+		    	case model:
+		    		is = getResources().openRawResource(R.raw.model);
+		    		break;
+		    	case range:
+		    		is = getResources().openRawResource(R.raw.range);
+		    		break;
+		    	}
+
+		        
+		        byte[] data = new byte[is.available()];
+		        is.read(data);
+		        os.write(data);
+		        is.close();
+		        os.close();
+				return file;
+		    }
+	    } 
+	    catch (IOException e) {
+	        Log.w("ExternalStorage", "Error writing to file", e);
+	    }
+		return null;
+	}
+	
+	
 }
+
