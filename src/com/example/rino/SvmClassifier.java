@@ -3,6 +3,7 @@ package com.example.rino;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import libsvm.svm;
@@ -14,8 +15,9 @@ public class SvmClassifier {
 	private svm_model model;
 	
 	private BufferedReader rangeReader;
-	private double feature_min[];
-	private double feature_max[];
+	private ArrayList<Double> feature_min;
+	private ArrayList<Double> feature_max;
+	
 	private double lower;
 	private double upper;
 	
@@ -25,6 +27,7 @@ public class SvmClassifier {
 		try {
 			model = svm.svm_load_model(modelFile);
 			rangeReader = new BufferedReader(new FileReader(rangeFile));
+			restoreRange(rangeReader);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -33,11 +36,7 @@ public class SvmClassifier {
 	}
 	
 	public String getCommandType(double[] params) 
-	{
-		feature_min = new double[params.length];
-		feature_max = new double[params.length];
-		
-		restoreRange(rangeReader);
+	{		
 		scaleVector(params);
 		
 		String type = "";
@@ -68,9 +67,10 @@ public class SvmClassifier {
 	
 	
 	private void restoreRange(BufferedReader fp_restore)
-	{		
-		int idx;
+	{		 
 		double fmin, fmax;
+		feature_min = new ArrayList<Double>();
+		feature_max = new ArrayList<Double>();
 	
 		try {	
 			if(fp_restore.read() == 'x') {
@@ -80,17 +80,16 @@ public class SvmClassifier {
 				upper = Double.parseDouble(st.nextToken());
 				String restore_line = null;
 				
-				for (int i = 0; i < feature_min.length; i++)
+				while ((restore_line = fp_restore.readLine()) != null)
 				{
-					restore_line = fp_restore.readLine();
 					StringTokenizer st2 = new StringTokenizer(restore_line);
 					
-					idx = Integer.parseInt(st2.nextToken());
+					st2.nextToken(); // parameter number
 					fmin = Double.parseDouble(st2.nextToken());
 					fmax = Double.parseDouble(st2.nextToken());
 
-					feature_min[idx - 1] = fmin;
-					feature_max[idx - 1] = fmax;
+					feature_min.add(fmin);
+					feature_max.add(fmax);
 				}
 			}
 			fp_restore.close();
@@ -112,17 +111,17 @@ public class SvmClassifier {
 		for (int i = 0; i < v.length; i++) 
 		{
 			/* skip single-valued attribute */
-			if(feature_max[i] == feature_min[i])
+			if(feature_max.get(i) == feature_min.get(i))
 				continue;
 
-			if(v[i] == feature_min[i])
+			if(v[i] == feature_min.get(i))
 				v[i] = lower;
-			else if(v[i] == feature_max[i])
+			else if(v[i] == feature_max.get(i))
 				v[i] = upper;
 			else
 				v[i] = lower + (upper-lower) * 
-					(v[i]-feature_min[i])/
-					(feature_max[i]-feature_min[i]);
+					(v[i]-feature_min.get(i)) /
+					(feature_max.get(i)-feature_min.get(i));
 		}
 	}
 	
