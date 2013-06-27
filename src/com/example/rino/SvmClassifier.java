@@ -127,27 +127,3 @@ public class SvmClassifier {
 	
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
