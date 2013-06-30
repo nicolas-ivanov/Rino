@@ -35,11 +35,9 @@ public class SvmClassifier {
 		}
 	}
 	
-	public String getCommandType(double[] params) 
+	public int classify(double[] params) 
 	{		
 		scaleVector(params);
-		
-		String type = "";
 		svm_node[] nodes = new svm_node[params.length];
 		
 		for (int i = 0; i < params.length; i++) {
@@ -48,21 +46,7 @@ public class SvmClassifier {
 			nodes[i].value = params[i];
 		}
 		
-		int res = (int)svm.svm_predict(model, nodes);
-		
-		switch (res) {
-			case 1: type = "a_call"; break;
-			case 2: type = "a_sms" ; break;
-			case 3: type = "a_mail"; break;
-			case 4: type = "a_look"; break;
-			case 5: type = "a_site"; break;
-			case 6: type = "a_blnc"; break;
-			case 7: type = "a_alrm"; break;
-			default:
-				System.out.println("Label '" + res + "' is incorrect");
-		}
-		
-		return type;
+		return (int)svm.svm_predict(model, nodes);
 	}
 	
 	

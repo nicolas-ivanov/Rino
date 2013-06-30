@@ -9,26 +9,26 @@ import java.util.regex.Pattern;
 
 import android.util.Log;
 
-public class ParamsGetter {
+public class WordFeaturesGetter {
 
 	private static final Pattern structurePattern = Pattern.compile("([\\d,]+)\\t+(\\w+)\\t+([^\\t~]+)");
 	private InputStream patternsStream;
 	private BufferedReader patternsReader;
 	
 	
-	ParamsGetter(MainActivity main){
+	WordFeaturesGetter(MainActivity main){
 		patternsStream = main.getApplicationContext().getResources().openRawResource(R.raw.psvm);
 		patternsReader = new BufferedReader(new InputStreamReader(patternsStream));
 	}	
 
 
-	public double[] getParams(String command) 
+	public double[][] getParams(String command) 
 	{    	
 		try {
 			
 	    	if (patternsReader.markSupported())
 	    		patternsReader.mark(1);
-	    	else{
+	    	else {
 				System.out.println("Mark is not supported");
 				return null;
 			}
@@ -38,6 +38,10 @@ public class ParamsGetter {
 			int paramsNum = 0;
 			
 			while ((rawPattern = patternsReader.readLine()) != null) {
+				
+				if (rawPattern.equals(""))
+					continue;	// skip empty lines
+				
 				paramsNum++;
 				Matcher structureMatcher = structurePattern.matcher(rawPattern);
 				
@@ -51,36 +55,53 @@ public class ParamsGetter {
 			
 				
 			String[] words = command.split(" ");
-			double[] pVector = new double[paramsNum];
+			double[][] wFeatures = new double[words.length][];
 			
-			for (int i=0; i<pVector.length; i++)
-				pVector[i] = 0.0;
-			
-			for (int i=0; i<words.length; i++) {	
-				String w = words[i];			
-				int pNum = 0;
+			for (int k = 0; k < words.length; k++) {
+				double[] pVector = new double[paramsNum];
 				
-				while ((rawPattern = patternsReader.readLine()) != null) {
+				for (int i=0; i<pVector.length; i++)
+					pVector[i] = 0.0;
+				
+				
+				for (int i=0; i<words.length; i++) {
+					String w = words[i];					
 					
-					Matcher structureMatcher = structurePattern.matcher(rawPattern);
-					// work only with correct type patterns
-					if (! structureMatcher.matches()) {
-						System.out.println("Pattern '" + rawPattern + "' is incorrect");
-						break;
-					}					
+					if (w.length() > 0) {
+						if (w.charAt(0) == '_') {
+							w = w.substring(1);
+						}
+					}
+					
+					int pNum = 0;
+					
+					while ((rawPattern = patternsReader.readLine()) != null) {
 
-					Pattern typePattern = Pattern.compile(structureMatcher.group(3));
-					Matcher typeMatcher = typePattern.matcher(w);
-								
-					if (typeMatcher.matches())						
-						pVector[pNum]++;
+						if (rawPattern.equals(""))
+							continue;	// skip empty lines
+						
+						Matcher structureMatcher = structurePattern.matcher(rawPattern);
+						
+						// work only with correct type patterns
+						if (! structureMatcher.matches()) {
+							System.out.println("Pattern '" + rawPattern + "' is incorrect");
+							break;
+						}
+						
+						Pattern typePattern = Pattern.compile(structureMatcher.group(3));
+						Matcher typeMatcher = typePattern.matcher(w);
+			
+						if (typeMatcher.matches()) {							
+							pVector[pNum]++;
+						}
+						pNum++;
+					}
 
-					pNum++;
+					patternsReader.close();
 				}
-
-				patternsReader.reset();
+				wFeatures[k] = pVector;
 			}
-			return pVector;	
+			return wFeatures;
 	
 		} 
 		catch (IOException e) {

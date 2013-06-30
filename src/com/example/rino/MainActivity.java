@@ -1,10 +1,7 @@
 package com.example.rino;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -13,8 +10,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +32,9 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	public static final String TAG = "Rino";
 	public static final String SVM = "svmModel";
+	public static enum ActionType {a_call, a_sms, a_site, a_email, a_look, a_alarm, a_balance};
+	public static enum ParamsType {action, p_name, p_number, p_email, p_site, p_time, other};
+	
 	private ArrayList<String> dialogList;
 	private ArrayList<String> newPhraseList;
 	private ArrayList<String> commands;
@@ -52,11 +52,21 @@ public class MainActivity extends Activity implements OnClickListener {
 	private PackageManager packageManager;
 	private InputMethodManager inputManager;
 	private DialogDBHelper dialogDBHelper;
+
 	
-	private SvmClassifier svmClassifier;
-	private enum Type {model, range};
+	public static class SvmBunch {
+		SvmClassifier svm_A;
+		SvmClassifier svm_call;
+		SvmClassifier svm_sms;
+		SvmClassifier svm_look;
+		SvmClassifier svm_site;
+		SvmClassifier svm_alarm;
+		SvmClassifier svm_email;
+	}
 	
-	static public class Token {
+	private SvmBunch svm_bundle;
+	
+	public static class Token {
 		String lexem;
 		Integer label;
 	};
@@ -86,11 +96,16 @@ public class MainActivity extends Activity implements OnClickListener {
 		dialogListView.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, dialogList));
 
-
-
-		File model = getSvmFile(Type.model);
-		File range = getSvmFile(Type.range);
-		svmClassifier = new SvmClassifier(model.getPath(), range.getPath());
+		
+		svm_bundle = new SvmBunch();
+		svm_bundle.svm_A = new SvmClassifier(getPath("model_action"), getPath("range_action"));
+		svm_bundle.svm_call = new SvmClassifier(getPath("model_a_call"), getPath("range_a_call"));
+		svm_bundle.svm_sms = new SvmClassifier(getPath("model_a_sms"), getPath("range_a_sms"));
+		svm_bundle.svm_site = new SvmClassifier(getPath("model_a_site"), getPath("range_a_site"));
+		svm_bundle.svm_email = new SvmClassifier(getPath("model_a_email"), getPath("range_a_email"));
+		svm_bundle.svm_look = new SvmClassifier(getPath("model_a_look"), getPath("range_a_look"));
+		svm_bundle.svm_alarm = new SvmClassifier(getPath("model_a_alarm"), getPath("range_a_alarm"));
+		
 		
 		// Check to see if a recognition activity is present
 		packageManager = getPackageManager();
@@ -250,23 +265,32 @@ public class MainActivity extends Activity implements OnClickListener {
 	    textButton.setVisibility(View.GONE);
 	    progress.setVisibility(View.VISIBLE);
 	    
-	    framingTask = new FramingTask(this, svmClassifier);
+	    framingTask = new FramingTask(this, svm_bundle);
 	    framingTask.execute(command);
 	}
 	
 	public void endFramingTask() {
 		try {			
-			String res = framingTask.get();
-		    addAnswer(res);
-				
-		    progress.setVisibility(View.GONE);
+			Intent intent = framingTask.get();
+		    
+			progress.setVisibility(View.GONE);
 		    textButton.setVisibility(View.VISIBLE);
-	   
-		
-		} catch (InterruptedException e) {
+	    	
+	    	if(intent != null) {				
+				// Check, whether the intent can be handled by some activity
+				List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+				if (activities.size() == 0) {
+				    addAnswer(getStr(R.string.unknown_action));
+				} else {
+					startActivityForResult(intent, SUB_ACTIVITY_REQUEST_CODE);
+				}
+	    	}
+		} 
+		catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ExecutionException e) {
+		} 
+		catch (ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -292,41 +316,17 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 //////////////// HMM Initialization ////////////////////////////////////////////////////////////////
 	
-	public File getSvmFile(Type type) 
+	public String getPath(String fileName) 
 	{
-	    try {
-	    	String path = Environment.getExternalStorageDirectory().getPath();
-	        File file = new File(path, type.toString() + ".txt");
-		    
-		    if (file.exists())
-		    	return file;
-		    else {
-		    	file = new File(path + "/" + type.toString() + ".txt");
-		        InputStream is = null;
-		        OutputStream os = new FileOutputStream(file);
-		    	
-		    	switch (type) {
-		    	case model:
-		    		is = getResources().openRawResource(R.raw.model);
-		    		break;
-		    	case range:
-		    		is = getResources().openRawResource(R.raw.range);
-		    		break;
-		    	}
-
-		        
-		        byte[] data = new byte[is.available()];
-		        is.read(data);
-		        os.write(data);
-		        is.close();
-		        os.close();
-				return file;
-		    }
-	    } 
-	    catch (IOException e) {
-	        Log.w("ExternalStorage", "Error writing to file", e);
-	    }
-		return null;
+		File file = new File("android.resource://com.example.rino/raw/" + fileName);
+		String path = file.getPath();
+		
+		if (!file.exists()) {
+			System.out.println("File '" + fileName + "' is missing");
+			return null;
+		}
+		
+		return path;
 	}
 	
 	
