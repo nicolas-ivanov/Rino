@@ -17,6 +17,7 @@ public class SvmClassifier {
 	private BufferedReader rangeReader;
 	private ArrayList<Double> feature_min;
 	private ArrayList<Double> feature_max;
+	private ArrayList<Integer> feature_idx;
 	
 	private double lower;
 	private double upper;
@@ -51,10 +52,12 @@ public class SvmClassifier {
 	
 	
 	private void restoreRange(BufferedReader fp_restore)
-	{		 
+	{	
+		int fidx;
 		double fmin, fmax;
 		feature_min = new ArrayList<Double>();
 		feature_max = new ArrayList<Double>();
+		feature_idx = new ArrayList<Integer>();
 	
 		try {	
 			if(fp_restore.read() == 'x') {
@@ -68,12 +71,13 @@ public class SvmClassifier {
 				{
 					StringTokenizer st2 = new StringTokenizer(restore_line);
 					
-					st2.nextToken(); // parameter number
+					fidx = Integer.parseInt(st2.nextToken());
 					fmin = Double.parseDouble(st2.nextToken());
 					fmax = Double.parseDouble(st2.nextToken());
 
 					feature_min.add(fmin);
 					feature_max.add(fmax);
+					feature_idx.add(fidx);
 				}
 			}
 			fp_restore.close();
@@ -92,20 +96,22 @@ public class SvmClassifier {
 	private void scaleVector(double[] v)
 	{
 		
-		for (int i = 0; i < v.length; i++) 
+		for (int k = 0; k < feature_idx.size(); k++) 
 		{
+			int i = feature_idx.get(k) - 1;
+			
 			/* skip single-valued attribute */
-			if(feature_max.get(i) == feature_min.get(i))
+			if(feature_max.get(k) == feature_min.get(k))
 				continue;
 
-			if(v[i] == feature_min.get(i))
+			if(v[i] == feature_min.get(k))
 				v[i] = lower;
-			else if(v[i] == feature_max.get(i))
+			else if(v[i] == feature_max.get(k))
 				v[i] = upper;
 			else
-				v[i] = lower + (upper-lower) * 
-					(v[i]-feature_min.get(i)) /
-					(feature_max.get(i)-feature_min.get(i));
+				v[i] = lower + 
+					(upper - lower) * (v[k]-feature_min.get(k)) /
+					(feature_max.get(k)-feature_min.get(k));
 		}
 	}
 	

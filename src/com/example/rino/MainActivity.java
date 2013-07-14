@@ -1,17 +1,21 @@
 package com.example.rino;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import android.R.raw;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.View;
@@ -33,7 +37,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	public static final String TAG = "Rino";
 	public static final String SVM = "svmModel";
 	public static enum ActionType {a_call, a_sms, a_site, a_email, a_look, a_alarm, a_balance};
-	public static enum ParamsType {action, p_name, p_number, p_email, p_site, p_time, other};
+	public static enum ParamsType {action, p_name, p_number, p_email, p_site, p_time, other, quote, q_mark};
 	
 	private ArrayList<String> dialogList;
 	private ArrayList<String> newPhraseList;
@@ -318,15 +322,35 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	public String getPath(String fileName) 
 	{
-		File file = new File("android.resource://com.example.rino/raw/" + fileName);
-		String path = file.getPath();
-		
-		if (!file.exists()) {
-			System.out.println("File '" + fileName + "' is missing");
-			return null;
-		}
-		
-		return path;
+	    try {
+	    	String path = Environment.getExternalStorageDirectory().getPath();
+	    	File dir = new File(path, "Rino");
+	    	
+	    	if (!dir.exists())
+	    		dir.mkdir();
+	    	
+	        File file = new File(dir, fileName);
+
+		    if (file.exists())
+		    	return file.getPath();
+		    else {		    	
+	            int rID = getResources().getIdentifier(fileName, "raw", getPackageName()); 
+
+		        InputStream is = getResources().openRawResource(rID);  
+		        OutputStream os = new FileOutputStream(file);
+
+		        byte[] data = new byte[is.available()];
+		        is.read(data);
+		        os.write(data);
+		        is.close();
+		        os.close();
+				return file.getPath();
+		    }
+	    } 
+	    catch (IOException e) {
+	        Log.w("ExternalStorage", "Error writing to file", e);
+	    }
+		return null;
 	}
 	
 	

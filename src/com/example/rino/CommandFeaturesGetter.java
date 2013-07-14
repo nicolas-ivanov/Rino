@@ -11,13 +11,13 @@ import android.util.Log;
 
 public class CommandFeaturesGetter {
 
-	private static final Pattern structurePattern = Pattern.compile("([\\d,]+)\\t+(\\w+)\\t+([^\\t~]+)");
+	private static final Pattern structurePattern = Pattern.compile("([-?\\d,]+)\\t+(\\w+)\\t+([^\\t~]+)");
 	private InputStream patternsStream;
 	private BufferedReader patternsReader;
 	
 	
 	CommandFeaturesGetter(MainActivity main){
-		patternsStream = main.getApplicationContext().getResources().openRawResource(R.raw.psvm);
+		patternsStream = main.getApplicationContext().getResources().openRawResource(R.raw.patterns);
 		patternsReader = new BufferedReader(new InputStreamReader(patternsStream));
 	}	
 
@@ -30,10 +30,10 @@ public class CommandFeaturesGetter {
 	    		patternsReader.mark(1);
 	    	else{
 				System.out.println("Mark is not supported");
-				return null;
+				throw new IOException();
 			}
 	    	
-	    	// Check "psvm" file for errors and get parameters number
+	    	// Check "pattern" file for errors and get parameters number
 			String rawPattern;
 			int paramsNum = 0;
 			
@@ -47,7 +47,7 @@ public class CommandFeaturesGetter {
 				
 				if (! structureMatcher.matches()) {
 					System.out.println("Pattern '" + rawPattern + "' is incorrect");
-					return null;
+					throw new IOException();
 				}
 			}
 			patternsReader.reset();

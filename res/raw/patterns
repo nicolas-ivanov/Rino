@@ -1,10 +1,17 @@
-call_num	(\w*звон\w+)\s(\+?[\d\s]+)	~	null,number
-call_num	(\w*звон\w+)\s(((\w+)\s){0,2}(\w+))	~	null,contact
-dial_num	(набер\w+|набрать|набир\w+)\s(\+?[\d\s]+)	~	null,number
-run_ussd	(набер\w+|набрать|набир\w+)\s((\*|звездочка\s)(\d+)\s?(#|решетка))	~	null,null,null,number,null
-balance		((\w+\s)?баланс)|((\w+\s)?сколько денег\s(\w+\s)?на\s(\w+\s)?телефоне)
-web_page	откр\w+\s((\w+.)+(ru|com|org|net|su))	~	webpage
-send_email	отправ\w+\s(письмо|email)\s(\w+\s)*([^S]+@[^S]+)\s((\w+)*)	~	null,null,email,text
-send_sms	отправ\w+\s(sms|смс)\s([^\d]+((\+)?[\d\s]+))\s((\w+)*)	~	null,number,null,null,text
-set_alarm	(\w+\s)?будильник\s(на\s)?(\d+)(\sчас\w*)?\s(\d+)(\sминут\w*)?	~	null,null,hours,null,minutes,null
-find		(найди|найти)\s((\w+\s)*(\w+))	~	null,contact
+10		a_call			(\p{InCyrillic}*звон\p{InCyrillic}+)|(набрать)|(набер\p{InCyrillic}+)|(набир\p{InCyrillic}+)|(соедин\p{InCyrillic}+)|(телефон\p{InCyrillic}*)|(номер\p{InCyrillic}*)
+10		a_sms			(смс\p{InCyrillic}*)|(sms)|(сообщение)|(смс)
+10		a_email			(e?mail)|(письмо)
+10		a_look			(найди)|(найти)|(ищи)|(искать)|(покаж\p{InCyrillic}+)|(показ\p{InCyrillic}*)|(\p{InCyrillic}*смотр\p{InCyrillic}*)|(узна\p{InCyrillic}+)|(скаж\p{InCyrillic}*)|(расска\p{InCyrillic}+)|(что)|(кто)|(тако\p{InCyrillic}*)|(значит\p{InCyrillic}*)|(означа\p{InCyrillic}+)
+10		a_site			(покаж\p{InCyrillic}+)|(откр\p{InCyrillic}+)
+10		a_balance		(баланс)|(покаж\p{InCyrillic}+)|(показ\p{InCyrillic}*)|(\p{InCyrillic}*смотр\p{InCyrillic}*)|(узна\p{InCyrillic}+)|(скаж\p{InCyrillic}*)
+10		a_alarm			(будильник)|(постав\p{InCyrillic}+)|(установ\p{InCyrillic}+)
+
+1		p_name			(Имя)|(Фамилия)|(Отчество)|(мам\p{InCyrillic}+)|(вас\p{InCyrillic}*)|(леш\p{InCyrillic}*)|(ван\p{InCyrillic}*)|(саш\p{InCyrillic}*)|(наст\p{InCyrillic}*)|(даш\p{InCyrillic}*)|(маш\p{InCyrillic}*)|(ан\p{InCyrillic}*)|(пет\p{InCyrillic}*)|(дим\p{InCyrillic}*)|(оля\p{InCyrillic}*)|(андр\p{InCyrillic}*)|(антон\p{InCyrillic}*)
+2		p_number		(Номер)|(\d+)|(\+)|(плюс)
+3		p_email			(Адрес)|([^S]+@[^S]+)|(e?mail)|(письмо)
+4		p_site			(Сайт)|((\w+\.)+(ru|com|org|net|su))
+5		p_time			(Время)|(\d{1,2})|(утр\p{InCyrillic}+)|(вечер\p{InCyrillic}*)|(час\p{InCyrillic}*)|(минут\p{InCyrillic}*)|(завтра)|(полчаса)
+
+-2		s_text			(текст\p{InCyrillic}*)
+-2		s_look			(такое)|(значит)|(слов\p{InCyrillic}*)|(про)|(в)|(интернет\p{InCyrillic}+)|(википед\p{InCyrillic}+)
+10		s_write			(напиш\p{InCyrillic}+)|(напис\p{InCyrillic}+)|(набрать)|(набер\p{InCyrillic}+)|(набир\p{InCyrillic}+)|(отправ\p{InCyrillic}+)|(перешл\p{InCyrillic}+)|(пересл\p{InCyrillic}+)
