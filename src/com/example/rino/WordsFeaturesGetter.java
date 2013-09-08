@@ -22,7 +22,7 @@ public class WordsFeaturesGetter {
 	}	
 
 
-	public double[][] getParams(String command) 
+	public int[][] getParams(String command) 
 	{    	
 		try {
 			
@@ -53,26 +53,24 @@ public class WordsFeaturesGetter {
 			patternsReader.reset();
 			
 			
-				
-			String[] words = command.split(" ");
-			double[][] wFeatures = new double[words.length][];
 			
+			String[] words = command.split(" ");
+			int[][] wordsVectors = new int[words.length][];
+
+			// Get parameters vector for every word of the command
 			for (int k = 0; k < words.length; k++) {
-				double[] pVector = new double[paramsNum];
 				
-				for (int i=0; i<pVector.length; i++)
-					pVector[i] = 0.0;
+				int[] wVector = new int[paramsNum];
 				
-				String w = words[k];					
+				for (int i=0; i<wVector.length; i++)
+					wVector[i] = 0;
 				
-				if (w.length() > 0) {
-					if (w.charAt(0) == '_') {
-						w = w.substring(1);
-					}
-				}
-				
+				String w = words[k];										
 				int pNum = 0;
+				patternsReader.reset();
+
 				
+				// Check if the word is a keyword of a certain set
 				while ((rawPattern = patternsReader.readLine()) != null) {
 
 					if (rawPattern.equals(""))
@@ -80,26 +78,43 @@ public class WordsFeaturesGetter {
 					
 					Matcher structureMatcher = structurePattern.matcher(rawPattern);
 					
-					// work only with correct type patterns
+					// Check if the pattern is correct
 					if (! structureMatcher.matches()) {
 						System.out.println("Pattern '" + rawPattern + "' is incorrect");
-						throw new IOException();
+						break;
 					}
 					
 					Pattern typePattern = Pattern.compile(structureMatcher.group(3));
 					Matcher typeMatcher = typePattern.matcher(w);
 		
-					if (typeMatcher.matches()) {							
-						pVector[pNum]++;
-					}
+					if (typeMatcher.matches())	
+						wVector[pNum]++;
+					
 					pNum++;
 				}
-
-				patternsReader.reset();
-			
-				wFeatures[k] = pVector;
+				wordsVectors[k] = wVector;		
 			}
-			return wFeatures;
+			
+			
+			// Get parameters vectors for trigrams of words
+			int paramsNum_2 = paramsNum*2; 
+			int paramsNum_3 = paramsNum*3;
+			int[][] trigramsVectors = new int[words.length][];
+			
+			
+			for (int k = 0; k < wordsVectors.length; k++) {
+				
+				int[] tVector = new int[paramsNum_3];
+				
+				for (int i = 0; i < paramsNum; i++) {
+					tVector[i] = wordsVectors[k][i]; 
+					tVector[i + paramsNum] = (k == 0)? 0 : wordsVectors[k-1][i]; // "first word" check
+					tVector[i + paramsNum_2] = (k == wordsVectors.length - 1)? 0 : wordsVectors[k+1][i]; // "last word" check
+				}
+				trigramsVectors[k] = tVector;
+			}			
+			
+			return trigramsVectors;
 	
 		} 
 		catch (IOException e) {

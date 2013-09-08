@@ -11,7 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginBottom="15dp"
-        android:text="@string/speak_button" />
+        android:layout_marginStart="10dp"
+        android:drawableRight="@drawable/ic_rino"
+        android:gravity="left|center_vertical"
+        android:includeFontPadding="true"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:scrollHorizontally="false"
+        android:text="@string/speak_button"
+        android:textColor="@android:color/background_dark" />
 
     <LinearLayout
         android:layout_width="match_parent"

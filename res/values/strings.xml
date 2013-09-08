@@ -3,8 +3,8 @@
 
     <string name="app_name">Rino Recognizer</string>
     <string name="menu_settings">Настройки</string>
-    <string name="speak_button">Нажми меня</string>
-    <string name="text_field">введи команду</string>
+    <string name="speak_button">Речевая\nкоманда</string>
+    <string name="text_field">текстовая команда</string>
     <string name="colored_label">Последняя команда</string>
     <string name="text_button">OK</string>
     

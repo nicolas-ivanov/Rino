@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import android.R.raw;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -36,8 +35,8 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	public static final String TAG = "Rino";
 	public static final String SVM = "svmModel";
-	public static enum ActionType {a_call, a_sms, a_site, a_email, a_look, a_alarm, a_balance};
-	public static enum ParamsType {action, p_name, p_number, p_email, p_site, p_time, other, quote, q_mark};
+	public static enum ActionType {A_CALL, A_SMS, A_SITE, A_EMAIL, A_SEARCH, A_ALARM, A_BALANCE};
+	public static enum ParamsType {ACTION, P_NAME, P_NUMBER, P_EMAIL, P_SITE, P_TIME, QUOTE, Q_MARK, OTHER};
 	
 	private ArrayList<String> dialogList;
 	private ArrayList<String> newPhraseList;
@@ -62,7 +61,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		SvmClassifier svm_A;
 		SvmClassifier svm_call;
 		SvmClassifier svm_sms;
-		SvmClassifier svm_look;
+		SvmClassifier svm_search;
 		SvmClassifier svm_site;
 		SvmClassifier svm_alarm;
 		SvmClassifier svm_email;
@@ -107,7 +106,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		svm_bundle.svm_sms = new SvmClassifier(getPath("model_a_sms"), getPath("range_a_sms"));
 		svm_bundle.svm_site = new SvmClassifier(getPath("model_a_site"), getPath("range_a_site"));
 		svm_bundle.svm_email = new SvmClassifier(getPath("model_a_email"), getPath("range_a_email"));
-		svm_bundle.svm_look = new SvmClassifier(getPath("model_a_look"), getPath("range_a_look"));
+		svm_bundle.svm_search = new SvmClassifier(getPath("model_a_search"), getPath("range_a_search"));
 		svm_bundle.svm_alarm = new SvmClassifier(getPath("model_a_alarm"), getPath("range_a_alarm"));
 		
 		
@@ -143,7 +142,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		} 
 		else if (v.getId() == R.id.text_button) {
 			String command = textField.getText().toString();
-//			startCommandAnalysing(str);
+//			startCommandAnalysing(command);
 			startFramingTask(command);
 			textField.setText("");
 			hideSoftKeyboard();
@@ -196,8 +195,8 @@ public class MainActivity extends Activity implements OnClickListener {
 ////////////////Dialog List Updating //////////////////////////////////////////////////////////////
 
 	public void addRequest(String request) {
-		newPhraseList.add(0, request);
-		dialogList.add(0, request);
+//		newPhraseList.add(0, "«" + request + "»");
+		dialogList.add(0, "«" + request + "»");
 		
 		dialogListView.setAdapter(new ArrayAdapter<String>(this,
 			android.R.layout.simple_list_item_1, dialogList));
@@ -205,7 +204,11 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	
 	public void addAnswer(String answer) {
-		String str = "- " + answer;
+		String request = dialogList.get(0);
+		dialogList.remove(0);
+		
+		String str = request + System.getProperty("line.separator") + "- " + answer 
+				+ System.getProperty("line.separator");
 		newPhraseList.add(str);
 		dialogList.add(0, str);
 		dialogListView.setAdapter(new ArrayAdapter<String>(this,
@@ -222,7 +225,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			analyserTask.cancel(true);
 	    }
 		InputStream patternsStream = this.getApplicationContext().getResources().
-				openRawResource(R.raw.patterns);
+				openRawResource(R.raw.patterns_regex);
 
 	    textButton.setVisibility(View.GONE);
 	    progress.setVisibility(View.VISIBLE);
@@ -330,6 +333,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	    		dir.mkdir();
 	    	
 	        File file = new File(dir, fileName);
+//	        file.lastModified();
+//	        Date lastModDate = new Date(file.lastModified());
 
 		    if (file.exists())
 		    	return file.getPath();

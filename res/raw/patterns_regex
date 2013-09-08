@@ -1,4 +1,4 @@
-call_num	(\w*звон\w+)\s(\+?[\d\s]+)	~	null,number
+call_num	(\w*звон\w+)\s([^\d]+\s)*(\+?[\d\s]+)	~	null,null,number
 call_num	(\w*звон\w+)\s(((\w+)\s){0,2}(\w+))	~	null,contact
 dial_num	(набер\w+|набрать|набир\w+)\s(\+?[\d\s]+)	~	null,number
 run_ussd	(набер\w+|набрать|набир\w+)\s((\*|звездочка\s)(\d+)\s?(#|решетка))	~	null,null,null,number,null

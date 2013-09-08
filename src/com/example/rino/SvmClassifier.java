@@ -36,15 +36,15 @@ public class SvmClassifier {
 		}
 	}
 	
-	public int classify(double[] params) 
+	public int classify(int[] params) 
 	{		
-		scaleVector(params);
-		svm_node[] nodes = new svm_node[params.length];
+		double[] scaledParams = scaleVector(params);
+		svm_node[] nodes = new svm_node[scaledParams.length];
 		
 		for (int i = 0; i < params.length; i++) {
 			nodes[i] = new svm_node();
 			nodes[i].index = i + 1;
-			nodes[i].value = params[i];
+			nodes[i].value = scaledParams[i];
 		}
 		
 		return (int)svm.svm_predict(model, nodes);
@@ -93,8 +93,9 @@ public class SvmClassifier {
 	}
 	
 	
-	private void scaleVector(double[] v)
+	private double[] scaleVector(int[] v)
 	{
+		double[] s = new double[v.length]; // scaled array
 		
 		for (int k = 0; k < feature_idx.size(); k++) 
 		{
@@ -105,14 +106,15 @@ public class SvmClassifier {
 				continue;
 
 			if(v[i] == feature_min.get(k))
-				v[i] = lower;
+				s[i] = lower;
 			else if(v[i] == feature_max.get(k))
-				v[i] = upper;
+				s[i] = upper;
 			else
-				v[i] = lower + 
+				s[i] = lower + 
 					(upper - lower) * (v[k]-feature_min.get(k)) /
 					(feature_max.get(k)-feature_min.get(k));
 		}
+		return s;
 	}
 	
 	

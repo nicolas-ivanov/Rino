@@ -104,6 +104,7 @@ public class CommandAnalyser extends AsyncTask<String, String, Intent> {
 								String number = commandMatcher.group(numberNum);
 								//TODO: check that number is proper
 								Uri numUri = Uri.parse("tel:" + number);
+							    publishProgress(getStr(R.string.calling_number) + number);
 								resIntent = new Intent(android.content.Intent.ACTION_CALL, numUri);
 								return resIntent;
 

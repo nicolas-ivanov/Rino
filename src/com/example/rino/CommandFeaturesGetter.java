@@ -22,7 +22,7 @@ public class CommandFeaturesGetter {
 	}	
 
 
-	public double[] getParams(String command) 
+	public int[] getParams(String command) 
 	{    	
 		try {
 			
@@ -55,10 +55,10 @@ public class CommandFeaturesGetter {
 			
 				
 			String[] words = command.split(" ");
-			double[] pVector = new double[paramsNum];
+			int[] pVector = new int[paramsNum];
 			
 			for (int i=0; i<pVector.length; i++)
-				pVector[i] = 0.0;
+				pVector[i] = 0;
 			
 			for (int i=0; i<words.length; i++) {	
 				String w = words[i];			

@@ -12,6 +12,7 @@ public final class R {
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
+        public static final int ic_rino=0x7f020001;
     }
     public static final class id {
         public static final int colored_textview=0x7f080004;
@@ -36,7 +37,7 @@ public final class R {
         public static final int model_a_balance=0x7f040001;
         public static final int model_a_call=0x7f040002;
         public static final int model_a_email=0x7f040003;
-        public static final int model_a_look=0x7f040004;
+        public static final int model_a_search=0x7f040004;
         public static final int model_a_site=0x7f040005;
         public static final int model_a_sms=0x7f040006;
         public static final int model_action=0x7f040007;
@@ -46,7 +47,7 @@ public final class R {
         public static final int range_a_balance=0x7f04000b;
         public static final int range_a_call=0x7f04000c;
         public static final int range_a_email=0x7f04000d;
-        public static final int range_a_look=0x7f04000e;
+        public static final int range_a_search=0x7f04000e;
         public static final int range_a_site=0x7f04000f;
         public static final int range_a_sms=0x7f040010;
         public static final int range_action=0x7f040011;

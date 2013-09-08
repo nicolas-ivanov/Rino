@@ -2,7 +2,6 @@ package com.example.rino;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Locale;
 
 import android.util.Log;
 
@@ -162,4 +161,64 @@ public class ContactsDatabase {
 		//TODO: make a cut off by distance
 		return possibleContacts;
 	}
+	
 }
+
+
+
+/*private void retrieveContacts() {
+Cursor people = getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+people.moveToFirst();
+int i = 0;
+while (people.moveToNext()) {
+	i++;
+	int nameFieldColumnIndex = people.getColumnIndex(PhoneLookup.DISPLAY_NAME);
+	if (nameFieldColumnIndex == -1)	continue;
+	String contact = people.getString(nameFieldColumnIndex);
+	String contactId = people.getString(people.getColumnIndex(ContactsContract.Contacts._ID)); 
+	if (people.getColumnIndex(PhoneLookup.HAS_PHONE_NUMBER) != 0) {
+		Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+				null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+		phones.moveToFirst();
+		Collection<String> numbers = new ArrayList<String>();
+		while (phones.moveToNext()) {
+			String number = phones.getString(phones.getColumnIndex(
+					ContactsContract.CommonDataKinds.Phone.NUMBER));
+			Log.d(MainActivity.TAG, this.getLocalClassName()
+					+ " " + i 
+					+ ": new contact name = " + contact + "; number = "
+					+ number);
+			numbers.add(number);
+		}
+		phones.close();
+		
+		String whereName = ContactsContract.Data.MIMETYPE + " = ? AND " + ContactsContract.CommonDataKinds.StructuredName.CONTACT_ID + " = ?";
+		String[] whereNameParams = new String[] { ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE, contactId };
+		Cursor nameCur = getContentResolver().query(ContactsContract.Data.CONTENT_URI, null, whereName, whereNameParams, ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME);
+		String givenName = null, familyName = null, middleName = null;
+		nameCur.moveToFirst();
+		//TODO: fix bug
+		//Strange: doesn't find all first names and last names which are written and used on phone
+		while (nameCur.moveToNext()) {
+			givenName = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME));
+			familyName = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME));
+			middleName = nameCur.getString(nameCur.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.MIDDLE_NAME));
+			Log.d(MainActivity.TAG, this.getLocalClassName()
+					+ ": new full contact"
+					+ "; FN = " + givenName
+					+ "; LN = " + familyName 
+					+ "; MN = " + middleName 
+					+ "; name = " + contact);
+		}
+		nameCur.close();
+		
+		ContactsDatabase.getInstance().addContact(contact, givenName, familyName, middleName, numbers);
+	} else {
+		Log.d(MainActivity.TAG, this.getLocalClassName()
+				+ ": No numbers");
+	}
+}
+
+people.close();
+}*/
+
