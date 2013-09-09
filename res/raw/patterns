@@ -1,17 +1,17 @@
-10		a_call			\p{InCyrillic}*звон\p{InCyrillic}+|набрать|набер\p{InCyrillic}+|набир\p{InCyrillic}+|соедин\p{InCyrillic}+|телефон\p{InCyrillic}*|номер\p{InCyrillic}*
-10		a_sms			смс\p{InCyrillic}*|sms|сообщение
-10		a_email			e?mail|письмо|электронн\p{InCyrillic}+|почт\p{InCyrillic}+
-10		a_search		поиск|найди|найти|ищи|искать|покаж\p{InCyrillic}+|показ\p{InCyrillic}*|\p{InCyrillic}*смотр\p{InCyrillic}*|узна\p{InCyrillic}+|скаж\p{InCyrillic}*|расска\p{InCyrillic}+|значит\p{InCyrillic}*|означа\p{InCyrillic}+
-10		a_site			покаж\p{InCyrillic}+|откр\p{InCyrillic}+
-10		a_alarm			будильник|постав\p{InCyrillic}+|установ\p{InCyrillic}+
-10		a_balance		баланс|покаж\p{InCyrillic}+|показ\p{InCyrillic}*|\p{InCyrillic}*смотр\p{InCyrillic}*|узна\p{InCyrillic}+|скаж\p{InCyrillic}*
+10		a_call			\p{InCyrillic}*звон\p{InCyrillic}+|набрать|набер\p{InCyrillic}+|набир\p{InCyrillic}+|соедин\p{InCyrillic}+|телефон\p{InCyrillic}*|номер\p{InCyrillic}*|выз\p{InCyrillic}+
+10		a_sms			смс\p{InCyrillic}*|sms|сообщение|напиш\p{InCyrillic}+|напис\p{InCyrillic}+|набрать|набер\p{InCyrillic}+|набир\p{InCyrillic}+|отправ\p{InCyrillic}+|перешл\p{InCyrillic}+|пересл\p{InCyrillic}+|номер\p{InCyrillic}*
+10		a_email			e?mail|письмо|электронн\p{InCyrillic}+|почт\p{InCyrillic}+|напиш\p{InCyrillic}+|напис\p{InCyrillic}+|набрать|набер\p{InCyrillic}+|набир\p{InCyrillic}+|отправ\p{InCyrillic}+|перешл\p{InCyrillic}+|пересл\p{InCyrillic}+|адрес\p{InCyrillic}*
+10		a_search		поиск\p{InCyrillic}*|найди|найти|ищи|искать|покаж\p{InCyrillic}+|показ\p{InCyrillic}*|\p{InCyrillic}*смотр\p{InCyrillic}*|\p{InCyrillic}зна\p{InCyrillic}+|скаж\p{InCyrillic}*|расска\p{InCyrillic}+|значит\p{InCyrillic}*|означа\p{InCyrillic}+|стать\p{InCyrillic}+|определен\p{InCyrillic}+
+10		a_site			покаж\p{InCyrillic}+|откр\p{InCyrillic}+|браузер\p{InCyrillic}+
+10		a_alarm			будильник|постав\p{InCyrillic}+|установ\p{InCyrillic}+|заве\p{InCyrillic}+|разбуди\p{InCyrillic}*
+10		a_balance		баланс|покаж\p{InCyrillic}+|показ\p{InCyrillic}*|\p{InCyrillic}*смотр\p{InCyrillic}*|узна\p{InCyrillic}+|скаж\p{InCyrillic}*|определ\p{InCyrillic}*
 
-1		p_name			Имя|Фамилия|Отчество|мам\p{InCyrillic}+|кол\p{InCyrillic}*|никола\p{InCyrillic}*|паш\p{InCyrillic}*|павел|стас\p{InCyrillic}*|кирил\p{InCyrillic}*|вас\p{InCyrillic}*|леш\p{InCyrillic}*|ван\p{InCyrillic}*|саш\p{InCyrillic}*|наст\p{InCyrillic}*|даш\p{InCyrillic}*|маш\p{InCyrillic}*|ан\p{InCyrillic}*|пет\p{InCyrillic}*|дим\p{InCyrillic}*|оля\p{InCyrillic}*|андр\p{InCyrillic}*|антон\p{InCyrillic}*
-2		p_number		Номер|\+?\d+|\+|плюс
-3		p_email			Адрес|[^S]+@[^S]+
-4		p_site			Сайт|\w+\.+ru|com|org|net|su
-5		p_time			Время|\d{1,2}|утр\p{InCyrillic}+|вечер\p{InCyrillic}*|час\p{InCyrillic}*|минут\p{InCyrillic}*|завтра|полчаса
+1		p_name			Name|Surname|Middlename|мам\p{InCyrillic}+|пап\p{InCyrillic}+|кол\p{InCyrillic}+|паш\p{InCyrillic}+|дмитри\p{InCyrillic}+|дим\p{InCyrillic}+|вас\p{InCyrillic}*|леш\p{InCyrillic}*|ван\p{InCyrillic}*|саш\p{InCyrillic}*|наст\p{InCyrillic}*|даш\p{InCyrillic}*|маш\p{InCyrillic}*|ан\p{InCyrillic}*|пет\p{InCyrillic}*|дим\p{InCyrillic}*|оля\p{InCyrillic}*|андр\p{InCyrillic}*|антон\p{InCyrillic}*|иванов\p{InCyrillic}*|петров\p{InCyrillic}*
+2		p_number		Number|\+?\d+|[\+\*#]|плюс|звездочка|решетка
+3		p_email			Address|[^S]+@[^S]+|@|собака|at|.|точка|дот|dot|ru|ру|com|ком|org|орг|su|су
+4		p_site			Site|\w+\.ru|\w+\.com|\w+\.org|\w+\.net|\w+\.su|yandex|яндекс\p{InCyrillic}*|google|гугл\p{InCyrillic}*|rambler|рамблер\p{InCyrillic}*|википед\p{InCyrillic}+|wikipedia|вики|wiki|интернет\p{InCyrillic}*
+5		p_time			Time|\d{1,2}|утр\p{InCyrillic}+|вечер\p{InCyrillic}*|час\p{InCyrillic}*|минут\p{InCyrillic}*|завтра|полчаса
 
 -2		s_text			текст\p{InCyrillic}*
--2		s_search		что|кто|тако\p{InCyrillic}*|значит|слов\p{InCyrillic}*|про|в|интернет\p{InCyrillic}+|википед\p{InCyrillic}+
-10		s_write			напиш\p{InCyrillic}+|напис\p{InCyrillic}+|набрать|набер\p{InCyrillic}+|набир\p{InCyrillic}+|отправ\p{InCyrillic}+|перешл\p{InCyrillic}+|пересл\p{InCyrillic}+
+-2		s_search		что|кто|тако\p{InCyrillic}*|нибудь|значит|слов\p{InCyrillic}*|поняти\p{InCyrillic}*
+-3		s_prepos		в|без|до|из|к|на|по|о|от|перед|при|через|с|у|за|над|об|под|про|для

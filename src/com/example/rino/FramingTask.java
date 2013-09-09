@@ -16,18 +16,16 @@ import android.util.Log;
 
 public class FramingTask extends AsyncTask<String, String, Intent> {
 
-	public static enum ActionType {A_CALL, A_SMS, A_SITE, A_EMAIL, A_LOOK, A_ALARM, A_BALANCE};
-	public static enum ParamsType {ACTION, P_NAME, P_NUMBER, P_EMAIL, P_SITE, P_TIME, OTHER, QUOTE, Q_MARK};
+	public static enum ActionType {A_CALL, A_SMS, A_SITE, A_EMAIL, A_SEARCH, A_ALARM, A_BALANCE};
+	public static enum ParamsType {ACTION, P_NAME, P_NUMBER, P_EMAIL, P_SITE, P_TIME, OTHER, QUOTE, Q_MARK, PREPOS};
 	
 	private MainActivity mainActivity;
 	private MainActivity.SvmBunch svm_bunch;
-	private String nl;
 
 	
 	FramingTask(MainActivity main, MainActivity.SvmBunch bunch){
 		mainActivity = main;
 		svm_bunch = bunch;
-		nl = System.getProperty("line.separator");
 	}
 	
 	
@@ -47,7 +45,7 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 					numUri = Uri.parse("tel:" + getPhoneNumber(wgroups.get(i), mainActivity));
 					break;
 					
-				case P_NUMBER: 
+				case P_NUMBER:
 					numUri = Uri.parse("tel:" + wgroups.get(i));
 					break;
 					
@@ -138,7 +136,7 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 			wwwUri = null;
 		}
 		
-		public void fill(List<String> wgroups, List<ParamsType> labels)
+		public Intent fill(List<String> wgroups, List<ParamsType> labels)
 		{			
 			for (int i = 0; i < wgroups.size(); i++)
 				switch (labels.get(i)) {
@@ -148,14 +146,16 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 					
 				default: break;
 				}
+			
+			return new Intent(Intent.ACTION_VIEW, wwwUri);
 		}
 	}	
 	
-	private class LookFrame {
+	private class SearchFrame {
 		private Uri wwwUri;
 		private String text;
 		
-		public LookFrame() {
+		public SearchFrame() {
 			wwwUri = Uri.parse("http://yandex.ru/yandsearch?text=");
 			text = "";
 		}
@@ -224,13 +224,13 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 		ActionType a_type = ActionType.A_CALL;
 		
 		switch (c_id) {
-		case 1: a_type = ActionType.A_CALL; break;
-		case 2: a_type = ActionType.A_SMS; break;
-		case 3: a_type = ActionType.A_EMAIL; break;
-		case 4: a_type = ActionType.A_LOOK; break;
-		case 5: a_type = ActionType.A_SITE; break;
-		case 6: a_type = ActionType.A_ALARM; break;
-		case 7: a_type = ActionType.A_BALANCE; break;
+		case 1: a_type = ActionType.A_CALL; 	break;
+		case 2: a_type = ActionType.A_SMS; 		break;
+		case 3: a_type = ActionType.A_EMAIL; 	break;
+		case 4: a_type = ActionType.A_SEARCH; 	break;
+		case 5: a_type = ActionType.A_SITE; 	break;
+		case 6: a_type = ActionType.A_ALARM; 	break;
+		case 7: a_type = ActionType.A_BALANCE; 	break;
 		default:
 				System.out.println("Command ID '" + c_id + "' is incorrect");
 		}
@@ -301,14 +301,12 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 			publishLabels(labels);
 			
 			SiteFrame siteFrame = new SiteFrame();
-			siteFrame.fill(words, labels);
-			
-			// step 3: form Intent
-			resIntent = new Intent(Intent.ACTION_VIEW, siteFrame.wwwUri);
+			resIntent = siteFrame.fill(words, labels);
+
 			break;
 		
 		
-		case A_LOOK:
+		case A_SEARCH:
 			for (int i = 0; i < wFeatures.length; i++)
 				labels_id.add(svm_bunch.svm_search.classify(wFeatures[i]));
 			
@@ -318,8 +316,8 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 			publishLabels(labels);
 
 			// step 3: form Intent
-			LookFrame lookFrame = new LookFrame();			
-			resIntent = lookFrame.fill(words, labels);
+			SearchFrame searchFrame = new SearchFrame();			
+			resIntent = searchFrame.fill(words, labels);
 			break;
 			
 			
@@ -393,6 +391,7 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
     		case  0: p_type.add(ParamsType.OTHER); 		break;
     		case -1: p_type.add(ParamsType.QUOTE); 		break;
     		case -2: p_type.add(ParamsType.Q_MARK); 	break;
+    		case -3: p_type.add(ParamsType.PREPOS);		break;
     		default:
     				System.out.println("Parameter's ID '" + p_type_id.get(i) + "' is incorrect");
     		}
@@ -424,6 +423,9 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 			currWord = wordsIterator.next();
 			currLabel = labelsIterator.next();
 			
+			currWord = swapSpecialWords(currWord, currLabel);
+			wordsIterator.set(currWord);
+			
 			if (currLabel == prevLabel)
 			{
 				wordsIterator.previous();
@@ -440,6 +442,67 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 				prevLabel = currLabel;
 			}
 		}			
+    }
+    
+    private String swapSpecialWords(String word, ParamsType label)
+    {
+    	String resWord = word;
+    	
+		switch (label) {
+		
+		case P_NAME: 	
+			resWord = word.substring(0,1).toUpperCase() + word.substring(1, word.length() - 1);
+			break;
+			
+		case P_NUMBER:
+			if (word.equals("плюс"))			resWord = "+";
+			else if (word.equals("звездочка"))	resWord = "*";
+			else if (word.equals("решетка"))	resWord = Uri.encode("#");
+
+			else if (word.equals("ноль"))	resWord = "0";
+			else if (word.equals("один"))	resWord = "1";
+			else if (word.equals("два"))	resWord = "2";
+			else if (word.equals("три"))	resWord = "3";
+			else if (word.equals("четыре"))	resWord = "4";
+			else if (word.equals("пять"))	resWord = "5";
+			else if (word.equals("шесть"))	resWord = "6";
+			else if (word.equals("семь"))	resWord = "7";
+			else if (word.equals("восемь"))	resWord = "8";
+			else if (word.equals("девять"))	resWord = "9";
+			
+			break;
+			
+			
+		case P_EMAIL: 	
+			if (word.equals("собака"))		resWord = "@";
+			else if (word.equals("точка"))	resWord = ".";
+			else if (word.equals("дот"))	resWord = ".";
+			
+			else if (word.equals("ру"))		resWord = "ru";
+			else if (word.equals("ком"))	resWord = "com";
+			else if (word.equals("орг"))	resWord = "org";
+			else if (word.equals("су"))		resWord = "su";
+			
+			break;
+			
+			
+		case P_SITE: 	
+			if	(word.matches("википед\\w+") 		|| word.equals("wikipedia") 	||
+				 word.equals("вики") 				|| word.equals("wiki"))			resWord = "ru.wikipedia.org";
+			else if (word.matches("яндекс\\w+") 	|| word.equals("yandex"))		resWord = "yandex.ru";
+			else if (word.matches("гугл\\w+") 		|| word.equals("google"))		resWord = "google.ru";
+			else if (word.matches("рамблер\\w+") 	|| word.equals("rambler"))		resWord = "rambler.ru";
+			
+			else if (word.equals("джимейл") 		|| word.equals("gmail"))		resWord = "gmail.com";
+			else if (word.equals("майл") 			|| word.equals("mail"))			resWord = "mail.ru";
+			
+			else if (word.matches("интернет\\w+"))	resWord = "yandex.ru";
+			
+			break;
+		default:
+		}
+		
+		return resWord;
     }
     
     

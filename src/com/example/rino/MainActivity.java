@@ -35,8 +35,6 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	public static final String TAG = "Rino";
 	public static final String SVM = "svmModel";
-	public static enum ActionType {A_CALL, A_SMS, A_SITE, A_EMAIL, A_SEARCH, A_ALARM, A_BALANCE};
-	public static enum ParamsType {ACTION, P_NAME, P_NUMBER, P_EMAIL, P_SITE, P_TIME, QUOTE, Q_MARK, OTHER};
 	
 	private ArrayList<String> dialogList;
 	private ArrayList<String> newPhraseList;
