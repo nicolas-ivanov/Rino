@@ -63,13 +63,15 @@ public final class R {
         public static final int contact_is_found=0x7f05000b;
         public static final int contact_is_not_found=0x7f05000c;
         public static final int dialing_number=0x7f05000f;
-        public static final int dialog_history_is_empty=0x7f050018;
+        public static final int dialog_history_is_empty=0x7f05001a;
         public static final int loading_webpage=0x7f050013;
         public static final int menu_settings=0x7f050001;
+        public static final int no_number=0x7f050019;
         public static final int no_pnohes_in_contact=0x7f05000d;
         public static final int recognition_is_cancelled=0x7f05000a;
         public static final int recognizer_is_absent=0x7f050006;
         public static final int running_ussd=0x7f050011;
+        public static final int searching_web=0x7f050018;
         public static final int sending_email=0x7f050014;
         public static final int sending_sms=0x7f050015;
         public static final int setting_alarm=0x7f050017;

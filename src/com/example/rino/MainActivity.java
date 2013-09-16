@@ -168,7 +168,7 @@ public class MainActivity extends Activity implements OnClickListener {
 				break;
 				
 			case RESULT_CANCELED:
-				addAnswer(getStr(R.string.recognition_is_cancelled));
+//				addAnswer(getStr(R.string.recognition_is_cancelled));
 		        break;
 			}
 		}

@@ -18,15 +18,17 @@
     <string name="no_pnohes_in_contact">У данного контакта нет телефонных номеров</string>
     <string name="unknown_action">Твой телефон не может выполнить это действие</string>
     
-    <string name="dialing_number">Набираю номер&#160;</string>
-    <string name="calling_number">Звоню по номеру&#160;</string>
-    <string name="running_ussd">Выполняю запрос&#160;</string>
+    <string name="dialing_number">Набираю номер</string>
+    <string name="calling_number">Звоню по номеру</string>
+    <string name="running_ussd">Выполняю запрос</string>
     <string name="checking_balance">Запрашиваю баланс</string>
-    <string name="loading_webpage">Загружаю страницу&#160;</string>
-    <string name="sending_email">Посылаю письмо по адресу&#160;</string>
-    <string name="sending_sms">Отправляю SMS на номер&#160;</string>
-    <string name="with_text">&#160;с текстом&#160;</string>
-    <string name="setting_alarm">Ставлю будильник на&#160;</string>
+    <string name="loading_webpage">Загружаю страницу</string>
+    <string name="sending_email">Посылаю письмо по адресу</string>
+    <string name="sending_sms">Отправляю SMS на номер</string>
+    <string name="with_text">с текстом</string>
+    <string name="setting_alarm">Ставлю будильник на</string>
+    <string name="searching_web">Ищу</string>
+    <string name="no_number">Не могу определить телефонный номер&#8230;</string>
     
     <string name="dialog_history_is_empty">История диалога пуста</string>
 

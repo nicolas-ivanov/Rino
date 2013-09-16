@@ -3,6 +3,7 @@ package com.example.rino;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Locale;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +22,7 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 	
 	private MainActivity mainActivity;
 	private MainActivity.SvmBunch svm_bunch;
+	private Boolean debugMode = false;
 
 	
 	FramingTask(MainActivity main, MainActivity.SvmBunch bunch){
@@ -28,6 +30,9 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 		svm_bunch = bunch;
 	}
 	
+	private String getStr(int strCode)	{
+		return String.format(mainActivity.getResources().getString(strCode));
+	}
 	
 	
 	private class CallFrame {
@@ -53,7 +58,14 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 				}
 
 			return new Intent(Intent.ACTION_CALL, numUri);
-		}		
+		}	
+		
+		public String getResponse()	{
+			if (numUri != null)
+				return getStr(R.string.calling_number) + " " + numUri.getSchemeSpecificPart();
+			else
+				return getStr(R.string.no_number);
+		}
 	}	
 	
 	
@@ -93,6 +105,14 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 		private boolean check() {
 			return false;
 		}
+	
+		public String getResponse()	{
+			if (numUri != null)
+				return 	getStr(R.string.sending_sms) + " " + numUri.getSchemeSpecificPart() + " " + 
+						getStr(R.string.with_text) + " " + "«" + text + "»";
+			else
+				return getStr(R.string.no_number);
+		}
 	}
 	
 	
@@ -111,7 +131,6 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 				switch (labels.get(i)) {
 				case P_NAME: 
 					emailUri = Uri.parse("mailto:" + getEmail(wgroups.get(i), mainActivity));
-//					emailUri = Uri.parse("mailto:" + wgroups.get(i));
 					break;
 					
 				case QUOTE: 
@@ -125,6 +144,10 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 			resIntent.putExtra(Intent.EXTRA_SUBJECT, "Hello from Rino");
 			resIntent.putExtra(Intent.EXTRA_TEXT, text + "\n\nBest regards,\nRinoRecognizer");
 			return resIntent;
+		}	
+		
+		public String getResponse()	{
+			return getStr(R.string.sending_email) + " " + emailUri.getSchemeSpecificPart();
 		}
 	}	
 	
@@ -148,6 +171,10 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 				}
 			
 			return new Intent(Intent.ACTION_VIEW, wwwUri);
+		}	
+		
+		public String getResponse()	{
+			return getStr(R.string.loading_webpage)	+ " " + wwwUri.getSchemeSpecificPart();
 		}
 	}	
 	
@@ -165,17 +192,22 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 			for (int i = 0; i < wgroups.size(); i++)
 				switch (labels.get(i)) {
 				case P_SITE: 
-					wwwUri = Uri.parse("http://yandex.ru/yandsearch?text=");
+					wwwUri = Uri.parse("http://ru.wikipedia.org/wiki/");
 					break;
 					
 				case QUOTE: 
-					text = wgroups.get(i);
+					text = wgroups.get(i).replace(" ", "_");
 					break;
 					
 				default: break;
 				}
 			
-			return new Intent(Intent.ACTION_VIEW, Uri.parse(wwwUri.getPath() + text));
+			String resStr = "http://ru.wikipedia.org/w/index.php?search=" + text;
+			return new Intent(Intent.ACTION_VIEW, Uri.parse(resStr));
+		}	
+		
+		public String getResponse()	{
+			return getStr(R.string.searching_web) + " " + "«" + text + "»";
 		}
 	}
 	
@@ -191,10 +223,17 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 		
 		public Intent fill(List<String> wgroups, List<ParamsType> labels)
 		{			
+			Boolean hourIsFound = false;
+			
 			for (int i = 0; i < wgroups.size(); i++)
 				switch (labels.get(i)) {
-				case P_TIME: 
-					
+				case P_NUMBER: 
+					if (!hourIsFound) {
+						hour = Integer.parseInt(wgroups.get(i));
+						hourIsFound = true;
+					}
+					else
+						minutes = Integer.parseInt(wgroups.get(i));
 					break;	
 					
 				default: break;
@@ -206,6 +245,30 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 			resIntent.putExtra(AlarmClock.EXTRA_MESSAGE,"Rino alarm");
 			
 			return resIntent;
+		}	
+		
+		public String getResponse()	{
+			return getStr(R.string.setting_alarm) + " " + hour.toString() + ":" + minutes.toString();
+		}
+	}	
+	
+	
+	private class BalanceFrame {
+		private Uri numUri;
+		
+		public BalanceFrame() {
+			String ussd = "*100" + Uri.encode("#");
+			numUri = Uri.parse("tel:" + ussd);	
+		}
+	
+		public Intent fill(List<String> wgroups, List<ParamsType> labels)
+		{	
+			Intent resIntent = new Intent(android.content.Intent.ACTION_CALL, numUri);			
+			return resIntent;
+		}	
+		
+		public String getResponse()	{
+			return getStr(R.string.checking_balance);
 		}
 	}
 	
@@ -234,7 +297,8 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 		default:
 				System.out.println("Command ID '" + c_id + "' is incorrect");
 		}
-		publishProgress("Command type: " + a_type.toString().toLowerCase());
+		if (debugMode)
+			publishProgress("Command type: " + a_type.toString().toLowerCase());
 		
     	
     	// step 2: map each word of a command with a label to get parameters
@@ -251,14 +315,12 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 		case A_CALL:
 			for (int i = 0; i < wFeatures.length; i++)
 				labels_id.add(svm_bunch.svm_call.classify(wFeatures[i]));
-			
+
 			labels = convertToEnum(labels_id);
-			publishLabels(labels);
 			makeGroups(words, labels);
-			publishLabels(labels);
-			
 			CallFrame callFrame = new CallFrame();
 			resIntent = callFrame.fill(words, labels);
+			publishProgress(callFrame.getResponse());
 			break;
 			
 			
@@ -267,12 +329,10 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 				labels_id.add(svm_bunch.svm_sms.classify(wFeatures[i]));
 			
 			labels = convertToEnum(labels_id);
-			publishLabels(labels);	
 			makeGroups(words, labels);
-			publishLabels(labels);
-			
 			SmsFrame smsFrame = new SmsFrame();
 			resIntent = smsFrame.fill(words, labels);
+			publishProgress(smsFrame.getResponse());
 			break;
 			
 			
@@ -281,66 +341,58 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 				labels_id.add(svm_bunch.svm_email.classify(wFeatures[i]));
 			
 			labels = convertToEnum(labels_id);
-			publishLabels(labels);
 			makeGroups(words, labels);
-			publishLabels(labels);
-			
 			EmailFrame emailFrame = new EmailFrame();
 			resIntent = emailFrame.fill(words, labels);
-			
+			publishProgress(emailFrame.getResponse());
 			break;
 			
 			
 		case A_SITE:
 			for (int i = 0; i < wFeatures.length; i++)
 				labels_id.add(svm_bunch.svm_site.classify(wFeatures[i]));
-			
+
 			labels = convertToEnum(labels_id);
-			publishLabels(labels);
 			makeGroups(words, labels);
-			publishLabels(labels);
-			
 			SiteFrame siteFrame = new SiteFrame();
 			resIntent = siteFrame.fill(words, labels);
-
+			publishProgress(siteFrame.getResponse());
 			break;
 		
 		
 		case A_SEARCH:
 			for (int i = 0; i < wFeatures.length; i++)
 				labels_id.add(svm_bunch.svm_search.classify(wFeatures[i]));
-			
-			labels = convertToEnum(labels_id);
-			publishLabels(labels);
-			makeGroups(words, labels);
-			publishLabels(labels);
 
-			// step 3: form Intent
+			labels = convertToEnum(labels_id);
+			makeGroups(words, labels);
 			SearchFrame searchFrame = new SearchFrame();			
 			resIntent = searchFrame.fill(words, labels);
+			publishProgress(searchFrame.getResponse());
 			break;
 			
 			
 		case A_ALARM:
 			for (int i = 0; i < wFeatures.length; i++)
 				labels_id.add(svm_bunch.svm_alarm.classify(wFeatures[i]));
-			
-			labels = convertToEnum(labels_id);
-			publishLabels(labels);
-			makeGroups(words, labels);
-			publishLabels(labels);
 
-			// step 3: form Intent
+			labels = convertToEnum(labels_id);
+			makeGroups(words, labels);
 			AlarmFrame alarmFrame = new AlarmFrame();			
 			resIntent = alarmFrame.fill(words, labels);
+			publishProgress(alarmFrame.getResponse());
 			break;
 
 			
 		case A_BALANCE:
-			// step 3: form Intent
-			String ussd = "*100" + Uri.encode("#");
-			Uri numUri = Uri.parse("tel:" + ussd);				
-			resIntent = new Intent(android.content.Intent.ACTION_CALL, numUri);
+			for (int i = 0; i < wFeatures.length; i++)
+				labels_id.add(svm_bunch.svm_alarm.classify(wFeatures[i]));
+			
+			labels = convertToEnum(labels_id);
+			makeGroups(words, labels);
+			BalanceFrame balanceFrame = new BalanceFrame();			
+			resIntent = balanceFrame.fill(words, labels);	
+			publishProgress(balanceFrame.getResponse());
 			break;
 			
 		}
@@ -374,6 +426,18 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
     	
     	return wList;
     }
+
+    
+    private void makeGroups(List<String> words, List<ParamsType> labels) 
+    {
+		if (debugMode) {
+			publishLabels(labels);
+			group(words, labels);
+			publishLabels(labels);		
+		}
+		else 
+			group(words, labels);
+    }
     
     
     private List<ParamsType> convertToEnum(List<Integer> p_type_id)
@@ -399,6 +463,7 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
     	return p_type;
     }
     
+    
     private void publishLabels(List<ParamsType>labels)
     {
 		String labels_str = "Labels:" + System.getProperty("line.separator");
@@ -408,7 +473,7 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 		publishProgress(labels_str.toLowerCase());
     }
 	
-    private void makeGroups(List<String> words, List<ParamsType> labels)
+    private void group(List<String> words, List<ParamsType> labels)
     {
     	String prevWord = "";
 		ParamsType prevLabel = null;
@@ -441,7 +506,7 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 				prevWord = currWord;
 				prevLabel = currLabel;
 			}
-		}			
+		}		
     }
     
     private String swapSpecialWords(String word, ParamsType label)
@@ -489,14 +554,14 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 		case P_SITE: 	
 			if	(word.matches("википед\\w+") 		|| word.equals("wikipedia") 	||
 				 word.equals("вики") 				|| word.equals("wiki"))			resWord = "ru.wikipedia.org";
-			else if (word.matches("яндекс\\w+") 	|| word.equals("yandex"))		resWord = "yandex.ru";
-			else if (word.matches("гугл\\w+") 		|| word.equals("google"))		resWord = "google.ru";
-			else if (word.matches("рамблер\\w+") 	|| word.equals("rambler"))		resWord = "rambler.ru";
+			else if (word.matches("яндекс\\w*") 	|| word.equals("yandex"))		resWord = "yandex.ru";
+			else if (word.matches("гугл\\w*") 		|| word.equals("google"))		resWord = "google.ru";
+			else if (word.matches("рамблер\\w*") 	|| word.equals("rambler"))		resWord = "rambler.ru";
 			
 			else if (word.equals("джимейл") 		|| word.equals("gmail"))		resWord = "gmail.com";
 			else if (word.equals("майл") 			|| word.equals("mail"))			resWord = "mail.ru";
 			
-			else if (word.matches("интернет\\w+"))	resWord = "yandex.ru";
+			else if (word.matches("интернет\\w*"))	resWord = "yandex.ru";
 			
 			break;
 		default:
