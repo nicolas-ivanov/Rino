@@ -22,7 +22,7 @@ public class FramingTask extends AsyncTask<String, String, Intent> {
 	
 	private MainActivity mainActivity;
 	private MainActivity.SvmBunch svm_bunch;
-	private Boolean debugMode = false;
+	private Boolean debugMode = true;
 
 	
 	FramingTask(MainActivity main, MainActivity.SvmBunch bunch){
