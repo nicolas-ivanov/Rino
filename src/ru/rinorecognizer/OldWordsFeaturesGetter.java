@@ -1,4 +1,4 @@
-package com.example.rino;
+package ru.rinorecognizer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,16 +7,18 @@ import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.example.rino.R;
+
 import android.util.Log;
 
-public class WordsFeaturesGetter {
+public class OldWordsFeaturesGetter {
 
 	private static final Pattern structurePattern = Pattern.compile("([-?\\d,]+)\\t+(\\w+)\\t+([^\\t~]+)");
 	private InputStream patternsStream;
 	private BufferedReader patternsReader;
 	
 	
-	WordsFeaturesGetter(MainActivity main){
+	OldWordsFeaturesGetter(MainActivity main){
 		patternsStream = main.getApplicationContext().getResources().openRawResource(R.raw.patterns);
 		patternsReader = new BufferedReader(new InputStreamReader(patternsStream));
 	}	
@@ -53,6 +55,7 @@ public class WordsFeaturesGetter {
 			patternsReader.reset();
 			
 			
+			/// Start of main section ///////////////////////////////////////////////////
 			
 			String[] words = command.split(" ");
 			int[][] wordsVectors = new int[words.length][];
@@ -97,8 +100,8 @@ public class WordsFeaturesGetter {
 			
 			
 			// Get parameters vectors for trigrams of words
-			int paramsNum_2 = paramsNum*2; 
-			int paramsNum_3 = paramsNum*3;
+			int paramsNum_2 = paramsNum * 2; 
+			int paramsNum_3 = paramsNum * 3;
 			int[][] trigramsVectors = new int[words.length][];
 			
 			
@@ -113,6 +116,7 @@ public class WordsFeaturesGetter {
 				}
 				trigramsVectors[k] = tVector;
 			}			
+			/// End of main section ///////////////////////////////////////////////////
 			
 			return trigramsVectors;
 	

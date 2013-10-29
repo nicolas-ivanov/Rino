@@ -1,4 +1,4 @@
-package com.example.rino;
+package ru.rinorecognizer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,16 +7,18 @@ import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.example.rino.R;
+
 import android.util.Log;
 
-public class CommandFeaturesGetter {
+public class OldCommandFeaturesGetter {
 
 	private static final Pattern structurePattern = Pattern.compile("([-?\\d,]+)\\t+(\\w+)\\t+([^\\t~]+)");
 	private InputStream patternsStream;
 	private BufferedReader patternsReader;
 	
 	
-	CommandFeaturesGetter(MainActivity main){
+	OldCommandFeaturesGetter(MainActivity main){
 		patternsStream = main.getApplicationContext().getResources().openRawResource(R.raw.patterns);
 		patternsReader = new BufferedReader(new InputStreamReader(patternsStream));
 	}	
@@ -52,16 +54,25 @@ public class CommandFeaturesGetter {
 			}
 			patternsReader.reset();
 			
-			
+
+			/// Main section ///////////////////////////////////////////////////
 				
 			String[] words = command.split(" ");
 			int[] pVector = new int[paramsNum];
 			
-			for (int i=0; i<pVector.length; i++)
+			for (int i = 0; i < pVector.length; i++)
 				pVector[i] = 0;
+
 			
-			for (int i=0; i<words.length; i++) {	
-				String w = words[i];			
+			for (int i = 0; i < words.length; i++) {	
+				String w = words[i];				
+				
+				if (w.length() == 0) 
+					continue;
+				
+				if (w.charAt(0) == '_')
+					w = w.substring(1);
+
 				int pNum = 0;
 				
 				while ((rawPattern = patternsReader.readLine()) != null) {
@@ -85,8 +96,10 @@ public class CommandFeaturesGetter {
 					pNum++;
 				}
 
-				patternsReader.reset();
+				patternsReader.reset(); //
 			}
+			/// End of main section ///////////////////////////////////////////////////
+			
 			return pVector;	
 	
 		} 

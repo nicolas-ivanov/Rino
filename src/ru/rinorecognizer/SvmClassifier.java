@@ -1,4 +1,4 @@
-package com.example.rino;
+package ru.rinorecognizer;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -38,6 +38,7 @@ public class SvmClassifier {
 	
 	public int classify(int[] params) 
 	{		
+		//TODO: apply scaling only for action type classification
 		double[] scaledParams = scaleVector(params);
 		svm_node[] nodes = new svm_node[scaledParams.length];
 		

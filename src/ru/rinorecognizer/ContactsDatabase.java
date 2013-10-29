@@ -1,4 +1,4 @@
-package com.example.rino;
+package ru.rinorecognizer;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,4 +1,4 @@
-package com.example.rino;
+package ru.rinorecognizer;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,6 +8,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import com.example.rino.R;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -47,8 +49,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	private TextView coloredTextView;
 	private ListView dialogListView;
 
-	private CommandAnalyser analyserTask;
 	private FramingTask framingTask;
+	private Frame savedFrame;
 	
 	private PackageManager packageManager;
 	private InputMethodManager inputManager;
@@ -59,18 +61,15 @@ public class MainActivity extends Activity implements OnClickListener {
 		SvmClassifier svm_A;
 		SvmClassifier svm_call;
 		SvmClassifier svm_sms;
+		SvmClassifier svm_email;
 		SvmClassifier svm_search;
 		SvmClassifier svm_site;
 		SvmClassifier svm_alarm;
-		SvmClassifier svm_email;
+		SvmClassifier svm_balance;
 	}
 	
-	private SvmBunch svm_bundle;
+	private SvmBunch svm_bunch;
 	
-	public static class Token {
-		String lexem;
-		Integer label;
-	};
 	
 
 //////////////// Common Methods ////////////////////////////////////////////////////////////////////
@@ -98,14 +97,15 @@ public class MainActivity extends Activity implements OnClickListener {
 				android.R.layout.simple_list_item_1, dialogList));
 
 		
-		svm_bundle = new SvmBunch();
-		svm_bundle.svm_A = new SvmClassifier(getPath("model_action"), getPath("range_action"));
-		svm_bundle.svm_call = new SvmClassifier(getPath("model_a_call"), getPath("range_a_call"));
-		svm_bundle.svm_sms = new SvmClassifier(getPath("model_a_sms"), getPath("range_a_sms"));
-		svm_bundle.svm_site = new SvmClassifier(getPath("model_a_site"), getPath("range_a_site"));
-		svm_bundle.svm_email = new SvmClassifier(getPath("model_a_email"), getPath("range_a_email"));
-		svm_bundle.svm_search = new SvmClassifier(getPath("model_a_search"), getPath("range_a_search"));
-		svm_bundle.svm_alarm = new SvmClassifier(getPath("model_a_alarm"), getPath("range_a_alarm"));
+		svm_bunch = new SvmBunch();
+		svm_bunch.svm_A = new SvmClassifier(getPath("model_action"), getPath("range_action"));
+		svm_bunch.svm_call = new SvmClassifier(getPath("model_a_call"), getPath("range_a_call"));
+		svm_bunch.svm_sms = new SvmClassifier(getPath("model_a_sms"), getPath("range_a_sms"));
+		svm_bunch.svm_site = new SvmClassifier(getPath("model_a_site"), getPath("range_a_site"));
+		svm_bunch.svm_email = new SvmClassifier(getPath("model_a_email"), getPath("range_a_email"));
+		svm_bunch.svm_search = new SvmClassifier(getPath("model_a_search"), getPath("range_a_search"));
+		svm_bunch.svm_alarm = new SvmClassifier(getPath("model_a_alarm"), getPath("range_a_alarm"));
+		svm_bunch.svm_balance = new SvmClassifier(getPath("model_a_balance"), getPath("range_a_balance"));
 		
 		
 		// Check to see if a recognition activity is present
@@ -140,7 +140,6 @@ public class MainActivity extends Activity implements OnClickListener {
 		} 
 		else if (v.getId() == R.id.text_button) {
 			String command = textField.getText().toString();
-//			startCommandAnalysing(command);
 			startFramingTask(command);
 			textField.setText("");
 			hideSoftKeyboard();
@@ -163,7 +162,6 @@ public class MainActivity extends Activity implements OnClickListener {
 				commands = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 				String command = commands.get(0);
 				Log.d(TAG, this.getLocalClassName() + ": res = '" + command + "'");
-//				startCommandAnalysing(command);
 				startFramingTask(command);
 				break;
 				
@@ -190,7 +188,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	
 	
-////////////////Dialog List Updating //////////////////////////////////////////////////////////////
+//////////////// Dialog List Updating //////////////////////////////////////////////////////////////
 
 	public void addRequest(String request) {
 //		newPhraseList.add(0, "«" + request + "»");
@@ -214,51 +212,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	
-//////////////// Command Analyzing Task ////////////////////////////////////////////////////////////
 	
-	private void startCommandAnalysing(String command) {	
-		addRequest(command);    
-		
-		if (analyserTask != null) {
-			analyserTask.cancel(true);
-	    }
-		InputStream patternsStream = this.getApplicationContext().getResources().
-				openRawResource(R.raw.patterns_regex);
-
-	    textButton.setVisibility(View.GONE);
-	    progress.setVisibility(View.VISIBLE);
-	    
-	    analyserTask = new CommandAnalyser(this, patternsStream);
-	    analyserTask.execute(command);
-	}
-	
-	public void endCommandAnalysing() {
-		try {
-			Intent intent = analyserTask.get();
-			
-		    progress.setVisibility(View.GONE);
-		    textButton.setVisibility(View.VISIBLE);
-	    	
-	    	if(intent != null) {				
-				// Check, whether the intent can be handled by some activity
-				List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
-				if (activities.size() == 0) {
-				    addAnswer(getStr(R.string.unknown_action));
-				} else {
-					startActivityForResult(intent, SUB_ACTIVITY_REQUEST_CODE);
-				}
-	    	}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	
-//////////////// Tagging Task //////////////////////////////////////////////////////////////////////
+//////////////// Framing Task //////////////////////////////////////////////////////////////////////
 	
 	private void startFramingTask(String command) {	
 		addRequest(command);    
@@ -270,25 +225,30 @@ public class MainActivity extends Activity implements OnClickListener {
 	    textButton.setVisibility(View.GONE);
 	    progress.setVisibility(View.VISIBLE);
 	    
-	    framingTask = new FramingTask(this, svm_bundle);
+	    framingTask = new FramingTask(this, svm_bunch, savedFrame);
 	    framingTask.execute(command);
 	}
 	
 	public void endFramingTask() {
 		try {			
-			Intent intent = framingTask.get();
+//			Intent intent = framingTask.get();
+			FramingResult result = framingTask.get();
+			Intent intent = result.intent;
+			this.savedFrame = result.savedFrame;
 		    
 			progress.setVisibility(View.GONE);
 		    textButton.setVisibility(View.VISIBLE);
 	    	
-	    	if(intent != null) {				
+	    	if(intent != null) {
 				// Check, whether the intent can be handled by some activity
 				List<ResolveInfo> activities = packageManager.queryIntentActivities(intent, 0);
+				
 				if (activities.size() == 0) {
 				    addAnswer(getStr(R.string.unknown_action));
 				} else {
 					startActivityForResult(intent, SUB_ACTIVITY_REQUEST_CODE);
 				}
+				this.savedFrame = null;
 	    	}
 		} 
 		catch (InterruptedException e) {
@@ -314,12 +274,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		inputManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
 	}
 		
-	private String getStr(int strCode)	{
+	public String getStr(int strCode)	{
 		return String.format(getResources().getString(strCode));
 	}
 	
 	
-//////////////// HMM Initialization ////////////////////////////////////////////////////////////////
+//////////////// SVM Initialization ////////////////////////////////////////////////////////////////
 	
 	public String getPath(String fileName) 
 	{
