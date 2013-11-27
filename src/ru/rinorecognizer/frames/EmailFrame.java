@@ -7,9 +7,6 @@ import ru.rinorecognizer.Contact;
 import ru.rinorecognizer.Frame;
 import ru.rinorecognizer.FramingResult;
 import ru.rinorecognizer.MainActivity;
-import ru.rinorecognizer.FramingTask.ActionType;
-import ru.rinorecognizer.FramingTask.ParamsType;
-
 import android.content.Intent;
 import android.net.Uri;
 

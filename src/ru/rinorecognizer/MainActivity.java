@@ -226,12 +226,15 @@ public class MainActivity extends Activity implements OnClickListener {
 	    progress.setVisibility(View.VISIBLE);
 	    
 	    framingTask = new FramingTask(this, svm_bunch, savedFrame);
-	    framingTask.execute(command);
+	    ExtendedCommand extCommand = new ExtendedCommand();
+	    extCommand.curCommand = command;
+	    extCommand.prevType = savedFrame.getTypeID();
+	    extCommand.prevComplite = savedFrame.isComplete()? 1 : 0;
+	    framingTask.execute(extCommand);
 	}
 	
 	public void endFramingTask() {
 		try {			
-//			Intent intent = framingTask.get();
 			FramingResult result = framingTask.get();
 			Intent intent = result.intent;
 			this.savedFrame = result.savedFrame;

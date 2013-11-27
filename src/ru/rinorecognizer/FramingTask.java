@@ -3,6 +3,7 @@ package ru.rinorecognizer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Locale;
 
 import ru.rinorecognizer.frames.AlarmFrame;
 import ru.rinorecognizer.frames.BalanceFrame;
@@ -14,6 +15,8 @@ import ru.rinorecognizer.frames.SmsFrame;
 
 import ru.rinorecognizer.CommandFeaturesGetter;
 import ru.rinorecognizer.WordsFeaturesGetter;
+import ru.rinorecognizer.Frame.ActionType;
+import ru.rinorecognizer.Frame.ParamsType;
 
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -21,10 +24,7 @@ import android.util.Log;
 
 
 
-public class FramingTask extends AsyncTask<String, String, FramingResult> {
-
-	public static enum ActionType {A_CALL, A_SMS, A_SITE, A_EMAIL, A_SEARCH, A_ALARM, A_BALANCE};
-	public static enum ParamsType {ACTION, P_NAME, P_NUMBER, P_EMAIL, P_SITE, P_TIME, OTHER, QUOTE, Q_MARK, PREPOS};
+public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResult> {
 	
 	private MainActivity mainActivity;
 	private MainActivity.SvmBunch svm_bunch;
@@ -39,15 +39,14 @@ public class FramingTask extends AsyncTask<String, String, FramingResult> {
 		this.savedFrame = savedFrame;
 	}
 	
-	
-    @Override
-    protected FramingResult doInBackground(String... str_list) 
+	@Override
+    protected FramingResult doInBackground(ExtendedCommand... extCommandList) 
     {    	
-    	String command = str_list[0];
+		ExtendedCommand extCommand = extCommandList[0];
     		
     	// step 1: detect command type
     	CommandFeaturesGetter cfGetter = new CommandFeaturesGetter(); 
-    	int[] cFeatures = cfGetter.getVector(command);
+    	int[] cFeatures = cfGetter.getVector(extCommand);
 		int c_id = svm_bunch.svm_A.classify(cFeatures);
 		ActionType a_type = ActionType.A_CALL;
 		
@@ -63,17 +62,17 @@ public class FramingTask extends AsyncTask<String, String, FramingResult> {
 				System.out.println("Command ID '" + c_id + "' is incorrect");
 		}
 		if (debugMode)
-			publishProgress("Command type: " + a_type.toString().toLowerCase());
+			publishProgress("Command type: " + a_type.toString().toLowerCase(Locale.US));
 		
     	
     	// step 2: map each word of a command with a label to get parameters
 
     	WordsFeaturesGetter wfGetter = new WordsFeaturesGetter(); 
-    	int[][] wFeatures = wfGetter.getVectors(command);
+    	int[][] wFeatures = wfGetter.getVectors(extCommand.curCommand);
 
 		List<ParamsType> labels = new ArrayList<ParamsType>();
 		List<Integer> labels_id = new ArrayList<Integer>();
-    	List<String> words = getWords(command);
+    	List<String> words = getWords(extCommand.curCommand);
     	
     	Frame frame = savedFrame;
     	SvmClassifier svm = null;
@@ -205,7 +204,7 @@ public class FramingTask extends AsyncTask<String, String, FramingResult> {
 		for (int i = 0; i < labels.size(); i++)
 			labels_str += " " + labels.get(i).toString();
 		
-		publishProgress(labels_str.toLowerCase());
+		publishProgress(labels_str.toLowerCase(Locale.US));
     }
 	
     private void group(List<String> words, List<ParamsType> labels)
@@ -251,7 +250,7 @@ public class FramingTask extends AsyncTask<String, String, FramingResult> {
 		switch (label) {
 		
 		case P_NAME: 	
-			resWord = word.substring(0,1).toUpperCase() + word.substring(1, word.length() - 1);
+			resWord = word.substring(0,1).toUpperCase(new Locale("ru","RU")) + word.substring(1, word.length() - 1);
 			break;
 			
 		case P_NUMBER:

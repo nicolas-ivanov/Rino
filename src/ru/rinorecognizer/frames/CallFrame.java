@@ -7,8 +7,6 @@ import ru.rinorecognizer.Contact;
 import ru.rinorecognizer.Frame;
 import ru.rinorecognizer.FramingResult;
 import ru.rinorecognizer.MainActivity;
-import ru.rinorecognizer.FramingTask.ActionType;
-import ru.rinorecognizer.FramingTask.ParamsType;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -54,6 +52,7 @@ public class CallFrame extends Frame {
 			Uri numUri = listUri.get(0);
 			intent = new Intent(Intent.ACTION_CALL, numUri);
 			response = mainActivity.getStr(R.string.calling_number) + " " + numUri.getSchemeSpecificPart();
+			isComplete = true;
 		}
 		else { // (listUri.size() >= 2)
 			response = "Слишком много вариантов... Кому позвонить?"; 

@@ -39,7 +39,9 @@ public class SvmClassifier {
 	public int classify(int[] params) 
 	{		
 		//TODO: apply scaling only for action type classification
-		double[] scaledParams = scaleVector(params);
+		VectorScaler vs = new VectorScaler();
+		double[] scaledParams = vs.scale(params);
+//		double[] scaledParams = scaleVector(params);
 		svm_node[] nodes = new svm_node[scaledParams.length];
 		
 		for (int i = 0; i < params.length; i++) {
