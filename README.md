@@ -1,7 +1,8 @@
 Rino
 ====
 
-RinoRecognizer is a prototype of [intelligent personal assistant](http://en.wikipedia.org/wiki/Intelligent_personal_assistant) for the Russian language.
+Rino is a project of [intelligent personal assistant](http://en.wikipedia.org/wiki/Intelligent_personal_assistant) for the Russian language.
+It's designed for the smartphones, that run Android 4.0 and higher.
 
 Currently there are 7 types of commands supported:
 
@@ -25,5 +26,8 @@ See below the examples of users comands in Russian:
 «покажи баланс
 ```
 
-The process of commands' analysing is based on [SVM method](http://en.wikipedia.org/wiki/Support_vector_machine),
-which is well implemented in [libsmv library](http://www.csie.ntu.edu.tw/~cjlin/libsvm/).
+The entire project consists of three parts:
+
+1. RinoRecognizer 	- represents an Android application for smartphone devices, utilises RinoLibrary
+2. RinoServer: 		- perform a training process of Rino's SVM classificators, utilises RinoLibrary
+3. RinoLibrary: 	- consists of classes, that should be identical for both RinoRecognizer and RinoServer
