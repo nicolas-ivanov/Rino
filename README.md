@@ -29,5 +29,5 @@ See below the examples of users comands in Russian:
 The entire project consists of three parts:
 
 1. RinoRecognizer - represents an Android application for smartphone devices, utilises RinoLibrary
-2. RinoServer - perform a training process of Rino's SVM classificators, utilises RinoLibrary
+2. RinoServer - performs the training process of Rino's SVM classificators, utilises RinoLibrary
 3. RinoLibrary - consists of classes, that should be identical for both RinoRecognizer and RinoServer
