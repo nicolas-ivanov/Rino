@@ -13,16 +13,11 @@ public class SeparateData {
 
     Random generator = new Random(2);    
 
-	private void separate(String inFile, String trainFile, String testFile) {
+	public void separate(String inFile, String trainFile, String testFile, double ratio) {
 		try {
-			BufferedReader dataReader = new BufferedReader(
-					new InputStreamReader(new FileInputStream(inFile)));
-
-			BufferedWriter trainWriter = new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(trainFile)));
-			BufferedWriter testWriter = new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(testFile)));
-
+			BufferedReader dataReader = new BufferedReader(new InputStreamReader(new FileInputStream(inFile)));
+			BufferedWriter trainWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(trainFile)));
+			BufferedWriter testWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(testFile)));
 
 			String line;
 
@@ -36,8 +31,7 @@ public class SeparateData {
 				else if (line.charAt(0) == '#')
 					continue;
 
-//				if (Math.random() < 0.5)
-				if (generator.nextDouble() < 0.25)
+				if (generator.nextDouble() < ratio)
 					trainWriter.write(line + "\n");
 				else
 					testWriter.write(line + "\n");
@@ -64,9 +58,10 @@ public class SeparateData {
 		String in = path + "collection";
 		String trainData = path + "train/train";
 		String testData = path + "test/test";
+		double ratio = 0.5;
 
 		SeparateData s = new SeparateData();
-		s.separate(in, trainData, testData);
+		s.separate(in, trainData, testData, ratio);
 	}
 
 }

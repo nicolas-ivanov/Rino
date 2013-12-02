@@ -1,0 +1,6 @@
+#!/bin/bash
+
+train="data/train/"
+test="data/test/"
+
+java -classpath libs/commons-cli-1.2.jar:bin/ ru.rinorecognizer.RinoServer -trainDir $train -testDir $test -separate -ratio 0.5
