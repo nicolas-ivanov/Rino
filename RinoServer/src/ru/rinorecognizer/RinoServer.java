@@ -13,22 +13,43 @@ public class RinoServer {
 	
 	public static void main(String[] args) throws ParseException {
 
+		
+		// Set command line arguments
 		Options options = new Options();
 		options.addOption("trainDir", 	true, "where to look for training files");
 		options.addOption("testDir", 	true, "where to look for testing files");
 		options.addOption("separate", 	false, "shows if training data should be separated on training and testing sets");
 		options.addOption("ratio", 		true, "train/test separation ratio");
+		
+		options.addOption("allParamsName", 		true, "where to output full-length params' vectors");
+		options.addOption("compactName", 		true, "where to output non-zeros params of vectors");
+		options.addOption("verboseName", 		true, "where to output non-zeros params with original command");
 
+		options.addOption("rangeName", 		true, "where to output scaling range values");
+
+
+		
+		// Get arguments values
 		CommandLineParser parser = new PosixParser();
 		CommandLine cmd = parser.parse(options, args);
 
-		String trainSourceDir = 	cmd.getOptionValue("trainDir");
+		String trainSourceDir = cmd.getOptionValue("trainDir");
 		String testSourceDir = 	cmd.getOptionValue("testDir");
-		Boolean separate = 	cmd.hasOption("separate");
-		Double sRatio = 	Double.parseDouble(cmd.getOptionValue("ratio"));
+		Boolean separate = 		cmd.hasOption("separate");
+		Double sRatio = 		Double.parseDouble(cmd.getOptionValue("ratio"));
+		
+		String allParamsName = 	cmd.getOptionValue("allParamsName", "allParams");
+		String compactName = 	cmd.getOptionValue("compactName", "compact");
+		String verboseName = 	cmd.getOptionValue("verboseName", "verbose");
+		
+		String rangeName = 	cmd.getOptionValue("rangeName", "range");
+		String scaledName = cmd.getOptionValue("scaledName", "scaled");
 
 
-		String trainDir, testDir;
+		
+		// Get training and testing sets
+		String trainDir = trainSourceDir;
+		String testDir = testSourceDir;
 		
 		if (separate) {			
 			File folder = new File(trainSourceDir);
@@ -47,16 +68,50 @@ public class RinoServer {
 				
 				SeparateData sData = new SeparateData();
 				sData.separate(sourceFile, trainTmpFile, testTmpFile, sRatio);
-				
-				System.out.println(sourceFile);
 		    }
 		}
-		else {
-			trainDir = trainSourceDir;
-			testDir = testSourceDir;
+
+		
+		String workingDir;
+		String allParamsFile, compactFile, verboseFile;
+		ActionsConvert actions = new ActionsConvert();
+		
+		String rangeFile, scaledFile;
+		ScaleData scaleData = new ScaleData();
+		
+		
+		
+		// Get parameters values for action-type classification
+		{			
+			// training set
+			workingDir = trainSourceDir + "../action/train/";
+			new File(workingDir).mkdirs();
+			
+			allParamsFile = workingDir + allParamsName;
+			compactFile = 	workingDir + compactName;
+			verboseFile = 	workingDir + verboseName;
+			actions.convert(trainDir, allParamsFile, compactFile, verboseFile);
+
+			rangeFile = workingDir + rangeName; 
+			scaledFile = workingDir + scaledName; 
+			scaleData.scale(allParamsFile, scaledFile, rangeFile);
+			
+			
+			// testing set
+			workingDir = trainSourceDir + "../action/test/";
+			new File(workingDir).mkdirs();
+			
+			allParamsFile = workingDir + allParamsName;
+			compactFile = 	workingDir + compactName;
+			verboseFile = 	workingDir + verboseName;			
+			actions.convert(testDir, allParamsFile, compactFile, verboseFile);
+
+			rangeFile = workingDir + rangeName; 
+			scaledFile = workingDir + scaledName; 
+			scaleData.scale(allParamsFile, scaledFile, rangeFile);
+			
 		}
 		
-
 	}
 
 }

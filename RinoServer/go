@@ -3,4 +3,10 @@
 train="data/train/"
 test="data/test/"
 
+#~ all="allParams"
+#~ compact="compact"
+#~ verbose="verbose"
+
+#~ java -classpath libs/commons-cli-1.2.jar:bin/ ru.rinorecognizer.RinoServer -trainDir $train -testDir $test -separate -ratio 0.5 -allParamsName all -compactName compact -verboseName verbose
+
 java -classpath libs/commons-cli-1.2.jar:bin/ ru.rinorecognizer.RinoServer -trainDir $train -testDir $test -separate -ratio 0.5

@@ -155,7 +155,7 @@ public class ActionsSupport {
 			return;
 		}		
 		String data = args[0];
-		String path = "../train/action/";
+		String path = "../main/action/";
 		
 		String model = path + "model_action";
 		String scaled = path + "scaled_" + data;

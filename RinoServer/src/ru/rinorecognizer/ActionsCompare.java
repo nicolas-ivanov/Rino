@@ -121,7 +121,7 @@ public class ActionsCompare {
 //		String data = "collection";
 		String data = args[0];
 		
-		String path = "../train/action/";
+		String path = "../main/action/";
 		String original = path + "verbose_" + data;
 		String predicted = path + "predicted_" + data;
 		String mistakes = path + "mistakes_" + data;

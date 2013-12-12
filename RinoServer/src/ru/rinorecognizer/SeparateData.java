@@ -54,7 +54,7 @@ public class SeparateData {
 	{
 //		String path = "/home/nicolas/Dropbox/Diploma/svm/train/";
 		
-		String path = "../train/";
+		String path = "../main/";
 		String in = path + "collection";
 		String trainData = path + "train/train";
 		String testData = path + "test/test";

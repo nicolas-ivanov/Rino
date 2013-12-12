@@ -26,7 +26,7 @@ public class ParamsCompare {
 			predictionsReader = new BufferedReader(new InputStreamReader(new FileInputStream(predictionsFile)));
 			mistakesWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(mistakesFile)));
  
-			mistakesWriter.write(String.format("  %-16s %-8s %-31s %-9s ",
+			mistakesWriter.write(String.format("  %-16s %-8s %-36s %-9s ",
 					"Original text", "O.label", "Original params", "P.label"));			
 			
 			String originalsLine;
@@ -90,7 +90,7 @@ public class ParamsCompare {
 					savedLines += "  ";
 				
 				
-				savedLines += String.format("%-15s %3s %5s %-30s %3s %5s", 
+				savedLines += String.format("%-15s %3s %5s %-35s %3s %5s", 
 						originalsText, originalsID, "", originalsParams, predictionsID, "");
 
 				String[] probs = predictionsProb.split(" ");
@@ -133,7 +133,7 @@ public class ParamsCompare {
 		}		
 		String data = args[0];
 		String modelName = args[1];		
-		String path = "../train/";
+		String path = "../main/";
 		
 		String original = path + modelName + "/verbose_" + data;
 		String predicted = path + modelName + "/predicted_" + data;

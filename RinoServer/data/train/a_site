@@ -1,0 +1,23 @@
+# A_SITE section #######################################################
+a_site	yandex.ru
+a_site	открой yandex.ru
+
+a_site	пожалуйста открой yandex.ru
+a_site	открой пожалуйста yandex.ru
+a_site	открой yandex.ru пожалуйста
+
+a_site	пожалуйста открой мне yandex.ru
+a_site	открой мне пожалуйста yandex.ru
+a_site	открой пожалуйста мне yandex.ru
+a_site	открой мне yandex.ru пожалуйста
+
+a_site	открой в браузере yandex.ru
+a_site	открой yandex.ru в браузере
+
+a_site	пожалуйста открой в браузере yandex.ru
+a_site	открой пожалуйста в браузере yandex.ru
+a_site	открой в браузере yandex.ru пожалуйста
+
+a_site	пожалуйста открой yandex.ru в браузере
+a_site	открой пожалуйста yandex.ru в браузере
+a_site	открой yandex.ru в браузере пожалуйста

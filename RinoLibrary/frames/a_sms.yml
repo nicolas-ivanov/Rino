@@ -1,0 +1,11 @@
+---
+type_id:  a_call
+type_rus: Телефонный вызов
+
+params_req:
+  - phone_number
+    if_missing: Кому нужно позвонить?
+  
+params_opt:
+  - name
+    if_missing: Кому нужно позвонить?

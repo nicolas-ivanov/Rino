@@ -18,7 +18,7 @@ public class ActionsConvert {
 
 	private static final Pattern sourcePattern = Pattern.compile("(\\w+)\\t([^\\t]+)(\\t+#.*)?");
 	
-	private void convert(String trainDir, String fullFile, String paramsFile, String verboseFile) {
+	public void convert(String trainDir, String allParamsFile, String compactFile, String verboseFile) {
 
 		BufferedReader dataReader = null;
 		BufferedWriter fullWriter = null;
@@ -26,8 +26,8 @@ public class ActionsConvert {
 		BufferedWriter verboseWriter = null;
 		
 		try {
-			fullWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fullFile)));
-			paramsWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(paramsFile)));
+			fullWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(allParamsFile)));
+			paramsWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(compactFile)));
 			verboseWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(verboseFile)));
 			
 		    
@@ -37,6 +37,8 @@ public class ActionsConvert {
 			
 			
 			for (File file : files) {
+
+//				System.out.println("Action: " + file.toString());
 				
 			    if (file.isFile())
 					dataReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
@@ -166,25 +168,25 @@ public class ActionsConvert {
 
 	public static void main(String[] args) {
 
-		String path = "/home/nicolas/Dropbox/Diploma/svm/train/";
-		String mode = "train";
-		String data = "collection";
+//		String path = "/home/nicolas/Dropbox/Diploma/svm/train/";
+//		String mode = "train";
+//		String data = "all";
 		
-//		if (args.length != 2) {
-//			System.out.println("ActionsConvert: wrong parameters number: " + args.length);
-//			return;
-//		};
-//		String data = args[0];
-//		String mode = args[1];
-//		String path = "../train/";
+		if (args.length != 2) {
+			System.out.println("ActionsConvert: wrong parameters number: " + args.length);
+			return;
+		};
+		String data = args[0];
+		String mode = args[1];
+		String path = "../main/";
 		
 		String trainDir = path + mode + "/";
-		String fullFile = path + "action/full_" + data;
-		String paramsFile = path + "action/params_" + data;
+		String allParamsFile = path + "action/full_" + data;
+		String compactFile = path + "action/params_" + data;
 		String verboseFile = path + "action/verbose_" + data;
 
 		ActionsConvert c = new ActionsConvert();
-		c.convert(trainDir, fullFile, paramsFile, verboseFile);
+		c.convert(trainDir, allParamsFile, compactFile, verboseFile);
 	}
 
 }

@@ -95,7 +95,7 @@ public class TestProbability {
 		}		
 		String data = args[0];
 		String modelName = args[1];
-		String path = "../train/";
+		String path = "../main/";
 		
 		String predicted = path + modelName + "/predicted_" + data;
 		

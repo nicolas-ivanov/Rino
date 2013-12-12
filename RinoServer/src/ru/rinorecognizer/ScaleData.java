@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class ScaleData {
 
-	private static final Pattern paramsPattern = Pattern.compile("(\\d+) (.*)");
+	private static final Pattern paramsPattern = Pattern.compile("(-?\\d+) (.*)");
 	
 	
 	private void getRange(String fullFile, String rangePath) throws IOException {
@@ -87,7 +87,7 @@ public class ScaleData {
 	}
 	
 	
-	private void scale(String fullFile, String scaledFile, String rangeFile) {
+	public void scale(String fullFile, String scaledFile, String rangeFile) {
 		
 		BufferedReader paramsReader = null;
 		BufferedWriter scaledWriter = null;
@@ -124,7 +124,7 @@ public class ScaleData {
 				
 				for (int i = 0; i < scaledParams.length; i++) {					
 					if (scaledParams[i] != 0) {
-						scaledString += " " + (i + 1) + ":" + scaledParams[i];
+						scaledString += " " + (i + 1) + ":" + new java.text.DecimalFormat("#").format(scaledParams[i]);
 					}
 				}
 				scaledWriter.write(scaledString + " \n");
@@ -149,19 +149,20 @@ public class ScaleData {
 
 	public static void main(String[] args) {
 
-		String path = "/home/nicolas/Dropbox/Diploma/svm/train/";
-		String data = "collection";
+//		String path = "/home/nicolas/Dropbox/Diploma/svm/train/";
+//		String data = "collection";
 		
-//		if (args.length != 1) {
-//			System.out.println("ScaleData: wrong parameters number: " + args.length);
-//			return;
-//		};
-//		String data = args[0];
-//		String path = "../train/";
-
-		String fullFile = path + "action/full_" + data;
-		String rangeFile = path + "action/range_" + data;
-		String scaledFile = path + "action/scaled_" + data;
+		if (args.length != 2) {
+			System.out.println("ScaleData: wrong parameters number: " + args.length);
+			return;
+		};
+		String data = args[0];
+		String modelName = args[1];
+		String path = "../main/";
+				
+		String fullFile = path + modelName + "/full_" + data;
+		String rangeFile = path + modelName + "/range_" + data;
+		String scaledFile = path + modelName + "/scaled_" + data;
 
 		ScaleData scaler = new ScaleData();
 		scaler.scale(fullFile, scaledFile, rangeFile);

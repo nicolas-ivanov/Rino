@@ -2,6 +2,7 @@ package ru.rinorecognizer;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,17 +20,23 @@ public class VectorScaler {
 	
 	
 	
-	public VectorScaler(String rangeFilePath) throws IOException 
+	public VectorScaler(String rangeFilePath)
 	{
 		File rangeFile = new File(rangeFilePath);
-		
-		if (rangeFile.exists()) {
-			rangeReader = new BufferedReader(new FileReader(rangeFilePath));
-			restoreRange(rangeReader);	
-		}
-		else {
-			System.out.println("File '" + rangeFilePath + "' doesn't exist.");
-			System.out.println("Range normalization won't be possible.");
+
+		try {
+			if (rangeFile.exists()) {
+				rangeReader = new BufferedReader(new FileReader(rangeFilePath));
+				restoreRange(rangeReader);	
+			}
+			else {
+				System.out.println("File '" + rangeFilePath + "' doesn't exist.");
+				System.out.println("Range normalization won't be possible.");
+			}
+		} 
+		catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
@@ -140,8 +147,8 @@ public class VectorScaler {
 	
 	public double[] scale(int[] v)
 	{
-//		return scaleRange(v);
-		return scaleSphere(v);
+		return scaleRange(v);
+//		return scaleSphere(v);
 //		return scaleNone(v);
 	}
 	

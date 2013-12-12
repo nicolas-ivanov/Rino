@@ -182,7 +182,7 @@ public class ParamsSupport {
 		}		
 		String data = args[0];
 		String modelName = args[1];
-		String path = "../train/";
+		String path = "../main/";
 		
 		String model = path + modelName + "/model_" + modelName;
 		String scaled = path + modelName + "/scaled_" + data;
