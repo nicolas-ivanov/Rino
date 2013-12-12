@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Rino Recognizer</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="speak_button">Речевая\nкоманда</string>
+    <string name="text_field">текстовая команда</string>
+    <string name="colored_label">Последняя команда</string>
+    <string name="text_button">OK</string>
+    
+    <string name="recognizer_is_absent">Распознаватель речи не найден&#8230;</string>
+    <string name="command_is_recognized">Выполняю&#8230;</string>
+    <string name="command_is_not_found">Я не знаю такой команды&#8230;</string>
+    <string name="analyzing_is_stopped">Анализирование команды отменено</string>
+    <string name="recognition_is_cancelled">Распознавание отменено</string>
+    <string name="contact_is_found">Я нашел подходящий контакт</string>
+    <string name="contact_is_not_found">Не могу найти подходящего контакта</string>
+    <string name="no_pnohes_in_contact">У данного контакта нет телефонных номеров</string>
+    <string name="unknown_action">Твой телефон не может выполнить это действие</string>
+    
+    <string name="dialing_number">Набираю номер</string>
+    <string name="calling_number">Звоню по номеру</string>
+    <string name="running_ussd">Выполняю запрос</string>
+    <string name="checking_balance">Запрашиваю баланс</string>
+    <string name="loading_webpage">Загружаю страницу</string>
+    <string name="sending_email">Посылаю письмо по адресу</string>
+    <string name="sending_sms">Отправляю SMS на номер</string>
+    <string name="with_text">с текстом</string>
+    <string name="setting_alarm">Ставлю будильник на</string>
+    <string name="searching_web">Ищу</string>
+    <string name="no_number">Не могу определить телефонный номер&#8230;</string>
+    
+    <string name="dialog_history_is_empty">История диалога пуста</string>
+
+</resources>
