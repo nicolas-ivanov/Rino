@@ -147,9 +147,9 @@ public class VectorScaler {
 	
 	public double[] scale(int[] v)
 	{
-		return scaleRange(v);
+//		return scaleRange(v);
 //		return scaleSphere(v);
-//		return scaleNone(v);
+		return scaleNone(v);
 	}
 	
 }

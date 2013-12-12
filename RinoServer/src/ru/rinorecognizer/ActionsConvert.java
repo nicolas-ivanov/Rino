@@ -60,7 +60,7 @@ public class ActionsConvert {
 					// parse line
 					Matcher sourceMatcher = sourcePattern.matcher(line);
 					if (!sourceMatcher.matches()) {
-						System.out.println("Line '" + line + "' is incorrect");
+						System.out.println("ActionConvert: Line '" + line + "' is incorrect");
 						break;
 					}
 					String label = sourceMatcher.group(1);
