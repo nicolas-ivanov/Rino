@@ -6,7 +6,7 @@ import java.util.List;
 public abstract class Frame {
 
 	public static enum ActionType {A_CALL, A_SMS, A_EMAIL, A_SEARCH, A_SITE, A_ALARM, A_BALANCE};
-	public static enum ParamsType {ACTION, P_NAME, P_NUMBER, P_EMAIL, P_SITE, P_TIME, OTHER, QUOTE, Q_MARK, PREPOS};
+	public static enum ParamsType {ACTION, P_NAME, P_NUMBER, P_EMAIL, P_SITE, P_TIME, OTHER, QUOTE, Q_MARK, PREPOS, CHANGE};
 	
 	protected MainActivity mainActivity;
 	protected String response;

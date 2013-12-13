@@ -59,7 +59,7 @@ public class SmsFrame extends Frame {
 		else if (uriList.size() == 1) {
 			Uri numUri = uriList.get(0);
 			intent = new Intent(Intent.ACTION_SENDTO, newUri);
-			response = mainActivity.getStr(R.string.calling_number) + " " + numUri.getSchemeSpecificPart();
+			response = "Отправляю смс на номер " + " " + numUri.getSchemeSpecificPart();
 		}
 		else { // (listUri.size() >= 2)
 			response = "Слишком много вариантов... Кому отправить смс?"; 

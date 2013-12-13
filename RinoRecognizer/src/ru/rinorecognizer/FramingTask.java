@@ -190,6 +190,7 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
     		case -1: p_type.add(ParamsType.QUOTE); 		break;
     		case -2: p_type.add(ParamsType.Q_MARK); 	break;
     		case -3: p_type.add(ParamsType.PREPOS);		break;
+    		case -4: p_type.add(ParamsType.CHANGE);		break;
     		default:
     				System.out.println("Parameter's ID '" + p_type_id.get(i) + "' is incorrect");
     		}
