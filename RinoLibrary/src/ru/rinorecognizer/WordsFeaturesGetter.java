@@ -54,11 +54,14 @@ public class WordsFeaturesGetter {
 				for (int i=0; i<wVector.length; i++)
 					wVector[i] = 0;
 				
-				String w = words[k];										
-				int pNum = 0;
+				// Replace special characters from words
+				String w = words[k];
+				if (w.charAt(0) == '_')
+					w = w.substring(1);
 				
+				int pNum = 0;
+				String rawPattern;				
 				BufferedReader patternsReader = getBufferedReader();
-				String rawPattern;
 				
 				// Check if the word is a keyword of a certain set
 				while ((rawPattern = patternsReader.readLine()) != null) {
