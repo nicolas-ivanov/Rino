@@ -108,8 +108,8 @@ public class WordsFeaturesGetter {
 //				trigramsVectors[k] = tVector;
 //			}
 			
-			final int left_leaf_size = 2;
-			final int right_leaf_size = 2;
+			final int left_leaf_size = 10;
+			final int right_leaf_size = 10;
 			int window_size = 1 + left_leaf_size + right_leaf_size;
 			
 			for (int curr_word_num = 0; curr_word_num < wordsVectors.length; curr_word_num++) {

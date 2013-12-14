@@ -67,7 +67,7 @@ public class RinoServer {
 				new File(testDir).mkdirs();
 				
 				SeparateData sData = new SeparateData();
-				sData.separate(sourceFile, trainTmpFile, testTmpFile, sRatio);
+				sData.separateFile(sourceFile, trainTmpFile, testTmpFile, sRatio);
 		    }
 		}
 

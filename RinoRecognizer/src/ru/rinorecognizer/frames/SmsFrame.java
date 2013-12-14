@@ -10,8 +10,6 @@ import ru.rinorecognizer.MainActivity;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.example.rino.R;
-
 
 public class SmsFrame extends Frame {
 	private List<Uri> uriList;
@@ -51,35 +49,39 @@ public class SmsFrame extends Frame {
 
 		
 		
-		// check uri;
-		if (uriList.size() == 0) {
-			response = "Кому отправить смс?"; 
-			isComplete = false;
-		}
-		else if (uriList.size() == 1) {
-			Uri numUri = uriList.get(0);
-			intent = new Intent(Intent.ACTION_SENDTO, newUri);
-			response = "Отправляю смс на номер " + " " + numUri.getSchemeSpecificPart();
-		}
-		else { // (listUri.size() >= 2)
-			response = "Слишком много вариантов... Кому отправить смс?"; 
-			uriList = null;
-		}
+		if (textList.size() == 0)
+			response = "Что нужно написать?";
 		
-		
-		// check text;
-		if (textList.size() == 0) {
-			textList.add(""); 
-		}
-		else if (textList.size() >= 1) {
-			String text = "";
-			for (String t: textList)
-				text += " " + t;
+		else {
+			// check uri;
+			if (uriList.size() == 0) {
+				response = "Кому отправить смс?"; 
+				isComplete = false;
+			}
+			else if (uriList.size() == 1) {
+				Uri numUri = uriList.get(0);
+				intent = new Intent(Intent.ACTION_SENDTO, newUri);
+				response = "Отправляю смс на номер " + " " + numUri.getSchemeSpecificPart();
+			}
+			else { // (listUri.size() >= 2)
+				response = "Слишком много вариантов... Кому отправить смс?"; 
+				uriList = null;
+			}
 			
-			if (intent != null)
-				intent.putExtra("sms_body", text);
-		}		
-		
+			
+			// check text;
+			if (textList.size() == 0) {
+				textList.add(""); 
+			}
+			else if (textList.size() >= 1) {
+				String text = "";
+				for (String t: textList)
+					text += " " + t;
+				
+				if (intent != null)
+					intent.putExtra("sms_body", text);
+			}		
+		}
 		
 		FramingResult framingResult = new FramingResult();
 		framingResult.intent = intent;

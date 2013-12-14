@@ -1,5 +1,5 @@
 10		a_call			\p{InCyrillic}*звон\p{InCyrillic}+|набрать|набер\p{InCyrillic}+|набир\p{InCyrillic}+|соедин\p{InCyrillic}+|телефон\p{InCyrillic}*|номер\p{InCyrillic}*|выз\p{InCyrillic}+
-10		a_sms			смс\p{InCyrillic}*|sms|сообщение|напиш\p{InCyrillic}+|напис\p{InCyrillic}+|набрать|набер\p{InCyrillic}+|набир\p{InCyrillic}+|отправ\p{InCyrillic}+|перешл\p{InCyrillic}+|пересл\p{InCyrillic}+|номер\p{InCyrillic}*
+10		a_sms			нов\p{InCyrillic}*|смс\p{InCyrillic}*|sms|сообщение|напиш\p{InCyrillic}+|напис\p{InCyrillic}+|набрать|набер\p{InCyrillic}+|набир\p{InCyrillic}+|отправ\p{InCyrillic}+|перешл\p{InCyrillic}+|пересл\p{InCyrillic}+|номер\p{InCyrillic}*
 10		a_email			e?mail|письмо|электронн\p{InCyrillic}+|почт\p{InCyrillic}+|напиш\p{InCyrillic}+|напис\p{InCyrillic}+|набрать|набер\p{InCyrillic}+|набир\p{InCyrillic}+|отправ\p{InCyrillic}+|перешл\p{InCyrillic}+|пересл\p{InCyrillic}+|адрес\p{InCyrillic}*
 10		a_search		поиск\p{InCyrillic}*|найди|найти|ищи|искать|покаж\p{InCyrillic}+|показ\p{InCyrillic}*|\p{InCyrillic}*смотр\p{InCyrillic}*|\p{InCyrillic}зна\p{InCyrillic}+|скаж\p{InCyrillic}*|расска\p{InCyrillic}+|значит\p{InCyrillic}*|означа\p{InCyrillic}+|стать\p{InCyrillic}+|определен\p{InCyrillic}+
 10		a_site			покаж\p{InCyrillic}+|откр\p{InCyrillic}+|браузер\p{InCyrillic}+
@@ -15,4 +15,4 @@
 -2		s_text			текст\p{InCyrillic}*|напиш\p{InCyrillic}*|напис\p{InCyrillic}*|набер\p{InCyrillic}*|набра\p{InCyrillic}*
 -2		s_search		что|кто|тако\p{InCyrillic}*|нибудь|значит|слов\p{InCyrillic}*|поняти\p{InCyrillic}*|скольк\p{InCyrillic}*
 -3		s_prepos		в|без|до|из|к|на|по|о|от|перед|при|через|с|у|за|над|об|под|про|для
--4		s_change		отмена|нет|давай|лучше|хотя|вместо|впрочем|знаешь
+-4		s_change		отмена|нет|лучше|хотя|вместо|впрочем|знаешь
