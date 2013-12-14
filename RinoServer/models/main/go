@@ -1,0 +1,138 @@
+#!/bin/bash
+
+time_start=$(date +%s)
+mode=$1
+
+l=../libsvm-3.17
+t=../libsvm-3.17/tools
+server=/home/nicolas/Develop/workspace/RinoServer/bin/:/home/nicolas/Develop/workspace/Rino/libs/rino-library.jar
+
+r=/home/nicolas/Develop/workspace/RinoRecognizer/res/raw
+#~ cp ./patterns $r
+
+#~ trainData="collection"
+#~ testData="collection"
+trainData="train"
+testData="test"
+#~ trainData="collection_dialogs"
+#~ testData="collection_dialogs"
+
+# Differencies for trainData and testData files:
+# params_
+# scaled_
+# verbose_
+
+	
+echo $(date) > accuracy
+echo >> accuracy
+
+#~ models="./action
+#~ ./a_call
+#~ ./a_sms"
+
+models="./action
+./a_call
+./a_sms
+./a_email
+./a_search
+./a_site
+./a_alarm
+./a_balance"
+
+
+train-predict (){
+	cs=$1
+	gs=$2
+	as=$3
+	
+	$l/svm-train -c $cs -g $gs -b 1 -q $q/scaled_$trainData $q/model_$type
+	
+	# predict	
+	$l/svm-predict -b 1 $q/scaled_$testData $q/model_$type $q/predicted_$testData | { read a1 a2 a3 a4 a5
+		#~ printf "%-10s %-10s %-12s\n" $type $a3 $a4
+		printf "%-10s %-10s %-12s " $type $a3 $a4
+		printf "%-10s %s \n" $type $as >> accuracy
+	}
+	
+	# predict	
+	$l/svm-predict -b 1 $q/scaled_$trainData $q/model_$type $q/predicted_$trainData | { read a1 a2 a3 a4 a5
+		#~ printf "%-10s %-10s %-12s " $type $a3 $a4
+		#~ printf "%-10s %s \n" $type $as >> accuracy
+	}
+	#~ $l/svm-predict -q -b 1 $q/scaled_$trainData $q/model_$type $q/predicted_$trainData
+}
+
+# get train and test data sets
+#~ java -classpath $server ru.rinorecognizer.SeparateData
+
+# get classification models
+for q in $models
+do	
+	type=${q#./};
+	
+	if [ "$type" == action ]
+		then {
+			java -classpath $server ru.rinorecognizer.ActionsConvert $trainData "train"
+			java -classpath $server ru.rinorecognizer.ActionsConvert $testData "test"
+		}
+		else {
+			java -classpath $server ru.rinorecognizer.ParamsConvert $trainData $type
+			java -classpath $server ru.rinorecognizer.ParamsConvert $testData $type
+		}
+	fi
+	
+	
+	java -classpath $server ru.rinorecognizer.ScaleData $trainData $type
+	java -classpath $server ru.rinorecognizer.ScaleData $testData $type
+	
+	### python $t/checkdata.py $q/params_$trainData > null	
+	### python $t/checkdata.py $q/params_$testData >> null	
+	#~ 
+	#~ $l/svm-scale -l 0 -u 1 -s $q/range_$type $q/params_$trainData > $q/scaled_$trainData
+	#~ $l/svm-scale -r $q/range_$type $q/params_$testData > $q/scaled_$testData
+	#~ 
+	#~ cp $q/params_$trainData  $q/scaled_$trainData
+	#~ cp $q/params_$testData  $q/scaled_$testData
+	
+	
+	if [ "$mode" == "fast" ]
+	then {
+		read cs gs as < $q/cgamma_$train
+		train-predict $cs $gs $as
+	}
+	else {
+		python $t/grid.py -log2c -5,15,5 -log2g 5,-15,-1 -v 5 -gnuplot null -out null -png $q/grid.png $q/scaled_$trainData | grep -v [local] | { 
+			read cs gs as
+			echo $cs $gs $as > $q/cgamma_$train
+			train-predict $cs $gs $as
+		}
+	}
+	fi
+	
+	
+	if [ "$type" == action ]
+		then {
+			java -classpath $server ru.rinorecognizer.ActionsCompare $testData
+			java -classpath $server ru.rinorecognizer.ActionsSupport $trainData | { read a1 a2 a3
+				printf "%s    %s  %-10s" $a1 $a2 $a3
+			}
+		}
+		else {
+			java -classpath $server ru.rinorecognizer.ParamsCompare $testData $type
+			java -classpath $server ru.rinorecognizer.ParamsSupport $trainData $type | { read a1 a2 a3
+				printf "%s    %s  %-10s" $a1 $a2 $a3
+			}
+		}	
+	fi		
+	
+	java -classpath $server ru.rinorecognizer.TestProbability $testData $type | { read a1 a2 a3
+		printf "%s    %s  %s\n" $a1 $a2 $a3
+	}
+	
+	cp $q/model_$type $r
+	cp $q/range_$type $r
+done
+
+
+time_end=$(date +%s)
+echo Elapsed time:  $(($time_end - $time_start)) seconds
