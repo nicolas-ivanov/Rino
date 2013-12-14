@@ -91,24 +91,63 @@ public class WordsFeaturesGetter {
 			
 			
 			// Get parameters vectors for trigrams of words
-			int paramsNum_2 = paramsNum * 2; 
-			int paramsNum_3 = paramsNum * 3;
-			int[][] trigramsVectors = new int[words.length][];
+			int[][] ngramsVectors = new int[words.length][];
+
+//			int paramsNum_2 = paramsNum * 2; 
+//			int paramsNum_3 = paramsNum * 3;
+//			
+//			for (int k = 0; k < wordsVectors.length; k++) {
+//				
+//				int[] tVector = new int[paramsNum_3];
+//				
+//				for (int i = 0; i < paramsNum; i++) {
+//					tVector[i] = wordsVectors[k][i]; 
+//					tVector[i + paramsNum] = (k == 0)? 0 : wordsVectors[k-1][i]; // "first word" check
+//					tVector[i + paramsNum_2] = (k == wordsVectors.length - 1)? 0 : wordsVectors[k+1][i]; // "last word" check
+//				}
+//				trigramsVectors[k] = tVector;
+//			}
 			
+			final int left_leaf_size = 2;
+			final int right_leaf_size = 2;
+			int window_size = 1 + left_leaf_size + right_leaf_size;
 			
-			for (int k = 0; k < wordsVectors.length; k++) {
+			for (int curr_word_num = 0; curr_word_num < wordsVectors.length; curr_word_num++) {
 				
-				int[] tVector = new int[paramsNum_3];
-				
+				int[] tVector = new int[window_size * paramsNum];
+
+				// get word's own params
 				for (int i = 0; i < paramsNum; i++) {
-					tVector[i] = wordsVectors[k][i]; 
-					tVector[i + paramsNum] = (k == 0)? 0 : wordsVectors[k-1][i]; // "first word" check
-					tVector[i + paramsNum_2] = (k == wordsVectors.length - 1)? 0 : wordsVectors[k+1][i]; // "last word" check
+					tVector[i] = wordsVectors[curr_word_num][i]; 
 				}
-				trigramsVectors[k] = tVector;
-			}			
+				
 			
-			return trigramsVectors;
+				// get left leaf params
+				for (int leaf_word_num = 0; leaf_word_num < left_leaf_size; leaf_word_num++) {
+					
+					int leaf_word_pos = curr_word_num - left_leaf_size + leaf_word_num;
+					
+					if (leaf_word_pos >= 0)
+						for (int p = 0; p < paramsNum; p++)
+							tVector[paramsNum * (leaf_word_num + 1) + p] = wordsVectors[leaf_word_pos][p];
+				}
+				
+				
+				// get right leaf params
+				for (int leaf_word_num = 0; leaf_word_num < right_leaf_size; leaf_word_num++) {
+					
+					int leaf_word_pos = curr_word_num + leaf_word_num + 1;
+					
+					if (leaf_word_pos < words.length)
+						for (int p = 0; p < paramsNum; p++)
+							tVector[paramsNum * (1 + left_leaf_size + leaf_word_num) + p] = wordsVectors[leaf_word_pos][p];
+				}
+					
+				
+				ngramsVectors[curr_word_num] = tVector;
+			}	
+			
+			return ngramsVectors;
 	
 		} 
 		catch (IOException e) {

@@ -12,7 +12,7 @@
 4		p_site			Site|\w+\.ru|\w+\.com|\w+\.org|\w+\.net|\w+\.su|yandex|яндекс\p{InCyrillic}*|google|гугл\p{InCyrillic}*|rambler|рамблер\p{InCyrillic}*|википед\p{InCyrillic}+|wikipedia|вики|wiki|интернет\p{InCyrillic}*
 5		p_time			Time|\d{1,2}|утр\p{InCyrillic}+|вечер\p{InCyrillic}*|час\p{InCyrillic}*|минут\p{InCyrillic}*|завтра|полчаса
 
--2		s_text			текст\p{InCyrillic}*
+-2		s_text			текст\p{InCyrillic}*|напиш\p{InCyrillic}*|напис\p{InCyrillic}*|набер\p{InCyrillic}*|набра\p{InCyrillic}*
 -2		s_search		что|кто|тако\p{InCyrillic}*|нибудь|значит|слов\p{InCyrillic}*|поняти\p{InCyrillic}*|скольк\p{InCyrillic}*
 -3		s_prepos		в|без|до|из|к|на|по|о|от|перед|при|через|с|у|за|над|об|под|про|для
 -4		s_change		отмена|нет|давай|лучше|хотя|вместо|впрочем|знаешь
