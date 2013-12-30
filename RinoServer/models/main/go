@@ -26,20 +26,20 @@ testData="test"
 echo $(date) > accuracy
 echo >> accuracy
 
-models="./a_sms"
+#~ models="./a_sms"
 
 #~ models="./action
 #~ ./a_call
 #~ ./a_sms"
 
-#~ models="./action
-#~ ./a_call
-#~ ./a_sms
-#~ ./a_email
-#~ ./a_search
-#~ ./a_site
-#~ ./a_alarm
-#~ ./a_balance"
+models="./action
+./a_call
+./a_sms
+./a_email
+./a_search
+./a_site
+./a_alarm
+./a_balance"
 
 
 train-predict (){

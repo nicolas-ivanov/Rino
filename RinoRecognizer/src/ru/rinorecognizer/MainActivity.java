@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import com.example.rino.R;
@@ -192,10 +193,11 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	public void addRequest(String request) {
 //		newPhraseList.add(0, "«" + request + "»");
-		dialogList.add(0, "«" + request + "»");
+		String str = " - " + request + "\n";
+//		String str = " - " + request.substring(0, 1).toUpperCase(Locale.US) + request.substring(1) + ".\n";
+		dialogList.add(0, str);
 		
-		dialogListView.setAdapter(new ArrayAdapter<String>(this,
-			android.R.layout.simple_list_item_1, dialogList));
+		dialogListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dialogList));
 	}
 	
 	
@@ -203,12 +205,17 @@ public class MainActivity extends Activity implements OnClickListener {
 		String request = dialogList.get(0);
 		dialogList.remove(0);
 		
-		String str = request + System.getProperty("line.separator") + "- " + answer 
-				+ System.getProperty("line.separator");
+//		String str = request + System.getProperty("line.separator") + "- " + answer 
+//				+ System.getProperty("line.separator");		
+		
+		String str = request + "- " + answer + "\n";		
+		
+
+//		String str = " - " + request;
+//		String str = " - " + request.substring(0, 1).toUpperCase(Locale.US) + request.substring(1) + "- " + answer + ".\n";
 		newPhraseList.add(str);
 		dialogList.add(0, str);
-		dialogListView.setAdapter(new ArrayAdapter<String>(this,
-			android.R.layout.simple_list_item_1, dialogList));
+		dialogListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dialogList));
 	}
 
 	
@@ -216,7 +223,7 @@ public class MainActivity extends Activity implements OnClickListener {
 //////////////// Framing Task //////////////////////////////////////////////////////////////////////
 	
 	private void startFramingTask(String command) {	
-		addRequest(command);    
+//		addRequest(command);    
 		
 		if (framingTask != null) {
 			framingTask.cancel(true);

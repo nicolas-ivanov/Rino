@@ -30,7 +30,7 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
 	private MainActivity.SvmBunch svm_bunch;
 	private Frame savedFrame;
 	
-	private Boolean debugMode = true;
+	private Boolean debugMode = false;
 
 	
 	FramingTask(MainActivity mainActivity, MainActivity.SvmBunch svmBunch, Frame savedFrame){
@@ -48,6 +48,12 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
     	CommandFeaturesGetter cfGetter = new CommandFeaturesGetter(); 
     	int[] cFeatures = cfGetter.getVector(extCommand);
 		int c_id = svm_bunch.svm_A.classify(cFeatures);
+		
+		if (c_id == extCommand.prevType)
+			publishProgress(extCommand.curCommand);
+		else
+			publishProgress(extCommand.curCommand, "");
+		
 		ActionType a_type = ActionType.A_CALL;
 		
 		switch (c_id) {
@@ -61,6 +67,8 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
 		default:
 				System.out.println("Command ID '" + c_id + "' is incorrect");
 		}
+
+		
 		if (debugMode)
 			publishProgress("Command type: " + a_type.toString().toLowerCase(Locale.US));
 		
@@ -138,7 +146,11 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
     @Override
     protected void onProgressUpdate(String... answer) {
     	super.onProgressUpdate(answer);
-  		mainActivity.addAnswer(answer[0]);
+    	
+    	if (answer.length == 1)
+    		mainActivity.addAnswer(answer[0]);
+    	else
+    		mainActivity.addRequest(answer[0]);
     }
     
     

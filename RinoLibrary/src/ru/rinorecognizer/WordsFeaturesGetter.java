@@ -92,24 +92,9 @@ public class WordsFeaturesGetter {
 			
 			// Get parameters vectors for trigrams of words
 			int[][] ngramsVectors = new int[words.length][];
-
-//			int paramsNum_2 = paramsNum * 2; 
-//			int paramsNum_3 = paramsNum * 3;
-//			
-//			for (int k = 0; k < wordsVectors.length; k++) {
-//				
-//				int[] tVector = new int[paramsNum_3];
-//				
-//				for (int i = 0; i < paramsNum; i++) {
-//					tVector[i] = wordsVectors[k][i]; 
-//					tVector[i + paramsNum] = (k == 0)? 0 : wordsVectors[k-1][i]; // "first word" check
-//					tVector[i + paramsNum_2] = (k == wordsVectors.length - 1)? 0 : wordsVectors[k+1][i]; // "last word" check
-//				}
-//				trigramsVectors[k] = tVector;
-//			}
 			
-			final int left_leaf_size = 10;
-			final int right_leaf_size = 10;
+			final int left_leaf_size = 2;
+			final int right_leaf_size = 2;
 			int window_size = 1 + left_leaf_size + right_leaf_size;
 			
 			for (int curr_word_num = 0; curr_word_num < wordsVectors.length; curr_word_num++) {
