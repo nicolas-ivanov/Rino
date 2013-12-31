@@ -54,10 +54,14 @@ public class WordsFeaturesGetter {
 				for (int i=0; i<wVector.length; i++)
 					wVector[i] = 0;
 				
-				// Replace special characters from words
+				// Replace special marking from words
 				String w = words[k];
-				if (w.charAt(0) == '_')
-					w = w.substring(1);
+				
+				if (w.length() > 0) {
+					w = w.replaceFirst("_", "");
+					w = w.replaceFirst("Hour:", "");
+					w = w.replaceFirst("Minutes:", "");
+				}
 				
 				int pNum = 0;
 				String rawPattern;				
@@ -159,9 +163,19 @@ public class WordsFeaturesGetter {
 				String w = words[k];
 				
 				if (w.length() > 0) {
-					if (w.charAt(0) == '_') {
-						w = w.substring(1);
+					if (w.startsWith("_")) {
+						w = w.replaceFirst("_", "");
 						wordsLabels[k] = -1;
+						wordFound = true;
+					}
+					if (w.startsWith("Hour:")) {
+						w = w.replaceFirst("Hour:", "");
+						wordsLabels[k] = 5;
+						wordFound = true;
+					}
+					if (w.startsWith("Minutes:")) {
+						w = w.replaceFirst("Minutes:", "");
+						wordsLabels[k] = 6;
 						wordFound = true;
 					}
 				}

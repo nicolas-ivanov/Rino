@@ -22,27 +22,22 @@ public class AlarmFrame extends Frame {
 	}
 	
 	public FramingResult fill(List<String> wgroups, List<ParamsType> labels)
-	{			
-		Boolean hourIsFound = false;
-		
+	{					
 		for (int i = 0; i < wgroups.size(); i++)
 			switch (labels.get(i)) {
-			case P_NUMBER: 
-				if (!hourIsFound) {
-					hour = Integer.parseInt(wgroups.get(i));
-					hourIsFound = true;
-				}
-				else
-					minutes = Integer.parseInt(wgroups.get(i));
-				break;	
-				
+			case P_HOUR: 
+				hour = Integer.parseInt(wgroups.get(i));
+			case P_MINUTES: 
+				minutes = Integer.parseInt(wgroups.get(i));
 			default: break;
 			}
+
+		response = "Ставлю будильник на " + hour + " часов " + minutes + "минут."; 
 		
 		Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM);
 		intent.putExtra(AlarmClock.EXTRA_HOUR, hour);
 		intent.putExtra(AlarmClock.EXTRA_MINUTES, minutes);
-		intent.putExtra(AlarmClock.EXTRA_MESSAGE,"Rino alarm");
+		intent.putExtra(AlarmClock.EXTRA_MESSAGE,"Rino Alarm");
 		
 		FramingResult framingResult = new FramingResult();
 		framingResult.intent = intent;

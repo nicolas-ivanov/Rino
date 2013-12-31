@@ -1,4 +1,4 @@
-#!/bin/bash #for highlighting purpose only
+#!/bin/bash #this line is for highlighting purpose only
 ########################################################################
 # A collection of marked user commands for the following commands types:
 # a_call	call to smb
@@ -1088,49 +1088,49 @@ a_balance	хотя нет лучше покажи баланс
 # A_ALARM section ######################################################
 
 a_alarm	будильник 				# на какое время?
-a_alarm	7
+a_alarm	Hour:7
 
 a_alarm	будильник 				# на какое время?
-a_alarm	7 30
+a_alarm	Hour:7 Minutes:30
 
 a_alarm	будильник 				# на какое время?
-a_alarm	7 часов
+a_alarm	Hour:7 часов
 
 a_alarm	будильник 				# на какое время?
-a_alarm	7 часов утра
+a_alarm	Hour:7 часов утра
 
 a_alarm	будильник 				# на какое время?
-a_alarm	7 часов 30 минут
+a_alarm	Hour:7 часов Minutes:30 минут
 
 
 a_alarm	будильник 				# на какое время?
-a_alarm	на 7
+a_alarm	на Hour:7
 
 a_alarm	будильник 				# на какое время?
-a_alarm	на 7 30
+a_alarm	на Hour:7 Minutes:30
 
 a_alarm	будильник 				# на какое время?
-a_alarm	на 7 часов 30 минут
+a_alarm	на Hour:7 часов Minutes:30 минут
 
 
 a_alarm	будильник 				# поставь на какое время?
-a_alarm	поставь на 7
+a_alarm	поставь на Hour:7
 
 a_alarm	будильник 				# поставь на какое время?
-a_alarm	поставь на 7 30
+a_alarm	поставь на Hour:7 Minutes:30
 
 a_alarm	будильник 				# поставь на какое время?
-a_alarm	поставь на 7 часов 30 минут
+a_alarm	поставь на Hour:7 часов Minutes:30 минут
 
 
 a_alarm	будильник 				# поставь будильник на какое время?
-a_alarm	поставь будильник на 7
+a_alarm	поставь будильник на Hour:7
 
 a_alarm	будильник 				# поставь будильник на какое время?
-a_alarm	поставь будильник на 7 30
+a_alarm	поставь будильник на Hour:7 Minutes:30
 
 a_alarm	будильник 				# поставь будильник на какое время?
-a_alarm	поставь будильник на 7 часов 30 минут
+a_alarm	поставь будильник на Hour:7 часов Minutes:30 минут
 
 
 # cancellation, 1 s_change word

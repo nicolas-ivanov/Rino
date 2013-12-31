@@ -36,7 +36,7 @@ public class RinoServer {
 		String trainSourceDir = cmd.getOptionValue("trainDir");
 		String testSourceDir = 	cmd.getOptionValue("testDir");
 		Boolean separate = 		cmd.hasOption("separate");
-		Double sRatio = 		Double.parseDouble(cmd.getOptionValue("ratio"));
+		Double sRatio = 		Double.parseDouble(cmd.getOptionValue("ratio", "0.5"));
 		
 		String allParamsName = 	cmd.getOptionValue("allParamsName", "allParams");
 		String compactName = 	cmd.getOptionValue("compactName", "compact");
@@ -74,13 +74,12 @@ public class RinoServer {
 		
 		String workingDir;
 		String allParamsFile, compactFile, verboseFile;
-		ActionsConvert actions = new ActionsConvert();
 		
 		String rangeFile, scaledFile;
 		ScaleData scaleData = new ScaleData();
 		
-		
-		
+
+		ActionsConvert actions = new ActionsConvert();
 		// Get parameters values for action-type classification
 		{			
 			// training set
@@ -111,6 +110,38 @@ public class RinoServer {
 			scaleData.scale(allParamsFile, scaledFile, rangeFile);
 			
 		}
+
+//		ParamsConvert params = new ParamsConvert();
+//		// Get parameters values for action-type classification
+//		{			
+//			// training set
+//			workingDir = trainSourceDir + "../action/train/";
+//			new File(workingDir).mkdirs();
+//			
+//			allParamsFile = workingDir + allParamsName;
+//			compactFile = 	workingDir + compactName;
+//			verboseFile = 	workingDir + verboseName;
+//			params.convert(modelName, trainDir, outFile, verboseFile, allParamsFile);
+//
+//			rangeFile = workingDir + rangeName; 
+//			scaledFile = workingDir + scaledName; 
+//			scaleData.scale(allParamsFile, scaledFile, rangeFile);
+//			
+//			
+//			// testing set
+//			workingDir = trainSourceDir + "../action/test/";
+//			new File(workingDir).mkdirs();
+//			
+//			allParamsFile = workingDir + allParamsName;
+//			compactFile = 	workingDir + compactName;
+//			verboseFile = 	workingDir + verboseName;			
+//			params.convert(testDir, allParamsFile, compactFile, verboseFile);
+//
+//			rangeFile = workingDir + rangeName; 
+//			scaledFile = workingDir + scaledName; 
+//			scaleData.scale(allParamsFile, scaledFile, rangeFile);
+//			
+//		}
 		
 	}
 

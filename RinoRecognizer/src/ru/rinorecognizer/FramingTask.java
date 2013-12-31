@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 
+import ru.rinorecognizer.Frame.ActionType;
+import ru.rinorecognizer.Frame.ParamsType;
 import ru.rinorecognizer.frames.AlarmFrame;
 import ru.rinorecognizer.frames.BalanceFrame;
 import ru.rinorecognizer.frames.CallFrame;
@@ -12,12 +14,6 @@ import ru.rinorecognizer.frames.EmailFrame;
 import ru.rinorecognizer.frames.SearchFrame;
 import ru.rinorecognizer.frames.SiteFrame;
 import ru.rinorecognizer.frames.SmsFrame;
-
-import ru.rinorecognizer.CommandFeaturesGetter;
-import ru.rinorecognizer.WordsFeaturesGetter;
-import ru.rinorecognizer.Frame.ActionType;
-import ru.rinorecognizer.Frame.ParamsType;
-
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -30,7 +26,7 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
 	private MainActivity.SvmBunch svm_bunch;
 	private Frame savedFrame;
 	
-	private Boolean debugMode = false;
+	private Boolean debugMode = true;
 
 	
 	FramingTask(MainActivity mainActivity, MainActivity.SvmBunch svmBunch, Frame savedFrame){
@@ -197,7 +193,8 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
     		case  2: p_type.add(ParamsType.P_NUMBER); 	break;
     		case  3: p_type.add(ParamsType.P_EMAIL); 	break;
     		case  4: p_type.add(ParamsType.P_SITE); 	break;
-    		case  5: p_type.add(ParamsType.P_TIME); 	break;
+    		case  5: p_type.add(ParamsType.P_HOUR); 	break;
+    		case  6: p_type.add(ParamsType.P_MINUTES); 	break;
     		case  0: p_type.add(ParamsType.OTHER); 		break;
     		case -1: p_type.add(ParamsType.QUOTE); 		break;
     		case -2: p_type.add(ParamsType.Q_MARK); 	break;

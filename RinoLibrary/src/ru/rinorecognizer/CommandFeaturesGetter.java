@@ -55,9 +55,9 @@ public class CommandFeaturesGetter {
 				String rawPattern;
 
 				if (w.length() > 0) {
-					if (w.charAt(0) == '_') {
-						w = w.substring(1);
-					}
+					w = w.replaceFirst("_", "");
+					w = w.replaceFirst("Hour:", "");
+					w = w.replaceFirst("Minutes:", "");
 				}
 
 				int pNum = 0;

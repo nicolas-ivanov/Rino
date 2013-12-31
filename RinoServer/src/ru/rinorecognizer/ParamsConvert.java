@@ -11,7 +11,7 @@ import java.io.OutputStreamWriter;
 
 public class ParamsConvert {
 
-	private void convert(String modelName, String trainDir, String outFile, String verboseFile, String allParamsFile)  
+	public void convert(String modelName, String trainDir, String outFile, String verboseFile, String allParamsFile)  
 	{   
 		
 		BufferedReader dataReader = null;
@@ -129,9 +129,9 @@ public class ParamsConvert {
 		String data = args[0];
 		String modelName = args[1];
 		
-//		String path = "/home/nicolas/Dropbox/Diploma/svm/train/";
-//		String data = "collection";
-//		String modelName = "a_call";
+//		String path = "/home/nicolas/Develop/workspace/RinoServer/models/main/";
+//		String data = "train";
+//		String modelName = "a_alarm";
 
 		
 		String trainDir = path + data;
