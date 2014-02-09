@@ -30,7 +30,7 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
 	private MainActivity.SvmBunch svm_bunch;
 	private Frame savedFrame;
 	
-	private Boolean debugMode = false;
+	private Boolean debugMode = true;
 
 	
 	FramingTask(MainActivity mainActivity, MainActivity.SvmBunch svmBunch, Frame savedFrame){

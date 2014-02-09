@@ -22,7 +22,9 @@ public class BalanceFrame extends Frame {
 	
 	public FramingResult fill(List<String> wgroups, List<ParamsType> labels)
 	{	
-		Intent intent = new Intent(android.content.Intent.ACTION_CALL, numUri);			
+		Intent intent = new Intent(android.content.Intent.ACTION_CALL, numUri);	
+		
+		response = "Запрашиваю баланс";
 		
 		FramingResult framingResult = new FramingResult();
 		framingResult.intent = intent;

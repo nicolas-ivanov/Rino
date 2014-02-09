@@ -1,4 +1,4 @@
-#!/bin/bash #for highlighting purpose only
+#!/bin/bash #this line is for highlighting purpose only
 ########################################################################
 # A collection of marked user commands for the following commands types:
 # a_call	call to smb
