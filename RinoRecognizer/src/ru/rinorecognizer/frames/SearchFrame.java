@@ -45,13 +45,24 @@ public class SearchFrame extends Frame {
 		
 		
 		// check text;
-		if (textList.size() != 1) {
-			response = "Что нужно найти?"; 
-		}
-		else {
-			resStr = "http://ru.wikipedia.org/w/index.php?search=" + textList.get(0);
+//		if (textList.size() != 1) {
+//			response = "Что нужно найти?"; 
+//		}
+//		else {
+//			resStr = "http://ru.wikipedia.org/w/index.php?search=" + textList.get(0);
+//			intent = new Intent(Intent.ACTION_VIEW, Uri.parse(resStr));
+//		}		
+		
+		{
+			for (String s: textList)
+				resStr += resStr + s + "_";
+			
+			resStr = resStr.substring(0, resStr.length() - 1	);
+			response = "Ищу «" + resStr.replace('_', ' ') + "»"; 
+			
+			resStr = "http://ru.wikipedia.org/w/index.php?search=" + resStr;
 			intent = new Intent(Intent.ACTION_VIEW, Uri.parse(resStr));
-		}		
+		}
 		
 		FramingResult framingResult = new FramingResult();
 		framingResult.intent = intent;
