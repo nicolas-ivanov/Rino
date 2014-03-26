@@ -114,14 +114,15 @@ public class ActionsCompare {
 	public static void main (String[] args) 
 	{		
 //		String path = "/home/nicolas/Dropbox/Diploma/svm/train/action/";
+//		String data = "collection";
+		
 		if (args.length != 1) {
 			System.out.println("ActionCompare: wrong parameters number: " + args.length);
 			return;
 		}		
-//		String data = "collection";
 		String data = args[0];
-		
 		String path = "../main/action/";
+		
 		String original = path + "verbose_" + data;
 		String predicted = path + "predicted_" + data;
 		String mistakes = path + "mistakes_" + data;

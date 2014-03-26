@@ -175,7 +175,7 @@ public class WordsFeaturesGetter {
 					}
 					if (w.startsWith("Minutes:")) {
 						w = w.replaceFirst("Minutes:", "");
-						wordsLabels[k] = 6;
+						wordsLabels[k] = 5;
 						wordFound = true;
 					}
 				}
