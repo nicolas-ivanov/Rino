@@ -2,7 +2,7 @@
 bin/
 bin-debug/
 bin-release/
-RinoServer/models/libsvm-3.17
+RinoServer/models/libsvm-3.17/
 
 # Other files and folders
 .settings/
