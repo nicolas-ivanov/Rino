@@ -10,7 +10,7 @@ import ru.rinorecognizer.MainActivity;
 import android.content.Intent;
 import android.net.Uri;
 
-import com.example.rino.R;
+import ru.rinorecognizer.R;
 
 
 public class EmailFrame extends Frame {

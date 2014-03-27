@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
-import com.example.rino.R;
+import ru.rinorecognizer.R;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -193,7 +193,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	public void addRequest(String request) {
 //		newPhraseList.add(0, "«" + request + "»");
-		String str = " - " + request + "\n";
+		String str = "- " + request + "\n";
 //		String str = " - " + request.substring(0, 1).toUpperCase(Locale.US) + request.substring(1) + ".\n";
 		dialogList.add(0, str);
 		
