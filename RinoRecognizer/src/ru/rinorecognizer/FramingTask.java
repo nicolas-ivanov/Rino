@@ -337,6 +337,9 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
 			else if (word.equals("джимейл") 		|| word.equals("gmail"))		resWord = "gmail.com";
 			else if (word.equals("майл") 			|| word.equals("mail"))			resWord = "mail.ru";
 			
+			else if (word.equals("вконтакте") 		|| word.equals("vkontakte"))	resWord = "vk.com";
+			else if (word.equals("фэйсбук") 		|| word.equals("facebook"))		resWord = "facebook.com";
+			
 			else if (word.matches("интернет\\w*"))	resWord = "yandex.ru";
 			
 			break;

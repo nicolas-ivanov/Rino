@@ -36,8 +36,8 @@ public class SearchFrame extends Frame {
 				break;
 				
 			case QUOTE: 
-				newText = wgroups.get(i).replace(" ", "_");
-				textList.add(newText);
+				newText = wgroups.get(i);
+				textList.add(newText + " ");
 				break;
 				
 			default: break;
@@ -45,20 +45,17 @@ public class SearchFrame extends Frame {
 		
 		
 		// check text;
-//		if (textList.size() != 1) {
-//			response = "Что нужно найти?"; 
-//		}
-//		else {
-//			resStr = "http://ru.wikipedia.org/w/index.php?search=" + textList.get(0);
-//			intent = new Intent(Intent.ACTION_VIEW, Uri.parse(resStr));
-//		}		
-		
-		{
-			for (String s: textList)
-				resStr += resStr + s + "_";
+		if (textList.size() != 1) {
+			response = "Что нужно найти?\nКандидаты:\n";
 			
-			resStr = resStr.substring(0, resStr.length() - 1	);
-			response = "Ищу «" + resStr.replace('_', ' ') + "»"; 
+			int i = 0;
+			for (String str: textList)
+				response += "\t" + (i++) + ". " + str + "\n";
+			
+		}
+		else {
+			resStr = textList.get(0);
+			response = "Ищу «" + resStr + "»";
 			
 			resStr = "http://ru.wikipedia.org/w/index.php?search=" + resStr;
 			intent = new Intent(Intent.ACTION_VIEW, Uri.parse(resStr));

@@ -9,12 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import ru.rinorecognizer.R;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.os.Environment;
@@ -311,11 +315,18 @@ public class MainActivity extends Activity implements OnClickListener {
 	    		dir.mkdir();
 	    	
 	        File file = new File(dir, fileName);
-//	        file.lastModified();
-//	        Date lastModDate = new Date(file.lastModified());
+	        
 
-		    if (file.exists())
+	    	ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(), 0);
+	        ZipFile zf = new ZipFile(ai.sourceDir);
+	        ZipEntry ze = zf.getEntry("classes.dex");
+	        long appModified = ze.getTime();
+	        long fileModified = file.lastModified();
+	    	zf.close();
+
+		    if (file.exists() && fileModified > appModified) {
 		    	return file.getPath();
+		    }
 		    else {		    	
 	            int rID = getResources().getIdentifier(fileName, "raw", getPackageName()); 
 
@@ -333,6 +344,10 @@ public class MainActivity extends Activity implements OnClickListener {
 	    catch (IOException e) {
 	        Log.w("ExternalStorage", "Error writing to file", e);
 	    }
+	    catch (NameNotFoundException e) {
+			e.printStackTrace();
+	        Log.w("Application Info", "Name not found exception", e);
+		}
 		return null;
 	}
 	
