@@ -59,8 +59,7 @@ public class WordsFeaturesGetter {
 				
 				if (w.length() > 0) {
 					w = w.replaceFirst("_", "");
-					w = w.replaceFirst("Hour:", "");
-					w = w.replaceFirst("Minutes:", "");
+					w = w.replaceFirst("Time:", "");
 				}
 				
 				int pNum = 0;
@@ -168,13 +167,8 @@ public class WordsFeaturesGetter {
 						wordsLabels[k] = -1;
 						wordFound = true;
 					}
-					if (w.startsWith("Hour:")) {
-						w = w.replaceFirst("Hour:", "");
-						wordsLabels[k] = 5;
-						wordFound = true;
-					}
-					if (w.startsWith("Minutes:")) {
-						w = w.replaceFirst("Minutes:", "");
+					if (w.startsWith("Time:")) {
+						w = w.replaceFirst("Time:", "");
 						wordsLabels[k] = 5;
 						wordFound = true;
 					}

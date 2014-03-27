@@ -1088,49 +1088,49 @@ a_balance	хотя нет лучше покажи баланс
 # A_ALARM section ######################################################
 
 a_alarm	будильник 				# на какое время?
-a_alarm	Hour:7
+a_alarm	Time:7
 
 a_alarm	будильник 				# на какое время?
-a_alarm	Hour:7 Minutes:30
+a_alarm	Time:7 Time:30
 
 a_alarm	будильник 				# на какое время?
-a_alarm	Hour:7 часов
+a_alarm	Time:7 часов
 
 a_alarm	будильник 				# на какое время?
-a_alarm	Hour:7 часов утра
+a_alarm	Time:7 часов утра
 
 a_alarm	будильник 				# на какое время?
-a_alarm	Hour:7 часов Minutes:30 минут
+a_alarm	Time:7 часов Time:30 минут
 
 
 a_alarm	будильник 				# на какое время?
-a_alarm	на Hour:7
+a_alarm	на Time:7
 
 a_alarm	будильник 				# на какое время?
-a_alarm	на Hour:7 Minutes:30
+a_alarm	на Time:7 Time:30
 
 a_alarm	будильник 				# на какое время?
-a_alarm	на Hour:7 часов Minutes:30 минут
+a_alarm	на Time:7 часов Time:30 минут
 
 
 a_alarm	будильник 				# поставь на какое время?
-a_alarm	поставь на Hour:7
+a_alarm	поставь на Time:7
 
 a_alarm	будильник 				# поставь на какое время?
-a_alarm	поставь на Hour:7 Minutes:30
+a_alarm	поставь на Time:7 Time:30
 
 a_alarm	будильник 				# поставь на какое время?
-a_alarm	поставь на Hour:7 часов Minutes:30 минут
+a_alarm	поставь на Time:7 часов Time:30 минут
 
 
 a_alarm	будильник 				# поставь будильник на какое время?
-a_alarm	поставь будильник на Hour:7
+a_alarm	поставь будильник на Time:7
 
 a_alarm	будильник 				# поставь будильник на какое время?
-a_alarm	поставь будильник на Hour:7 Minutes:30
+a_alarm	поставь будильник на Time:7 Time:30
 
 a_alarm	будильник 				# поставь будильник на какое время?
-a_alarm	поставь будильник на Hour:7 часов Minutes:30 минут
+a_alarm	поставь будильник на Time:7 часов Time:30 минут
 
 
 # cancellation, 1 s_change word

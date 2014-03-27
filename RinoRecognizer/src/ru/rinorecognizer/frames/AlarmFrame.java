@@ -1,20 +1,23 @@
 package ru.rinorecognizer.frames;
 
 import java.util.List;
+import java.util.Locale;
 
 import ru.rinorecognizer.Frame;
 import ru.rinorecognizer.FramingResult;
 import ru.rinorecognizer.MainActivity;
+import ru.rinorecognizer.Frame.ParamsType;
 import ru.rinorecognizer.parsers.TimeParser;
 
+import android.text.format.Time;
 import android.content.Intent;
+import android.net.Uri;
 import android.provider.AlarmClock;
 
 
 
 public class AlarmFrame extends Frame {
-	private Integer hour;
-	private Integer minutes;
+	private Time time;
 	
 	public AlarmFrame(MainActivity main){
 		super(main, ActionType.A_ALARM);
@@ -22,37 +25,42 @@ public class AlarmFrame extends Frame {
 	
 	public FramingResult fill(List<String> wgroups, List<ParamsType> labels)
 	{			
-		for (int i = 0; i < wgroups.size(); i++)
+		String timePatch = "";
+		
+		for (int i = 0; i < wgroups.size(); i++) 
+		{
 			switch (labels.get(i)) {
 			case P_TIME:
 				TimeParser tp = new TimeParser();
-				TimeParser.Time time = tp.parse(wgroups.get(i));
-
-				if (time != null) {	
-					hour = time.hour;
-					minutes = time.minutes;
-				}
-				else {
-					response = "Непонятное время: «" + wgroups.get(i) + "»";
-					return null;
-				}
+				timePatch = wgroups.get(i);
+				time = tp.parse(timePatch);
 				
 			default: break;
 			}
-		
-		response = "Ставлю будильник на " + hour + " часов " + minutes + " минут."; 
-		
-		Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM);
-		intent.putExtra(AlarmClock.EXTRA_HOUR, hour);
-		intent.putExtra(AlarmClock.EXTRA_MINUTES, minutes);
-		intent.putExtra(AlarmClock.EXTRA_MESSAGE,"Rino Alarm");
+		}
+
 		
 		FramingResult framingResult = new FramingResult();
-		framingResult.intent = intent;
-		framingResult.savedFrame = this;
 
+		if (time != null) {
+			response = "Ставлю будильник на " + time.hour + " часов " + time.minute + " минут.";	
+			
+			Intent intent = new Intent(AlarmClock.ACTION_SET_ALARM);
+			intent.putExtra(AlarmClock.EXTRA_HOUR, time.hour);
+			intent.putExtra(AlarmClock.EXTRA_MINUTES, time.minute);
+			intent.putExtra(AlarmClock.EXTRA_MESSAGE,"Rino Alarm");
+			
+			framingResult.intent = intent;
+		}
+		else {
+			response = "Непонятное время: «" + timePatch + "»";
+			framingResult.intent = null;
+		}
+
+		framingResult.savedFrame = this; 
 		return framingResult;
 	}	
+	
 	
 	protected boolean check() {
 		return true;

@@ -248,6 +248,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	    framingTask.execute(extCommand);
 	}
 	
+	
 	public void endFramingTask() {
 		try {			
 			FramingResult result = framingTask.get();

@@ -56,8 +56,7 @@ public class CommandFeaturesGetter {
 
 				if (w.length() > 0) {
 					w = w.replaceFirst("_", "");
-					w = w.replaceFirst("Hour:", "");
-					w = w.replaceFirst("Minutes:", "");
+					w = w.replaceFirst("Time:", "");
 				}
 
 				int pNum = 0;

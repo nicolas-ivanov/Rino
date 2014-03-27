@@ -263,20 +263,53 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
 			break;
 			
 		case P_NUMBER:
-			if (word.equals("плюс"))			resWord = "+";
-			else if (word.equals("звездочка"))	resWord = "*";
-			else if (word.equals("решетка"))	resWord = Uri.encode("#");
+		case P_TIME:
+			if (word.equals("плюс"))				resWord = "+";
+			else if (word.equals("звездочка"))		resWord = "*";
+			else if (word.equals("решетка"))		resWord = Uri.encode("#");
 
-			else if (word.equals("ноль"))	resWord = "0";
-			else if (word.equals("один"))	resWord = "1";
-			else if (word.equals("два"))	resWord = "2";
-			else if (word.equals("три"))	resWord = "3";
-			else if (word.equals("четыре"))	resWord = "4";
-			else if (word.equals("пять"))	resWord = "5";
-			else if (word.equals("шесть"))	resWord = "6";
-			else if (word.equals("семь"))	resWord = "7";
-			else if (word.equals("восемь"))	resWord = "8";
-			else if (word.equals("девять"))	resWord = "9";
+			else if (word.equals("ноль"))			resWord = "0";
+			else if (word.equals("один"))			resWord = "1";
+			else if (word.equals("два"))			resWord = "2";
+			else if (word.equals("три"))			resWord = "3";
+			else if (word.equals("четыре"))			resWord = "4";
+			else if (word.equals("пять"))			resWord = "5";
+			else if (word.equals("шесть"))			resWord = "6";
+			else if (word.equals("семь"))			resWord = "7";
+			else if (word.equals("восемь"))			resWord = "8";
+			else if (word.equals("девять"))			resWord = "9";
+			
+			else if (word.equals("десять"))			resWord = "10";
+			else if (word.equals("одиннадцать"))	resWord = "11";
+			else if (word.equals("двенадцать"))		resWord = "12";
+			else if (word.equals("тринадцать"))		resWord = "13";
+			else if (word.equals("четырнадцать"))	resWord = "14";
+			else if (word.equals("пятнадцать"))		resWord = "15";
+			else if (word.equals("шестнадцать"))	resWord = "16";
+			else if (word.equals("семнадцать"))		resWord = "17";
+			else if (word.equals("восемнадцать"))	resWord = "18";
+			else if (word.equals("девятнадцать"))	resWord = "19";
+			
+			else if (word.equals("двадцать"))		resWord = "20";
+			else if (word.equals("тридцать"))		resWord = "30";
+			else if (word.equals("сорок"))			resWord = "40";
+			else if (word.equals("пятьдесят"))		resWord = "50";
+			else if (word.equals("шестьдесят"))		resWord = "60";
+			else if (word.equals("семьдесят"))		resWord = "70";
+			else if (word.equals("восемьдесят"))	resWord = "80";
+			else if (word.equals("девяносто"))		resWord = "90";
+			
+			else if (word.equals("сто"))			resWord = "100";
+			else if (word.equals("двести"))			resWord = "200";
+			else if (word.equals("триста"))			resWord = "300";
+			else if (word.equals("четыреста"))		resWord = "400";
+			else if (word.equals("пятьсот"))		resWord = "500";
+			else if (word.equals("шестьсот"))		resWord = "600";
+			else if (word.equals("семьсот"))		resWord = "700";
+			else if (word.equals("восемьсот"))		resWord = "800";
+			else if (word.equals("десятьсот"))		resWord = "900";
+			
+			else if (word.equals("тысяча"))		resWord = "1000";
 			
 			break;
 			
