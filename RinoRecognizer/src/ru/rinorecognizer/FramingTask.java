@@ -332,7 +332,7 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
 				 word.equals("вики") 				|| word.equals("wiki"))			resWord = "ru.wikipedia.org";
 			else if (word.matches("яндекс\\w*") 	|| word.equals("yandex"))		resWord = "yandex.ru";
 			else if (word.matches("гугл\\w*") 		|| word.equals("google"))		resWord = "google.ru";
-			else if (word.matches("рамблер\\w*") 	|| word.equals("rambler"))		resWord = "rambler.ru";
+			else if (word.matches("рамблер\\w*") 	|| word.equals("rambler"))		resWord = "nova.rambler.ru";
 			
 			else if (word.equals("джимейл") 		|| word.equals("gmail"))		resWord = "gmail.com";
 			else if (word.equals("майл") 			|| word.equals("mail"))			resWord = "mail.ru";

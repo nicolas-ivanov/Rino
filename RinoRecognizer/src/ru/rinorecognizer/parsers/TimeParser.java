@@ -16,21 +16,21 @@ public class TimeParser {
 	private static final Pattern p_evening = Pattern.compile(".*(дня|вечер\\p{InCyrillic}*).*");
 	private static final Pattern p_tomorrow = Pattern.compile(".*завтра\\p{InCyrillic}*.*");
 	
+	public Time parse(String timePatch) {
 	
-	public Time parse(String command) {
 
 		Time time = new Time();
 		Boolean found = false;
 		
-		Matcher pFullTimeMatcher = p_full_time.matcher(command);
-		Matcher pMinutesMatcher = p_minutes.matcher(command);
-		Matcher pHourMatcher = p_hour.matcher(command);
+		Matcher pFullTimeMatcher = p_full_time.matcher(timePatch);
+		Matcher pMinutesMatcher = p_minutes.matcher(timePatch);
+		Matcher pHourMatcher = p_hour.matcher(timePatch);
 		
-		Matcher pEveningMatcher = p_evening.matcher(command);
-		Matcher pTomorrowMatcher = p_tomorrow.matcher(command);
+		Matcher pEveningMatcher = p_evening.matcher(timePatch);
+		Matcher pTomorrowMatcher = p_tomorrow.matcher(timePatch);
 		
-		Matcher pOneMatcher = p_one.matcher(command);
-		Matcher pMidnightMatcher = p_midnight.matcher(command);
+		Matcher pOneMatcher = p_one.matcher(timePatch);
+		Matcher pMidnightMatcher = p_midnight.matcher(timePatch);
 		
 
 		if (pFullTimeMatcher.matches()) {
