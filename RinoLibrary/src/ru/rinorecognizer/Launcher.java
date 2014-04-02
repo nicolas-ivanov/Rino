@@ -19,13 +19,13 @@ public class Launcher {
 		System.out.println();
 
 		WordsFeaturesGetter w_getter = new WordsFeaturesGetter();
-		int[][] w_vectors = w_getter.getVectors("позвони васе по номеру 8 917 123");
-		
-		for (int i = 0; i < w_vectors.length; i++) {
-			for (int j = 0; j < w_vectors[i].length; j++)
-				System.out.print(w_vectors[i][j] + " ");
-			System.out.println();
-		}
+//		int[][] w_vectors = w_getter.getVectors("позвони васе по номеру 8 917 123");
+//		
+//		for (int i = 0; i < w_vectors.length; i++) {
+//			for (int j = 0; j < w_vectors[i].length; j++)
+//				System.out.print(w_vectors[i][j] + " ");
+//			System.out.println();
+//		}
 		
 		
 	}

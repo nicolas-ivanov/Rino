@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 public class ActionsConvert {
 
-	private static final Pattern sourcePattern = Pattern.compile("(\\w+)\\t([^\\t]+)(\\t+#.*)?");
+	private static final Pattern sourcePattern = Pattern.compile("(\\w+)\\t([^\\t]+)(?:\\t+([#&] .+))?");	
 	
 	public void convert(String trainDir, String allParamsFile, String compactFile, String verboseFile) {
 

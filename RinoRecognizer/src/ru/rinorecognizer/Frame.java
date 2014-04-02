@@ -9,16 +9,18 @@ public abstract class Frame {
 	public static enum ParamsType {ACTION, P_NAME, P_NUMBER, P_EMAIL, P_SITE, P_TIME, OTHER, QUOTE, Q_MARK, PREPOS, CHANGE};
 	
 	protected MainActivity mainActivity;
-	protected String response;
 	protected ActionType type;
 	protected Boolean isComplete;
+	protected ParamsType expParameter;
+	protected String response;
 	
 	public Frame(MainActivity main, ActionType type)
 	{
 		this.mainActivity = main;
 		this.type = type;
 		this.isComplete = false;
-		response = "";
+		this.expParameter = null;
+		this.response = "";
 	}
 	
 	public abstract FramingResult fill(List<String> wgroups, List<ParamsType> labels);
@@ -31,6 +33,24 @@ public abstract class Frame {
 	public Boolean isComplete() {
 		return isComplete;
 	}
+	
+	public int getExpParameterID() {
+		
+		int paramID;
+		
+		switch (expParameter) {
+		case P_NAME: 	paramID = 1; break;
+		case P_NUMBER: 	paramID = 2; break;
+		case P_EMAIL: 	paramID = 3; break;
+		case P_SITE: 	paramID = 4; break;
+		case P_TIME: 	paramID = 5; break;
+		case QUOTE: 	paramID = 6; break;
+		default: 		paramID = 0;
+		}
+		
+		return paramID;
+	}
+	
 	
 	public int getTypeID() {
 		

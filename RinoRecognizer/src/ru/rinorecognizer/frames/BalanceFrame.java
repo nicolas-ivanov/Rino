@@ -5,7 +5,6 @@ import java.util.List;
 import ru.rinorecognizer.Frame;
 import ru.rinorecognizer.FramingResult;
 import ru.rinorecognizer.MainActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 
@@ -25,6 +24,7 @@ public class BalanceFrame extends Frame {
 		Intent intent = new Intent(android.content.Intent.ACTION_CALL, numUri);	
 		
 		response = "Запрашиваю баланс";
+		expParameter = null;		
 		
 		FramingResult framingResult = new FramingResult();
 		framingResult.intent = intent;

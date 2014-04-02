@@ -40,11 +40,13 @@ public class SiteFrame extends Frame {
 		// check
 		if (wwwUriList.size() == 0) {
 			response = "Какой сайт нужно открыть?"; 
+			expParameter = ParamsType.P_SITE;
 		}
 		else if (wwwUriList.size() == 1) 
 		{
 			Uri wwwUri = wwwUriList.get(0);
 			response = "Открываю " + wwwUri.toString();
+			expParameter = null;
 			intent = new Intent(Intent.ACTION_VIEW, wwwUri);
 		}
 		else 
@@ -56,6 +58,7 @@ public class SiteFrame extends Frame {
 				response += "\t" + (i++) + ". " + uri.toString() + "\n";
 			
 			response += "Какой сайт нужно открыть?";
+			expParameter = ParamsType.P_SITE;
 			wwwUriList = null;
 		}
 				

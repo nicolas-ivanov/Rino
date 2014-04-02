@@ -50,6 +50,7 @@ public class SearchFrame extends Frame {
 		
 		// check site
 		if (wwwUriList.size() == 0) {
+			expParameter = ParamsType.P_SITE;
 			response = "Какой сайт нужно открыть?"; 
 		}
 		else if (wwwUriList.size() == 1) 
@@ -58,10 +59,12 @@ public class SearchFrame extends Frame {
 			
 			// check text;
 			if (searchList.size() == 0) {
+				expParameter = ParamsType.QUOTE;
 				response += "Что нужно найти?";			
 			}
 			else if (searchList.size() == 1) {
 				searchStr = searchList.get(0);
+				expParameter = null;
 				response = "Ищу «" + searchStr + "»";
 				
 				SearchParser searchParser = new SearchParser();
@@ -80,6 +83,7 @@ public class SearchFrame extends Frame {
 					response += "\t" + (i++) + ". " + str + "\n";
 				
 				response += "Что нужно найти?";
+				expParameter = ParamsType.QUOTE;
 				searchList = null;
 			}
 		}
@@ -92,6 +96,7 @@ public class SearchFrame extends Frame {
 				response += "\t" + (i++) + ". " + uri.toString() + "\n";
 			
 			response += "Какой сайт нужно открыть?";
+			expParameter = ParamsType.P_SITE;
 			wwwUriList = null;
 		}
 		

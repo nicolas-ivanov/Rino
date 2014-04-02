@@ -38,7 +38,8 @@ public class AlarmFrame extends Frame {
 		
 		// check
 		if (time != null) {
-			response = "Ставлю будильник на " + time.hour + " часов " + time.minute + " минут.";	
+			response = "Ставлю будильник на " + time.hour + " часов " + time.minute + " минут.";
+			expParameter = null;
 			
 			intent = new Intent(AlarmClock.ACTION_SET_ALARM);
 			intent.putExtra(AlarmClock.EXTRA_HOUR, time.hour);
@@ -46,7 +47,8 @@ public class AlarmFrame extends Frame {
 			intent.putExtra(AlarmClock.EXTRA_MESSAGE,"Rino Alarm");
 		}
 		else {
-			response = "Непонятное время: «" + timePatch + "»";
+			response = "Непонятное время: «" + timePatch + "»\n На сколько нужно поставить будильник?";
+			expParameter = ParamsType.P_TIME;
 		}
 
 		FramingResult framingResult = new FramingResult();

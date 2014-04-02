@@ -49,22 +49,26 @@ public class SmsFrame extends Frame {
 
 		
 		
-		if (textList.size() == 0)
+		if (textList.size() == 0) {
 			response = "Что нужно написать?";
-		
+			expParameter = ParamsType.QUOTE;
+		}
 		else {
 			// check uri;
 			if (uriList.size() == 0) {
 				response = "Кому отправить смс?"; 
+				expParameter = ParamsType.P_NAME;
 				isComplete = false;
 			}
 			else if (uriList.size() == 1) {
 				Uri numUri = uriList.get(0);
 				intent = new Intent(Intent.ACTION_SENDTO, newUri);
 				response = "Отправляю смс на номер " + " " + numUri.getSchemeSpecificPart();
+				expParameter = null;
 			}
 			else { // (listUri.size() >= 2)
 				response = "Слишком много вариантов... Кому отправить смс?"; 
+				expParameter = ParamsType.P_NAME;
 				uriList = null;
 			}
 			

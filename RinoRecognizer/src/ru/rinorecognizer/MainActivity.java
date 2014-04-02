@@ -7,12 +7,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import ru.rinorecognizer.R;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -242,11 +239,13 @@ public class MainActivity extends Activity implements OnClickListener {
 	    
 	    if (savedFrame != null) {
 		    extCommand.prevType = savedFrame.getTypeID();
-		    extCommand.prevComplete = savedFrame.isComplete()? 1 : 0;	    	
+		    extCommand.prevComplete = savedFrame.isComplete()? 1 : 0;
+		    extCommand.expParameter = savedFrame.getExpParameterID();
 	    }
 	    else {
 		    extCommand.prevType = 0;
 		    extCommand.prevComplete = 1;
+		    extCommand.expParameter = 0;
 	    }
 	    	
 	    framingTask.execute(extCommand);

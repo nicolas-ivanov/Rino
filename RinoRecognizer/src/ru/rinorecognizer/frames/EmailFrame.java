@@ -7,10 +7,9 @@ import ru.rinorecognizer.Contact;
 import ru.rinorecognizer.Frame;
 import ru.rinorecognizer.FramingResult;
 import ru.rinorecognizer.MainActivity;
+import ru.rinorecognizer.R;
 import android.content.Intent;
 import android.net.Uri;
-
-import ru.rinorecognizer.R;
 
 
 public class EmailFrame extends Frame {
@@ -48,7 +47,8 @@ public class EmailFrame extends Frame {
 		
 		// check uri;
 		if (emailUriList.size() == 0) {
-			response = "Кому нужно отправить email?"; 
+			response = "Кому нужно отправить email?";
+			expParameter = ParamsType.P_NAME;
 		}
 		else if (emailUriList.size() == 1) {
 			Uri emailUri = emailUriList.get(0);
@@ -56,9 +56,11 @@ public class EmailFrame extends Frame {
 			intent.putExtra(Intent.EXTRA_SUBJECT, "Hello from Rino");
 			
 			response = mainActivity.getStr(R.string.sending_email);
+			expParameter = null;
 		}
 		else { // (listUri.size() >= 2)
 			response = "Очень много вариантов... Кому нужно отправить email?"; 
+			expParameter = ParamsType.P_NAME;
 			emailUriList = null;
 		}
 		

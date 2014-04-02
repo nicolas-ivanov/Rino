@@ -7,11 +7,9 @@ import ru.rinorecognizer.Contact;
 import ru.rinorecognizer.Frame;
 import ru.rinorecognizer.FramingResult;
 import ru.rinorecognizer.MainActivity;
-
+import ru.rinorecognizer.R;
 import android.content.Intent;
 import android.net.Uri;
-
-import ru.rinorecognizer.R;
 
 
 public class CallFrame extends Frame {
@@ -47,15 +45,18 @@ public class CallFrame extends Frame {
 		// check();
 		if (listUri.size() == 0) {
 			response = "Кому нужно позвонить?"; 
+			expParameter = ParamsType.P_NAME;
 		}
 		else if (listUri.size() == 1) {
 			Uri numUri = listUri.get(0);
 			intent = new Intent(Intent.ACTION_CALL, numUri);
 			response = mainActivity.getStr(R.string.calling_number) + " " + numUri.getSchemeSpecificPart();
+			expParameter = null;
 			isComplete = true;
 		}
 		else { // (listUri.size() >= 2)
-			response = "Слишком много вариантов... Кому позвонить?"; 
+			response = "Слишком много вариантов... Кому позвонить?";
+			expParameter = ParamsType.P_NAME;
 			listUri = null;
 		}
 

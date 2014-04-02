@@ -8,8 +8,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ParamsConvert {
+
+	private static final Pattern sourcePattern = Pattern.compile("(\\w+)\\t([^\\t]+)(?:\\t+([#&] .+))?");	
 
 	public void convert(String modelName, String trainDir, String outFile, String verboseFile, String allParamsFile)  
 	{   
@@ -39,28 +43,48 @@ public class ParamsConvert {
 			
 				while ((line = dataReader.readLine()) != null) {
 					
-					if ((line.length() == 0) || (line.charAt(0) == '#'))
+					// skip empty lines and comments
+					if (line.length() == 0) {
+//						verboseWriter.write("\n");
 						continue;
+					} else if (line.charAt(0) == '#')
+						continue;
+
 					
-					String[] parts = line.split("\t");
-	
-					if (parts.length < 2) {
-						System.out.println("ActionConvert: line '" + line + "' is incorrect");
+					// parse line
+					Matcher sourceMatcher = sourcePattern.matcher(line);
+					if (!sourceMatcher.matches()) {
+						System.out.println("ParamsConvert: Line '" + line + "' is incorrect");
 						break;
 					}
+					String label = sourceMatcher.group(1);
 					
-					if (!modelName.equals(parts[0])) 
+					if (!modelName.equals(label)) 
 						continue;
+					
+					
+					// process commands
+					String command = sourceMatcher.group(2);
+					String comment = sourceMatcher.group(3);
+					int expParam = 0;
+					
+					if (comment!=null) {
+						if (comment.startsWith("& "))
+							expParam = getExpParameterID(comment.replaceFirst("& ", ""));
+					}
+					
+					ExtendedCommand extCommand = new ExtendedCommand();
+					extCommand.curCommand = command;
+					extCommand.expParameter = expParam;
 					
 	
 					/// Main section ///////////////////////////////////////////////////
 					
 					WordsFeaturesGetter wfg = new WordsFeaturesGetter();
 	
-					String command = parts[1];
-					String[] words = parts[1].split(" ");
-					int[] wordsLabels = wfg.getLabels(command);
-					int[][] wordsVectors = wfg.getVectors(command);
+					String[] words = command.split(" ");
+					int[] wordsLabels = wfg.getLabels(extCommand);
+					int[][] wordsVectors = wfg.getVectors(extCommand);
 	
 					
 					
@@ -117,6 +141,25 @@ public class ParamsConvert {
 			}
 		}
 	}
+	
+	
+	public int getExpParameterID(String expParameter) {
+		
+		int paramID;
+		
+		switch (expParameter) {
+		case "p_name": 		paramID = 1; break;
+		case "p_number": 	paramID = 2; break;
+		case "p_email": 	paramID = 3; break;
+		case "p_site": 		paramID = 4; break;
+		case "p_time": 		paramID = 5; break;
+		case "p_quote": 	paramID = 6; break;
+		default: 			paramID = 0;
+		}
+		
+		return paramID;
+	}
+	
 	
 	
 	public static void main (String[] args) 

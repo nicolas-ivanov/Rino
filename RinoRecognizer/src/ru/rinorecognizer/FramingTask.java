@@ -72,7 +72,7 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
     	// step 2: map each word of a command with a label to get parameters
 
     	WordsFeaturesGetter wfGetter = new WordsFeaturesGetter(); 
-    	int[][] wFeatures = wfGetter.getVectors(extCommand.curCommand);
+    	int[][] wFeatures = wfGetter.getVectors(extCommand);
 
 		List<ParamsType> labels = new ArrayList<ParamsType>();
 		List<Integer> labels_id = new ArrayList<Integer>();

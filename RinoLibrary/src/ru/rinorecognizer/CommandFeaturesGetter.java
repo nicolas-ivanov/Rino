@@ -38,7 +38,7 @@ public class CommandFeaturesGetter {
 			
 			String command = extCommand.curCommand;
 
-			int paramsNum = getParamsNum() + 2;
+			int paramsNum = getParamsNum() + 3; // Params Num + prevType + prevComplete + expParameter
 
 			String[] words = command.split(" ");
 			int[] pVector = new int[paramsNum];
@@ -85,8 +85,10 @@ public class CommandFeaturesGetter {
 				patternsReader.close();
 			}
 			
-			pVector[pVector.length - 2] = extCommand.prevType;
-			pVector[pVector.length - 1] = extCommand.prevComplete;
+			pVector[pVector.length - 3] = extCommand.prevType;
+			pVector[pVector.length - 2] = extCommand.prevComplete;
+//			pVector[pVector.length - 1] = 0;
+			pVector[pVector.length - 1] = extCommand.expParameter;
 			
 			return pVector;
 
