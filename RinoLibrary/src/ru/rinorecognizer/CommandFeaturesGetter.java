@@ -86,7 +86,7 @@ public class CommandFeaturesGetter {
 			}
 			
 			pVector[pVector.length - 2] = extCommand.prevType;
-			pVector[pVector.length - 1] = extCommand.prevComplite;
+			pVector[pVector.length - 1] = extCommand.prevComplete;
 			
 			return pVector;
 

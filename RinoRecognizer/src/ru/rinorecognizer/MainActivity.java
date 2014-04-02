@@ -242,11 +242,11 @@ public class MainActivity extends Activity implements OnClickListener {
 	    
 	    if (savedFrame != null) {
 		    extCommand.prevType = savedFrame.getTypeID();
-		    extCommand.prevComplite = savedFrame.isComplete()? 1 : 0;	    	
+		    extCommand.prevComplete = savedFrame.isComplete()? 1 : 0;	    	
 	    }
 	    else {
 		    extCommand.prevType = 0;
-		    extCommand.prevComplite = 1;
+		    extCommand.prevComplete = 1;
 	    }
 	    	
 	    framingTask.execute(extCommand);

@@ -73,7 +73,7 @@ public class ActionsConvert {
 					ExtendedCommand extCommand = new ExtendedCommand();
 					extCommand.curCommand = command;
 					extCommand.prevType = prevType;
-					extCommand.prevComplite = prevComplite;
+					extCommand.prevComplete = prevComplite;
 					
 					int[] pVector = cfg.getVector(extCommand);
 					

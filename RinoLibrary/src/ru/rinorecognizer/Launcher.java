@@ -6,7 +6,7 @@ public class Launcher {
 		
 		ExtendedCommand extCommand = new ExtendedCommand();
 		extCommand.curCommand = "позвони васе по номеру 8 917 123";
-		extCommand.prevComplite = 1;
+		extCommand.prevComplete = 1;
 		extCommand.prevType = 0;
 		
 		CommandFeaturesGetter c_getter = new CommandFeaturesGetter();
