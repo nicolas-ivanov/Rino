@@ -91,13 +91,20 @@ public class ParamsConvert {
 					
 					
 					// Write parameters and labels to files
+					// + add label id of the previous word at the end of each vector
+
+					int saved_label_id = 0;
 					
 					for (int k = 0; k < wordsVectors.length; k++) {
 	
 						float[] tVector = wordsVectors[k];
-						String fullString = wordsLabels[k] + "";
-						String paramsString = wordsLabels[k] + "";
-						String verboseString = String.format("%-5s", wordsLabels[k]);
+						
+						tVector[tVector.length - 1] = saved_label_id;
+						saved_label_id = wordsLabels[k];
+						
+						String fullString = saved_label_id + "";
+						String paramsString = saved_label_id + "";
+						String verboseString = String.format("%-5s", saved_label_id);
 	
 						
 						for (int j = 0; j < tVector.length; j++) {
