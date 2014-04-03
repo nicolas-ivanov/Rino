@@ -30,7 +30,7 @@ public class ScaleData {
 	    if (line != null) {
 			Matcher paramsMatcher = paramsPattern.matcher(line);
 			if (!paramsMatcher.matches()) {
-				System.out.println("Line '" + line + "' is incorrect\n");
+				System.out.println(this.toString()+ ": Line '" + line + "' is incorrect\n");
 				fullReader.close();
 				return;
 			}
@@ -55,7 +55,7 @@ public class ScaleData {
 		while ((line = fullReader.readLine()) != null) {
 			Matcher paramsMatcher = paramsPattern.matcher(line);
 			if (!paramsMatcher.matches()) {
-				System.out.println("Line '" + line + "' is incorrect\n");
+				System.out.println(this.toString()+ ": Line '" + line + "' is incorrect\n");
 				break;
 			}
 			String params = paramsMatcher.group(2);
@@ -106,7 +106,7 @@ public class ScaleData {
 				// parse line
 				Matcher paramsMatcher = paramsPattern.matcher(line);
 				if (!paramsMatcher.matches()) {
-					System.out.println("Line '" + line + "' is incorrect\n");
+					System.out.println(this.toString()+ ": Line '" + line + "' is incorrect\n");
 					break;
 				}
 				String label = paramsMatcher.group(1);

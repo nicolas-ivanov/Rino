@@ -54,7 +54,7 @@ public class ParamsConvert {
 					// parse line
 					Matcher sourceMatcher = sourcePattern.matcher(line);
 					if (!sourceMatcher.matches()) {
-						System.out.println("ParamsConvert: Line '" + line + "' is incorrect");
+						System.out.println(this.toString() + ": Line '" + line + "' is incorrect");
 						break;
 					}
 					String label = sourceMatcher.group(1);
@@ -66,16 +66,15 @@ public class ParamsConvert {
 					// process commands
 					String command = sourceMatcher.group(2);
 					String comment = sourceMatcher.group(3);
-					int expParam = 0;
-					
-					if (comment!=null) {
-						if (comment.startsWith("& "))
-							expParam = getExpParameterID(comment.replaceFirst("& ", ""));
-					}
 					
 					ExtendedCommand extCommand = new ExtendedCommand();
 					extCommand.curCommand = command;
-					extCommand.expParameter = expParam;
+					extCommand.expParameter = 0;
+					
+					if (comment != null) {
+						if (comment.startsWith("& "))
+							extCommand.expParameter = IdTranslator.getParamID(comment.replaceFirst("& ", ""));
+					}
 					
 	
 					/// Main section ///////////////////////////////////////////////////
@@ -109,7 +108,7 @@ public class ParamsConvert {
 						
 						fullWriter.write(fullString + " \n");
 						paramsWriter.write(paramsString + "\n");
-						verboseWriter.write(String.format("%-40s # %s%n",verboseString, words[k]));
+						verboseWriter.write(String.format("%-70s # %s%n",verboseString, words[k]));
 					}
 					verboseWriter.newLine();
 	
@@ -143,27 +142,14 @@ public class ParamsConvert {
 	}
 	
 	
-	public int getExpParameterID(String expParameter) {
-		
-		int paramID;
-		
-		switch (expParameter) {
-		case "p_name": 		paramID = 1; break;
-		case "p_number": 	paramID = 2; break;
-		case "p_email": 	paramID = 3; break;
-		case "p_site": 		paramID = 4; break;
-		case "p_time": 		paramID = 5; break;
-		case "p_quote": 	paramID = 6; break;
-		default: 			paramID = 0;
-		}
-		
-		return paramID;
-	}
-	
 	
 	
 	public static void main (String[] args) 
 	{		
+//		String path = "/home/nicolas/Develop/workspace/RinoServer/models/main/";
+//		String data = "train";
+//		String modelName = "a_alarm";
+		
 		if (args.length != 2) {
 			System.out.println("ParamsConvert: wrong parameters number: " + args.length);
 			return;
@@ -172,11 +158,7 @@ public class ParamsConvert {
 		String data = args[0];
 		String modelName = args[1];
 		
-//		String path = "/home/nicolas/Develop/workspace/RinoServer/models/main/";
-//		String data = "train";
-//		String modelName = "a_alarm";
 
-		
 		String trainDir = path + data;
 		String outFile = path + modelName + "/params_" + data;
 		String verboseFile = path + modelName + "/verbose_" + data;

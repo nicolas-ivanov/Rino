@@ -5,6 +5,7 @@ import java.util.List;
 
 import ru.rinorecognizer.Frame;
 import ru.rinorecognizer.FramingResult;
+import ru.rinorecognizer.IdTranslator;
 import ru.rinorecognizer.MainActivity;
 import ru.rinorecognizer.parsers.SearchParser;
 import ru.rinorecognizer.parsers.SiteParser;
@@ -18,12 +19,12 @@ public class SearchFrame extends Frame {
 	private List<String> searchList;
 	
 	public SearchFrame(MainActivity main) {
-		super(main, ActionType.A_SEARCH);
+		super(main, IdTranslator.ActionType.A_SEARCH);
 		wwwUriList = new ArrayList<Uri>();
 		searchList = new ArrayList<String>();
 	}
 	
-	public FramingResult fill(List<String> wgroups, List<ParamsType> labels)
+	public FramingResult fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
 	{			
 		Uri siteUri = null;		
 		String newText = null;
@@ -50,7 +51,7 @@ public class SearchFrame extends Frame {
 		
 		// check site
 		if (wwwUriList.size() == 0) {
-			expParameter = ParamsType.P_SITE;
+			expParameter = IdTranslator.ParamsType.P_SITE;
 			response = "Какой сайт нужно открыть?"; 
 		}
 		else if (wwwUriList.size() == 1) 
@@ -59,7 +60,7 @@ public class SearchFrame extends Frame {
 			
 			// check text;
 			if (searchList.size() == 0) {
-				expParameter = ParamsType.QUOTE;
+				expParameter = IdTranslator.ParamsType.QUOTE;
 				response += "Что нужно найти?";			
 			}
 			else if (searchList.size() == 1) {
@@ -83,7 +84,7 @@ public class SearchFrame extends Frame {
 					response += "\t" + (i++) + ". " + str + "\n";
 				
 				response += "Что нужно найти?";
-				expParameter = ParamsType.QUOTE;
+				expParameter = IdTranslator.ParamsType.QUOTE;
 				searchList = null;
 			}
 		}
@@ -96,7 +97,7 @@ public class SearchFrame extends Frame {
 				response += "\t" + (i++) + ". " + uri.toString() + "\n";
 			
 			response += "Какой сайт нужно открыть?";
-			expParameter = ParamsType.P_SITE;
+			expParameter = IdTranslator.ParamsType.P_SITE;
 			wwwUriList = null;
 		}
 		

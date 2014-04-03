@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 
-import ru.rinorecognizer.Frame.ActionType;
-import ru.rinorecognizer.Frame.ParamsType;
+import ru.rinorecognizer.IdTranslator.ActionType;
+import ru.rinorecognizer.IdTranslator.ParamsType;
 import ru.rinorecognizer.frames.AlarmFrame;
 import ru.rinorecognizer.frames.BalanceFrame;
 import ru.rinorecognizer.frames.CallFrame;

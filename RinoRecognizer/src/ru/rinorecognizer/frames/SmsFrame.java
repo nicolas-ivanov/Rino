@@ -6,6 +6,7 @@ import java.util.List;
 import ru.rinorecognizer.Contact;
 import ru.rinorecognizer.Frame;
 import ru.rinorecognizer.FramingResult;
+import ru.rinorecognizer.IdTranslator;
 import ru.rinorecognizer.MainActivity;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,12 +17,12 @@ public class SmsFrame extends Frame {
 	private List<String> textList;
 	
 	public SmsFrame(MainActivity main){
-		super(main, ActionType.A_SMS);
+		super(main, IdTranslator.ActionType.A_SMS);
 		uriList = new ArrayList<Uri>();
 		textList = new ArrayList<String>();
 	}
 	
-	public FramingResult fill(List<String> wgroups, List<ParamsType> labels)
+	public FramingResult fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
 	{
 		Uri newUri = null;
 		String newText = null;
@@ -51,13 +52,13 @@ public class SmsFrame extends Frame {
 		
 		if (textList.size() == 0) {
 			response = "Что нужно написать?";
-			expParameter = ParamsType.QUOTE;
+			expParameter = IdTranslator.ParamsType.QUOTE;
 		}
 		else {
 			// check uri;
 			if (uriList.size() == 0) {
 				response = "Кому отправить смс?"; 
-				expParameter = ParamsType.P_NAME;
+				expParameter = IdTranslator.ParamsType.P_NAME;
 				isComplete = false;
 			}
 			else if (uriList.size() == 1) {
@@ -68,7 +69,7 @@ public class SmsFrame extends Frame {
 			}
 			else { // (listUri.size() >= 2)
 				response = "Слишком много вариантов... Кому отправить смс?"; 
-				expParameter = ParamsType.P_NAME;
+				expParameter = IdTranslator.ParamsType.P_NAME;
 				uriList = null;
 			}
 			

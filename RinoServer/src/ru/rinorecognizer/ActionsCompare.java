@@ -26,7 +26,7 @@ public class ActionsCompare {
 			predictionsReader = new BufferedReader(new InputStreamReader(new FileInputStream(predictionsFile)));
 			mistakesWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(mistakesFile)));
 			
-			mistakesWriter.write(String.format("%-50s %-10s %-30s %-10s " +
+			mistakesWriter.write(String.format("%-50s %-10s %-70s %-10s " +
 					"%6s %6s %6s %6s %6s %6s %6s\n", 
 					"Original text", "O.label", "Original params", "P.label", 
 					"call", "sms", "mail", "search", "site", "alrm", "blnc"));
@@ -45,11 +45,11 @@ public class ActionsCompare {
 				Matcher predictionsMatcher = predictionsPattern.matcher(predictionsLine);
 				
 				if (!originalsMatcher.matches()) {
-					System.out.println("Line '" + originalsLine + "' is incorrect");
+					System.out.println(this.toString()+ ": Line '" + originalsLine + "' is incorrect");
 					break;
 				}
 				else if (!predictionsMatcher.matches()) {
-					System.out.println("Line '" + predictionsLine + "' is incorrect");
+					System.out.println(this.toString()+ ": Line '" + predictionsLine + "' is incorrect");
 					break;
 				}
 
@@ -63,7 +63,7 @@ public class ActionsCompare {
 				String predictionsLabel = "";
 				
 				if (! originalsID.equals(predictionsID)) {
-					mistakesWriter.write(String.format("%-50s %-10s %-30s ", originalsText, originalsLabel, originalsParams));
+					mistakesWriter.write(String.format("%-50s %-10s %-70s ", originalsText, originalsLabel, originalsParams));
 
 					Integer pID = new Integer(predictionsID);
 					

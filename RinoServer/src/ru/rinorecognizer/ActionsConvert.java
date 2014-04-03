@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class ActionsConvert {
 
 	private static final Pattern sourcePattern = Pattern.compile("(\\w+)\\t([^\\t]+)(?:\\t+([#&] .+))?");	
@@ -45,17 +46,21 @@ public class ActionsConvert {
 
 				
 				int prevType = 0;
-				int prevComplite = 1;
+				int prevComplete = 1;
 				
 
 				while ((line = dataReader.readLine()) != null) {
 
 					// skip empty lines and comments
-					if (line.length() == 0) {
-//						verboseWriter.write("\n");
+					if (line.length() == 0 || line.charAt(0) == '#') {
+						prevType = 0;
+						prevComplete = 1;
+						
+//						if (line.length() != 0)
+//							verboseWriter.write("\n");
+						
 						continue;
-					} else if (line.charAt(0) == '#')
-						continue;
+					}
 
 					// parse line
 					Matcher sourceMatcher = sourcePattern.matcher(line);
@@ -64,17 +69,27 @@ public class ActionsConvert {
 						break;
 					}
 					String label = sourceMatcher.group(1);
-					int l = getLabelCode(label);
+					int l = IdTranslator.getActionID(label);
 					
 					// process commands
-					CommandFeaturesGetter cfg = new CommandFeaturesGetter();
 					String command = sourceMatcher.group(2);
+					String comment = sourceMatcher.group(3);
+					
+					if (comment == null)
+						comment = "";					
+					
 					
 					ExtendedCommand extCommand = new ExtendedCommand();
 					extCommand.curCommand = command;
 					extCommand.prevType = prevType;
-					extCommand.prevComplete = prevComplite;
+					extCommand.prevComplete = prevComplete;
 					
+					if (comment.startsWith("&"))
+						extCommand.expParameter = IdTranslator.getParamID(comment.replaceFirst("& ", ""));
+					else
+						extCommand.expParameter = 0;
+
+					CommandFeaturesGetter cfg = new CommandFeaturesGetter();
 					int[] pVector = cfg.getVector(extCommand);
 					
 					// check if vector is a duplicate
@@ -90,7 +105,7 @@ public class ActionsConvert {
 					// write down non-duplicate data
 					String fullString = l + "";
 					String paramsString = l + "";
-					String verboseString = String.format("%s\t%-70s\t", l, line);
+					String verboseString = String.format("%s\t%s\t%-70s %-25s\t", l, label, command, comment);
 					
 					if (!duplicateFound) {
 						vList.addFirst(pVector);
@@ -112,13 +127,13 @@ public class ActionsConvert {
 //						System.out.println(Arrays.toString(pVector));
 //					}
 					
-					if (sourceMatcher.group(3) == null) {
-						prevComplite = 1;
+					if (comment.equals("")) {
+						prevComplete = 1;
 						prevType = 0;
 //						System.out.println(sourceMatcher.group(3));
 					}
 					else {
-						prevComplite = 0;
+						prevComplete = 0;
 						prevType = l;
 //						System.out.println(sourceMatcher.group(3));
 					}
@@ -146,24 +161,6 @@ public class ActionsConvert {
 		}
 	}
 	
-	private int getLabelCode(String label) {
-	
-		int l = 0;
-		
-		switch (label) {
-		case "a_call":		l = 1; break;
-		case "a_sms":		l = 2; break;
-		case "a_email":		l = 3; break;
-		case "a_search": 	l = 4; break;
-		case "a_site":		l = 5; break;
-		case "a_alarm":		l = 6; break;
-		case "a_balance":	l = 7; break;
-		default:
-			System.out.println(this.toString() + ": Label '" + label + "' is incorrect");
-		}
-		
-		return l;
-	}
 
 
 	public static void main(String[] args) {

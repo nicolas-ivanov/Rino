@@ -4,17 +4,14 @@ import java.util.List;
 
 
 public abstract class Frame {
-
-	public static enum ActionType {A_CALL, A_SMS, A_EMAIL, A_SEARCH, A_SITE, A_ALARM, A_BALANCE};
-	public static enum ParamsType {ACTION, P_NAME, P_NUMBER, P_EMAIL, P_SITE, P_TIME, OTHER, QUOTE, Q_MARK, PREPOS, CHANGE};
 	
 	protected MainActivity mainActivity;
-	protected ActionType type;
 	protected Boolean isComplete;
-	protected ParamsType expParameter;
 	protected String response;
+	protected IdTranslator.ActionType type;
+	protected IdTranslator.ParamsType expParameter;
 	
-	public Frame(MainActivity main, ActionType type)
+	public Frame(MainActivity main, IdTranslator.ActionType type)
 	{
 		this.mainActivity = main;
 		this.type = type;
@@ -23,7 +20,7 @@ public abstract class Frame {
 		this.response = "";
 	}
 	
-	public abstract FramingResult fill(List<String> wgroups, List<ParamsType> labels);
+	public abstract FramingResult fill(List<String> wgroups, List<IdTranslator.ParamsType> labels);
 	protected abstract boolean check();	
 	
 	public String getResponse()	{
@@ -35,39 +32,11 @@ public abstract class Frame {
 	}
 	
 	public int getExpParameterID() {
-		
-		int paramID;
-		
-		switch (expParameter) {
-		case P_NAME: 	paramID = 1; break;
-		case P_NUMBER: 	paramID = 2; break;
-		case P_EMAIL: 	paramID = 3; break;
-		case P_SITE: 	paramID = 4; break;
-		case P_TIME: 	paramID = 5; break;
-		case QUOTE: 	paramID = 6; break;
-		default: 		paramID = 0;
-		}
-		
-		return paramID;
+		return IdTranslator.getParamID(expParameter);
 	}
 	
-	
-	public int getTypeID() {
-		
-		int typeID;
-		
-		switch (type) {
-		case A_CALL: 	typeID = 1; break;
-		case A_SMS: 	typeID = 2; break;
-		case A_EMAIL: 	typeID = 3; break;
-		case A_SEARCH: 	typeID = 4; break;
-		case A_SITE: 	typeID = 5; break;
-		case A_ALARM: 	typeID = 6; break;
-		case A_BALANCE:	typeID = 7; break;
-		default: 		typeID = 0;
-		}
-		
-		return typeID;
+	public int getTypeID() {		
+		return IdTranslator.getActionID(type);
 	}
 }
 

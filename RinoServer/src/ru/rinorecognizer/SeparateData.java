@@ -40,7 +40,7 @@ public class SeparateData {
 				// parse line
 				Matcher sourceMatcher = sourcePattern.matcher(line);
 				if (!sourceMatcher.matches()) {
-					System.out.println("ActionConvert: Line '" + line + "' is incorrect");
+					System.out.println(this.toString()+ ": Line '" + line + "' is incorrect");
 					break;
 				}
 				

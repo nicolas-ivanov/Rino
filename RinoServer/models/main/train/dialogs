@@ -614,7 +614,7 @@ a_email	письмо												# что написать?
 a_email	напиши _зайди _на _yandex.ru						& quote
 
 a_email	письмо												# что написать?
-a_email	напиши _завтра _буду _в _7 _часов
+a_email	напиши _завтра _буду _в _7 _часов					& quote
 
 
 # cancellation, 1 s_change word
@@ -638,7 +638,7 @@ a_email	письмо												# что написать?
 a_alarm	нет поставь будильник								& quote
 
 a_email	письмо												# что написать?
-a_balance	нет покажи баланс
+a_balance	нет покажи баланс								& quote
 
 
 # cancellation, 2 s_change words
@@ -662,7 +662,7 @@ a_email	письмо												# что написать?
 a_alarm	хотя нет поставь будильник							& quote
 
 a_email	письмо												# что написать?
-a_balance	хотя нет покажи баланс
+a_balance	хотя нет покажи баланс							& quote
 
 
 # cancellation, 3 s_change words
@@ -935,7 +935,7 @@ a_search	поиск													# что нужно найти?
 a_alarm	нет поставь будильник										& quote
 
 a_search	поиск													# что нужно найти?
-a_balance	нет покажи баланс
+a_balance	нет покажи баланс										& quote
 
 
 # cancellation, 2 s_change words
@@ -1014,7 +1014,7 @@ a_site	сайт								# какой сайт открыть?
 a_site	открой сайт msu.ru					& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	открой в браузере сайт msu.ru
+a_site	открой в браузере сайт msu.ru		& p_site
 
 
 # 2 words			& p_site
@@ -1041,7 +1041,7 @@ a_site	сайт								# какой сайт открыть?
 a_site	открой сайт msu ru					& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	открой в браузере сайт msu ru
+a_site	открой в браузере сайт msu ru		& p_site
 
 
 # 3 words			& p_site
@@ -1093,7 +1093,7 @@ a_site	сайт								# какой сайт открыть?
 a_alarm	нет поставь будильник				& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_balance	нет покажи баланс
+a_balance	нет покажи баланс				& p_site
 
 
 # cancellation, 2 s_change words
@@ -1117,7 +1117,7 @@ a_site	сайт								# какой сайт открыть?
 a_alarm	хотя нет поставь будильник			& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_balance	хотя нет покажи баланс
+a_balance	хотя нет покажи баланс			& p_site
 
 
 # cancellation, 3 s_change words			& p_site
@@ -1314,7 +1314,7 @@ a_alarm	будильник 													# на какое время?
 a_alarm	нет поставь будильник										& p_time
 
 a_alarm	будильник 													# на какое время?
-a_balance	нет покажи баланс
+a_balance	нет покажи баланс										& p_time
 
 
 # cancellation, 2 s_change words
@@ -1338,7 +1338,7 @@ a_alarm	будильник 													# на какое время?
 a_alarm	хотя нет поставь будильник									& p_time
 
 a_alarm	будильник 													# на какое время?
-a_balance	хотя нет покажи баланс
+a_balance	хотя нет покажи баланс									& p_time
 
 
 # cancellation, 3 s_change words

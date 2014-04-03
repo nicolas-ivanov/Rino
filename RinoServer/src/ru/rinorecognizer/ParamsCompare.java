@@ -26,7 +26,7 @@ public class ParamsCompare {
 			predictionsReader = new BufferedReader(new InputStreamReader(new FileInputStream(predictionsFile)));
 			mistakesWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(mistakesFile)));
  
-			mistakesWriter.write(String.format("  %-16s %-8s %-36s %-9s ",
+			mistakesWriter.write(String.format("  %-16s %-8s %-70s %-9s ",
 					"Original text", "O.label", "Original params", "P.label"));			
 			
 			String originalsLine;
@@ -90,7 +90,7 @@ public class ParamsCompare {
 					savedLines += "  ";
 				
 				
-				savedLines += String.format("%-15s %3s %5s %-35s %3s %5s", 
+				savedLines += String.format("%-15s %3s %5s %-70s %3s %5s", 
 						originalsText, originalsID, "", originalsParams, predictionsID, "");
 
 				String[] probs = predictionsProb.split(" ");
@@ -128,7 +128,7 @@ public class ParamsCompare {
 //		String modelName = "a_call";
 		
 		if (args.length != 2) {
-			System.out.println("ParamsCompare 1: wrong parameters number: " + args.length);
+			System.out.println("ParamsCompare: wrong parameters number: " + args.length);
 			return;
 		}		
 		String data = args[0];

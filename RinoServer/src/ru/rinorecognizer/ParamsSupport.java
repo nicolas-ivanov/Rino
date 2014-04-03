@@ -51,7 +51,7 @@ public class ParamsSupport {
 
 				Matcher supportMatcher = supportPattern.matcher(supportLine);
 				if (!supportMatcher.matches()) {
-					System.out.println("Line '" + supportLine + "' is incorrect");
+					System.out.println(this.toString() + ": Line '" + supportLine + "' is incorrect");
 					break;
 				}
 				String support_v = supportMatcher.group(1);
@@ -85,7 +85,7 @@ public class ParamsSupport {
 
 					Matcher scaledMatcher = scaledPattern.matcher(scaledLine);
 					if (!scaledMatcher.matches()) {
-						System.out.println("Line '" + scaledLine + "' is incorrect");
+						System.out.println(this.toString()+ ": Line '" + scaledLine + "' is incorrect");
 						break;
 					}
 					String scaled_v = scaledMatcher.group(1);

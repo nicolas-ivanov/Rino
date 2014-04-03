@@ -6,6 +6,7 @@ import java.util.List;
 import ru.rinorecognizer.Contact;
 import ru.rinorecognizer.Frame;
 import ru.rinorecognizer.FramingResult;
+import ru.rinorecognizer.IdTranslator;
 import ru.rinorecognizer.MainActivity;
 import ru.rinorecognizer.R;
 import android.content.Intent;
@@ -17,11 +18,11 @@ public class CallFrame extends Frame {
 	// optional
 	
 	public CallFrame(MainActivity main){
-		super(main, ActionType.A_CALL);
+		super(main, IdTranslator.ActionType.A_CALL);
 		listUri = new ArrayList<Uri>();
 	}
 	
-	public FramingResult fill(List<String> wgroups, List<ParamsType> labels)
+	public FramingResult fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
 	{		
 		Uri newUri = null;
 		Intent intent = null;
@@ -45,7 +46,7 @@ public class CallFrame extends Frame {
 		// check();
 		if (listUri.size() == 0) {
 			response = "Кому нужно позвонить?"; 
-			expParameter = ParamsType.P_NAME;
+			expParameter = IdTranslator.ParamsType.P_NAME;
 		}
 		else if (listUri.size() == 1) {
 			Uri numUri = listUri.get(0);
@@ -56,7 +57,7 @@ public class CallFrame extends Frame {
 		}
 		else { // (listUri.size() >= 2)
 			response = "Слишком много вариантов... Кому позвонить?";
-			expParameter = ParamsType.P_NAME;
+			expParameter = IdTranslator.ParamsType.P_NAME;
 			listUri = null;
 		}
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import ru.rinorecognizer.Frame;
 import ru.rinorecognizer.FramingResult;
+import ru.rinorecognizer.IdTranslator;
 import ru.rinorecognizer.MainActivity;
 import ru.rinorecognizer.parsers.SiteParser;
 import android.content.Intent;
@@ -15,11 +16,11 @@ public class SiteFrame extends Frame {
 	private List<Uri> wwwUriList;
 	
 	public SiteFrame(MainActivity main){
-		super(main, ActionType.A_SITE);
+		super(main, IdTranslator.ActionType.A_SITE);
 		wwwUriList = new ArrayList<Uri>();
 	}
 	
-	public FramingResult fill(List<String> wgroups, List<ParamsType> labels)
+	public FramingResult fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
 	{			
 		Uri siteUri = null;
 		Intent intent = null;
@@ -40,7 +41,7 @@ public class SiteFrame extends Frame {
 		// check
 		if (wwwUriList.size() == 0) {
 			response = "Какой сайт нужно открыть?"; 
-			expParameter = ParamsType.P_SITE;
+			expParameter = IdTranslator.ParamsType.P_SITE;
 		}
 		else if (wwwUriList.size() == 1) 
 		{
@@ -58,7 +59,7 @@ public class SiteFrame extends Frame {
 				response += "\t" + (i++) + ". " + uri.toString() + "\n";
 			
 			response += "Какой сайт нужно открыть?";
-			expParameter = ParamsType.P_SITE;
+			expParameter = IdTranslator.ParamsType.P_SITE;
 			wwwUriList = null;
 		}
 				

@@ -4,6 +4,7 @@ import java.util.List;
 
 import ru.rinorecognizer.Frame;
 import ru.rinorecognizer.FramingResult;
+import ru.rinorecognizer.IdTranslator;
 import ru.rinorecognizer.MainActivity;
 import ru.rinorecognizer.parsers.TimeParser;
 import android.content.Intent;
@@ -16,10 +17,10 @@ public class AlarmFrame extends Frame {
 	private Time time;
 	
 	public AlarmFrame(MainActivity main){
-		super(main, ActionType.A_ALARM);
+		super(main, IdTranslator.ActionType.A_ALARM);
 	}
 	
-	public FramingResult fill(List<String> wgroups, List<ParamsType> labels)
+	public FramingResult fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
 	{			
 		String timePatch = "";
 		Intent intent = null;
@@ -48,7 +49,7 @@ public class AlarmFrame extends Frame {
 		}
 		else {
 			response = "Непонятное время: «" + timePatch + "»\n На сколько нужно поставить будильник?";
-			expParameter = ParamsType.P_TIME;
+			expParameter = IdTranslator.ParamsType.P_TIME;
 		}
 
 		FramingResult framingResult = new FramingResult();

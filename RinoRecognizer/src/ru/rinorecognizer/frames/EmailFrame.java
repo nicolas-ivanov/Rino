@@ -6,6 +6,7 @@ import java.util.List;
 import ru.rinorecognizer.Contact;
 import ru.rinorecognizer.Frame;
 import ru.rinorecognizer.FramingResult;
+import ru.rinorecognizer.IdTranslator;
 import ru.rinorecognizer.MainActivity;
 import ru.rinorecognizer.R;
 import android.content.Intent;
@@ -17,12 +18,12 @@ public class EmailFrame extends Frame {
 	private List<String> textList;
 	
 	public EmailFrame(MainActivity main){
-		super(main, ActionType.A_EMAIL);
+		super(main, IdTranslator.ActionType.A_EMAIL);
 		emailUriList = new ArrayList<Uri>();
 		textList = new ArrayList<String>();
 	}
 	
-	public FramingResult fill(List<String> wgroups, List<ParamsType> labels)
+	public FramingResult fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
 	{		
 		Uri newEmailUri = null;
 		String newText = null;
@@ -48,7 +49,7 @@ public class EmailFrame extends Frame {
 		// check uri;
 		if (emailUriList.size() == 0) {
 			response = "Кому нужно отправить email?";
-			expParameter = ParamsType.P_NAME;
+			expParameter = IdTranslator.ParamsType.P_NAME;
 		}
 		else if (emailUriList.size() == 1) {
 			Uri emailUri = emailUriList.get(0);
@@ -60,7 +61,7 @@ public class EmailFrame extends Frame {
 		}
 		else { // (listUri.size() >= 2)
 			response = "Очень много вариантов... Кому нужно отправить email?"; 
-			expParameter = ParamsType.P_NAME;
+			expParameter = IdTranslator.ParamsType.P_NAME;
 			emailUriList = null;
 		}
 		
