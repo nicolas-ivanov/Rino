@@ -10,7 +10,7 @@ public class Launcher {
 		extCommand.prevType = 0;
 		
 		CommandFeaturesGetter c_getter = new CommandFeaturesGetter();
-		int[] c_vector = c_getter.getVector(extCommand);
+		float[] c_vector = c_getter.getVector(extCommand);
 		
 		for (int i = 0; i < c_vector.length; i++)
 			System.out.print(c_vector[i] + " ");

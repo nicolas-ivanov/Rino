@@ -102,16 +102,16 @@ public class SeparateData {
 	
 	public static void main(String[] args) 
 	{		
-		if (args.length != 3) {
-			System.out.println("SeparateData: wrong parameters number: " + args.length);
-			return;
-		};
 		
 //		String path = "../main/saved/";
 //		String trainDir = path + args[0] + "/"; 
 //		String testDir = path + args[1] + "/";
 //		double ratio = new Double(args[2]);
-//		
+		
+		if (args.length != 3) {
+			System.out.println("SeparateData: wrong parameters number: " + args.length);
+			return;
+		}
 		String path = "../main/saved/";
 		String trainDir = path + "train/";
 		String testDir = path + "test/";

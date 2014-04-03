@@ -21,8 +21,8 @@ public class ScaleData {
 //		File rangeFile = new File(rangePath);
 		BufferedReader fullReader = new BufferedReader(new InputStreamReader(new FileInputStream(fullFile)));
 		
-		int[] paramsMin;
-		int[] paramsMax;
+		float[] paramsMin;
+		float[] paramsMax;
 		
 		// initialize arrays paramsMin and paramsMax
 	    String line = fullReader.readLine();
@@ -36,12 +36,12 @@ public class ScaleData {
 			}
 			String params = paramsMatcher.group(2);
 			String[] paramsStr = params.split(" ");
-			paramsMin = new int[paramsStr.length];
-			paramsMax = new int[paramsStr.length];
+			paramsMin = new float[paramsStr.length];
+			paramsMax = new float[paramsStr.length];
 			
 			for (int i = 0; i < paramsStr.length; i++) { 
-				paramsMin[i] = Integer.parseInt(paramsStr[i]);
-				paramsMax[i] = Integer.parseInt(paramsStr[i]);
+				paramsMin[i] = Float.parseFloat(paramsStr[i]);
+				paramsMax[i] = Float.parseFloat(paramsStr[i]);
 			} 	
 	    }	    	
 	    else {
@@ -62,7 +62,7 @@ public class ScaleData {
 			String[] paramsStr = params.split(" ");
 			
 			for (int i = 0; i < paramsStr.length; i++) {
-				int curNum = Integer.parseInt(paramsStr[i]);
+				float curNum = Float.parseFloat(paramsStr[i]);
 				
 				if (curNum < paramsMin[i])
 					paramsMin[i] = curNum;
@@ -113,10 +113,10 @@ public class ScaleData {
 				String params = paramsMatcher.group(2);
 				
 				String[] paramsStr = params.split(" ");
-				int[] paramsInt = new int[paramsStr.length];
+				float[] paramsInt = new float[paramsStr.length];
 				
 				for (int i = 0; i < paramsInt.length; i++)
-					paramsInt[i] = Integer.parseInt(paramsStr[i]);
+					paramsInt[i] = Float.parseFloat(paramsStr[i]);
 
 				double[] scaledParams = vScaler.scale(paramsInt);
 				

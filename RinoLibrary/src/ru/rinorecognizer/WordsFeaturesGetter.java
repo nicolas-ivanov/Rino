@@ -107,10 +107,10 @@ public class WordsFeaturesGetter {
 	}
 	
 
-	public int[][] getVectors(ExtendedCommand extCommand) 
+	public float[][] getVectors(ExtendedCommand extCommand) 
 	{    	
 		try {
-			int paramsNum = getParamsNum();
+			int paramsNum = getParamsNum() + 1; // number of semantic groups + relative position in command 
 			
 			String command = extCommand.curCommand;
 			int expParam = extCommand.expParameter;
@@ -118,18 +118,18 @@ public class WordsFeaturesGetter {
 			/// Start of main section ///////////////////////////////////////////////////
 			
 			String[] words = command.split(" ");
-			int[][] wordsVectors = new int[words.length][];
+			float[][] wordsVectors = new float[words.length][];
 
 			// Get parameters vector for every word of the command
-			for (int k = 0; k < words.length; k++) {
+			for (int wNum = 0; wNum < words.length; wNum++) {
 				
-				int[] wVector = new int[paramsNum];
+				float[] wVector = new float[paramsNum];
 				
 				for (int i=0; i<wVector.length; i++)
 					wVector[i] = 0;
 				
 				// Replace special marking from words
-				String w = words[k];
+				String w = words[wNum];
 				
 				if (w.length() > 0) {
 					w = w.replaceFirst("_", "");
@@ -162,13 +162,19 @@ public class WordsFeaturesGetter {
 					
 					pNum++;
 				}
-				wordsVectors[k] = wVector;	
+				
+				// add info about relative position in command
+				{
+					wVector[wVector.length - 1] = (float)wNum / words.length;
+				}				
+				
+				wordsVectors[wNum] = wVector;	
 				patternsReader.close();	
 			}
 			
 			
 			// Get parameters vectors for trigrams of words
-			int[][] ngramsVectors = new int[words.length][];
+			float[][] ngramsVectors = new float[words.length][];
 			
 			final int left_leaf_size = 2;
 			final int right_leaf_size = 2;
@@ -176,7 +182,7 @@ public class WordsFeaturesGetter {
 			
 			for (int curr_word_num = 0; curr_word_num < wordsVectors.length; curr_word_num++) {
 				
-				int[] tVector = new int[window_size * paramsNum + 1]; // last +1 is for expected parameter index
+				float[] tVector = new float[window_size * paramsNum + 1]; // last +1 is for expected parameter index
 
 				// get word's own params
 				for (int i = 0; i < paramsNum; i++) {

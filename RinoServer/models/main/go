@@ -26,7 +26,7 @@ testData="test"
 echo $(date) > accuracy
 echo >> accuracy
 
-models="./action"
+#~ models="./action"
 
 #~ models="./a_call"
 

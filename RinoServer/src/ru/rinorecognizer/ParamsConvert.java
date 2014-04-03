@@ -8,12 +8,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ParamsConvert {
 
 	private static final Pattern sourcePattern = Pattern.compile("(\\w+)\\t([^\\t]+)(?:\\t+([#&] .+))?");	
+	
+	DecimalFormat cuteFormat = new DecimalFormat("#.#");
 
 	public void convert(String modelName, String trainDir, String outFile, String verboseFile, String allParamsFile)  
 	{   
@@ -83,7 +86,7 @@ public class ParamsConvert {
 	
 					String[] words = command.split(" ");
 					int[] wordsLabels = wfg.getLabels(extCommand);
-					int[][] wordsVectors = wfg.getVectors(extCommand);
+					float[][] wordsVectors = wfg.getVectors(extCommand);
 	
 					
 					
@@ -91,7 +94,7 @@ public class ParamsConvert {
 					
 					for (int k = 0; k < wordsVectors.length; k++) {
 	
-						int[] tVector = wordsVectors[k];
+						float[] tVector = wordsVectors[k];
 						String fullString = wordsLabels[k] + "";
 						String paramsString = wordsLabels[k] + "";
 						String verboseString = String.format("%-5s", wordsLabels[k]);
@@ -101,8 +104,8 @@ public class ParamsConvert {
 							fullString += " " + tVector[j];
 							
 							if (tVector[j] != 0) {
-								paramsString += " " + (j+1) + ":" + tVector[j];
-								verboseString += " " + (j+1) + ":" + tVector[j];
+								paramsString += " " + (j+1) + ":" + cuteFormat.format(tVector[j]);
+								verboseString += " " + (j+1) + ":" + cuteFormat.format(tVector[j]);
 							}
 						}
 						

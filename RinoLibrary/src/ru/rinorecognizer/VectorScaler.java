@@ -83,7 +83,7 @@ public class VectorScaler {
 	}
 	
 	
-	private double[] scaleRange(int[] v)
+	private double[] scaleRange(float[] v)
 	{
 		if (rangeReader != null) {
 			double[] s = new double[v.length]; // scaled array
@@ -114,7 +114,7 @@ public class VectorScaler {
 	}
 	
 	
-	private double[] scaleSphere(int[] v)
+	private double[] scaleSphere(float[] v)
 	{		
 		// get geometric mean
 		double squares_sum = 0;
@@ -134,7 +134,7 @@ public class VectorScaler {
 	}
 	
 	
-	private double[] scaleNone(int[] v)
+	private double[] scaleNone(float[] v)
 	{		
 		double[] s = new double[v.length]; 
 		
@@ -145,7 +145,7 @@ public class VectorScaler {
 	}	
 	
 	
-	public double[] scale(int[] v)
+	public double[] scale(float[] v)
 	{
 //		return scaleRange(v);
 //		return scaleSphere(v);

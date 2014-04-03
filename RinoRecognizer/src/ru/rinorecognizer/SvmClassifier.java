@@ -23,7 +23,7 @@ public class SvmClassifier {
 		}
 	}
 	
-	public int classify(int[] params) 
+	public int classify(float[] params) 
 	{		
 		double[] scaledParams = scaler.scale(params);
 		svm_node[] nodes = new svm_node[scaledParams.length];

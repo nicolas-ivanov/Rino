@@ -31,7 +31,7 @@ public class CommandFeaturesGetter {
 	}
 	
 
-	public int[] getVector(ExtendedCommand extCommand) {
+	public float[] getVector(ExtendedCommand extCommand) {
 		try {
 			// if (!checkPatterns())
 			// return null;
@@ -41,7 +41,7 @@ public class CommandFeaturesGetter {
 			int paramsNum = getParamsNum() + 3; // Params Num + prevType + prevComplete + expParameter
 
 			String[] words = command.split(" ");
-			int[] pVector = new int[paramsNum];
+			float[] pVector = new float[paramsNum];
 
 			for (int i = 0; i < pVector.length; i++)
 				pVector[i] = 0;
@@ -87,7 +87,6 @@ public class CommandFeaturesGetter {
 			
 			pVector[pVector.length - 3] = extCommand.prevType;
 			pVector[pVector.length - 2] = extCommand.prevComplete;
-//			pVector[pVector.length - 1] = 77;
 			pVector[pVector.length - 1] = extCommand.expParameter;
 			
 			return pVector;

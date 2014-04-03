@@ -34,7 +34,7 @@ public class ActionsConvert {
 		    
 		    String line;
 			File[] files = new File(trainDir).listFiles();
-			LinkedList<int[]> vList = new LinkedList<int[]>();
+			LinkedList<float[]> vList = new LinkedList<float[]>();
 			
 			
 			for (File file : files) {
@@ -90,14 +90,14 @@ public class ActionsConvert {
 						extCommand.expParameter = 0;
 
 					CommandFeaturesGetter cfg = new CommandFeaturesGetter();
-					int[] pVector = cfg.getVector(extCommand);
+					float[] pVector = cfg.getVector(extCommand);
 					
 					// check if vector is a duplicate
-					Iterator<int[]> vListIterator = vList.iterator();
+					Iterator<float[]> vListIterator = vList.iterator();
 					Boolean duplicateFound = false;
 					
 					while (vListIterator.hasNext() && !duplicateFound) {
-						int[] v = vListIterator.next();
+						float[] v = vListIterator.next();
 						if (Arrays.equals(pVector,v))
 							duplicateFound = true;
 					}

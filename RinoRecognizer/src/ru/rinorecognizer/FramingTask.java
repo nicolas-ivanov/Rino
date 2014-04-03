@@ -42,28 +42,15 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
     		
     	// step 1: detect command type
     	CommandFeaturesGetter cfGetter = new CommandFeaturesGetter(); 
-    	int[] cFeatures = cfGetter.getVector(extCommand);
-		int c_id = svm_bunch.svm_A.classify(cFeatures);
+    	float[] cFeatures = cfGetter.getVector(extCommand);
+		int actionID = svm_bunch.svm_A.classify(cFeatures);
 		
-		if (c_id == extCommand.prevType)
+		if (actionID == extCommand.prevType)
 			publishProgress(extCommand.curCommand);
 		else
-			publishProgress(extCommand.curCommand, "");
+			publishProgress(extCommand.curCommand, ""); // "" is needed to distinguish addAnswer() and addRequest() cases
 		
-		ActionType a_type = ActionType.A_CALL;
-		
-		switch (c_id) {
-		case 1: a_type = ActionType.A_CALL; 	break;
-		case 2: a_type = ActionType.A_SMS; 		break;
-		case 3: a_type = ActionType.A_EMAIL; 	break;
-		case 4: a_type = ActionType.A_SEARCH; 	break;
-		case 5: a_type = ActionType.A_SITE; 	break;
-		case 6: a_type = ActionType.A_ALARM; 	break;
-		case 7: a_type = ActionType.A_BALANCE; 	break;
-		default:
-				System.out.println("Command ID '" + c_id + "' is incorrect");
-		}
-
+		ActionType a_type = IdTranslator.getActionEnum(actionID);
 		
 		if (debugMode)
 			publishProgress("Command type: " + a_type.toString().toLowerCase(Locale.US));
@@ -72,7 +59,7 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
     	// step 2: map each word of a command with a label to get parameters
 
     	WordsFeaturesGetter wfGetter = new WordsFeaturesGetter(); 
-    	int[][] wFeatures = wfGetter.getVectors(extCommand);
+    	float[][] wFeatures = wfGetter.getVectors(extCommand);
 
 		List<ParamsType> labels = new ArrayList<ParamsType>();
 		List<Integer> labels_id = new ArrayList<Integer>();
