@@ -1,14 +1,10 @@
-<<<<<<< HEAD
-Пт. апр. 4 16:22:20 MSK 2014
-=======
-Чт. апр. 3 16:19:10 MSK 2014
->>>>>>> prevLabelParam
+Пт. апр. 4 17:55:14 MSK 2014
 
 action     96.4856 
-a_call     100.0 
-a_sms      95.3964 
-a_email    97.4599 
-a_search   98.1481 
-a_site     100.0 
+a_call     99.6815 
+a_sms      98.627 
+a_email    97.1223 
+a_search   99.4465 
+a_site     99.3007 
 a_alarm    100.0 
-a_balance  100.0 
+a_balance  96.4706 

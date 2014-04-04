@@ -54,15 +54,15 @@ train-predict (){
 	# predict	
 	$l/svm-predict -b 1 $q/scaled_$testData $q/model_$type $q/predicted_$testData | { read a1 a2 a3 a4 a5
 		#~ printf "%-10s %-10s %-12s\n" $type $a3 $a4
-		printf "%-10s %-10s %-12s " $type $a3 $a4
+		printf "%-10s %-8s %-10s " $type $a3 $a4
 		printf "%-10s %s \n" $type $as >> accuracy
 	}
 	
 	# predict	
-	#~ $l/svm-predict -b 1 $q/scaled_$trainData $q/model_$type $q/predicted_$trainData | { read a1 a2 a3 a4 a5
-		#~ printf "%-10s %-10s %-12s " $type $a3 $a4
+	$l/svm-predict -b 1 $q/scaled_$trainData $q/model_$type $q/predicted_$trainData | { read a1 a2 a3 a4 a5
+		printf "%-5s %-12s " $a3 $a4
 		#~ printf "%-10s %s \n" $type $as >> accuracy
-	#~ }
+	}
 	#~ $l/svm-predict -q -b 1 $q/scaled_$trainData $q/model_$type $q/predicted_$trainData
 }
 
@@ -101,13 +101,13 @@ do
 	
 	if [ "$mode" == "fast" ]
 	then {
-		read cs gs as < $q/cgamma_$train
+		read cs gs as < $q/cgamma_$type
 		train-predict $cs $gs $as
 	}
 	else {
 		python $t/grid.py -log2c -5,15,5 -log2g 5,-15,-1 -v 5 -gnuplot null -out null -png $q/grid.png $q/scaled_$trainData | grep -v [local] | { 
 			read cs gs as
-			echo $cs $gs $as > $q/cgamma_$train
+			echo $cs $gs $as > $q/cgamma_$type
 			train-predict $cs $gs $as
 		}
 	}
