@@ -150,8 +150,6 @@ public class ParamsSupport {
 			System.out.print(String.format("%4.2f %4.2f %4.2f", probSum / probNum, probMin, probMax));
 			supportWriter.flush();
 			
-			supportWriter.flush();
-			
 		}	
 		catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -172,9 +170,9 @@ public class ParamsSupport {
 	
 	public static void main (String[] args) 
 	{		
-//		String path = "/home/nicolas/Dropbox/Diploma/svm/train/";
-//		String data = "collection";
-//		String modelName = "a_call";
+//		String path = "/home/nicolas/Develop/workspace/RinoServer/models/main/";
+//		String data = "train";
+//		String modelName = "a_sms";
 		
 		if (args.length != 2) {
 			System.out.println("ParamsSupport: wrong parameters number: " + args.length);

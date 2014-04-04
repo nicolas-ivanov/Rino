@@ -54,20 +54,20 @@ train-predict (){
 	# predict	
 	$l/svm-predict -b 1 $q/scaled_$testData $q/model_$type $q/predicted_$testData | { read a1 a2 a3 a4 a5
 		#~ printf "%-10s %-10s %-12s\n" $type $a3 $a4
-		printf "%-10s %-8s %-10s " $type $a3 $a4
+		printf "%-10s %-8s %-11s " $type $a3 $a4
 		printf "%-10s %s \n" $type $as >> accuracy
 	}
 	
 	# predict	
 	$l/svm-predict -b 1 $q/scaled_$trainData $q/model_$type $q/predicted_$trainData | { read a1 a2 a3 a4 a5
-		printf "%-5s %-12s " $a3 $a4
+		printf "%-4s %-12s " $a3 $a4
 		#~ printf "%-10s %s \n" $type $as >> accuracy
 	}
 	#~ $l/svm-predict -q -b 1 $q/scaled_$trainData $q/model_$type $q/predicted_$trainData
 }
 
 # get train and test data sets
-#~ java -classpath $server ru.rinorecognizer.SeparateData $trainData $testData 0.5
+java -classpath $server ru.rinorecognizer.SeparateData $trainData $testData 0.3
 
 # get classification models
 for q in $models
@@ -118,19 +118,19 @@ do
 		then {
 			java -classpath $server ru.rinorecognizer.ActionsCompare $testData
 			java -classpath $server ru.rinorecognizer.ActionsSupport $trainData | { read a1 a2 a3
-				printf "%s    %s  %-10s" $a1 $a2 $a3
+				printf "%s  %s  %-8s" $a1 $a2 $a3
 			}
 		}
 		else {
 			java -classpath $server ru.rinorecognizer.ParamsCompare $testData $type
 			java -classpath $server ru.rinorecognizer.ParamsSupport $trainData $type | { read a1 a2 a3
-				printf "%s    %s  %-10s" $a1 $a2 $a3
+				printf "%s  %s  %-8s" $a1 $a2 $a3
 			}
 		}	
 	fi		
 	
 	java -classpath $server ru.rinorecognizer.TestProbability $testData $type | { read a1 a2 a3
-		printf "%s    %s  %s\n" $a1 $a2 $a3
+		printf "%s  %s  %s\n" $a1 $a2 $a3
 	}
 	
 	cp $q/model_$type $r

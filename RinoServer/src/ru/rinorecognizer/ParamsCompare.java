@@ -62,11 +62,11 @@ public class ParamsCompare {
 				Matcher predictionsMatcher = predictionsPattern.matcher(predictionsLine);
 				
 				if (!originalsMatcher.matches()) {
-					System.out.println("OriginalsFile: line'" + originalsLine + "' is incorrect");
+					System.out.println(this.toString() + ": OriginalsFile: line'" + originalsLine + "' is incorrect");
 					break;
 				}
 				else if (!predictionsMatcher.matches()) {
-					System.out.println("PredictedFile: line '" + predictionsLine + "' is incorrect");
+					System.out.println(this.toString() + ": PredictedFile: line '" + predictionsLine + "' is incorrect");
 					break;
 				}
 				

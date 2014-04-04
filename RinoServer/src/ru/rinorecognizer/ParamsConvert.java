@@ -101,10 +101,11 @@ public class ParamsConvert {
 						
 						tVector[tVector.length - 1] = saved_label_id;
 						saved_label_id = wordsLabels[k];
+//						saved_label_id = 0;
 						
-						String fullString = saved_label_id + "";
-						String paramsString = saved_label_id + "";
-						String verboseString = String.format("%-5s", saved_label_id);
+						String fullString = wordsLabels[k] + "";
+						String paramsString = wordsLabels[k] + "";
+						String verboseString = String.format("%-5s", wordsLabels[k]);
 	
 						
 						for (int j = 0; j < tVector.length; j++) {
