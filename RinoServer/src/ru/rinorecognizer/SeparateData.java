@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 public class SeparateData {
 
-	private static final Pattern sourcePattern = Pattern.compile("(\\w+)\\t([^\\t]+)(\\t+#.*)?");
+	private static final Pattern sourcePattern = Pattern.compile("(\\w+)\\t([^\\t]+)(?:\\t+([#&] .+))?");	
 
     Random generator = new Random(2);    
 
@@ -30,8 +30,14 @@ public class SeparateData {
 			while ((line = dataReader.readLine()) != null) {
 				
 				if (line.length() == 0) {
-//					trainWriter.write("\n");
-//					testWriter.write("\n");
+					outLine += line + "\n";
+				
+					if (generator.nextDouble() < ratio)
+						trainWriter.write(outLine);
+					else
+						testWriter.write(outLine);
+					
+					outLine = "";
 					continue;
 				}
 				else if (line.charAt(0) == '#')
@@ -48,7 +54,7 @@ public class SeparateData {
 					outLine += line + "\n";
 				}
 				else {
-					outLine += line + "\n\n";
+					outLine += line + "\n";
 					
 					if (generator.nextDouble() < ratio)
 						trainWriter.write(outLine);
@@ -56,7 +62,7 @@ public class SeparateData {
 						testWriter.write(outLine);
 					
 					outLine = "";
-				}
+				}	
 
 			}
 			trainWriter.flush();
@@ -102,23 +108,24 @@ public class SeparateData {
 	
 	public static void main(String[] args) 
 	{		
+		String path = "/home/nicolas/Develop/workspace/RinoServer/models/main/saved/";
+//		String path = "../main/saved/";
+		String trainSourceDir = path + "train/";
+		String testSourceDir = path + "test/";
+		double ratio = 0.5;
 		
+//		if (args.length != 3) {
+//			System.out.println("SeparateData: wrong parameters number: " + args.length);
+//			return;
+//		}	
 //		String path = "../main/saved/";
 //		String trainDir = path + args[0] + "/"; 
 //		String testDir = path + args[1] + "/";
 //		double ratio = new Double(args[2]);
-		
-		if (args.length != 3) {
-			System.out.println("SeparateData: wrong parameters number: " + args.length);
-			return;
-		}
-		String path = "../main/saved/";
-		String trainDir = path + "train/";
-		String testDir = path + "test/";
-		double ratio = 0.5;
+
 
 		SeparateData s = new SeparateData();
-		s.separateFolder(trainDir, testDir, ratio);
+		s.separateFolder(trainSourceDir, testSourceDir, ratio);
 	}
 
 }
