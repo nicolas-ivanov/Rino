@@ -110,7 +110,7 @@ public class WordsFeaturesGetter {
 	public float[][] getVectors(ExtendedCommand extCommand) 
 	{    	
 		try {
-			int paramsNum = getParamsNum() + 1; // number of semantic groups + relative position in command 
+			int paramsNum = getParamsNum() + 1; // number of semantic groups + relative position in command
 			
 			String command = extCommand.curCommand;
 			int expParam = extCommand.expParameter;
@@ -182,7 +182,7 @@ public class WordsFeaturesGetter {
 			
 			for (int curr_word_num = 0; curr_word_num < wordsVectors.length; curr_word_num++) {
 				
-				float[] tVector = new float[window_size * paramsNum + 1]; // last +1 is for expected parameter index
+				float[] tVector = new float[window_size * paramsNum + 1 + 1]; // first +1 is for expected parameter index, last +1 is for label id of the previous word
 
 				// get word's own params
 				for (int i = 0; i < paramsNum; i++) {
@@ -212,7 +212,7 @@ public class WordsFeaturesGetter {
 				}
 				
 				// get the expected parameter index
-				tVector[tVector.length - 1] = expParam;
+				tVector[tVector.length - 2] = expParam;
 				
 				ngramsVectors[curr_word_num] = tVector;
 			}	

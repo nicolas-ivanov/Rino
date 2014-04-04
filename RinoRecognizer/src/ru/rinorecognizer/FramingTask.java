@@ -62,7 +62,7 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
     	float[][] wFeatures = wfGetter.getVectors(extCommand);
 
 		List<ParamsType> labels = new ArrayList<ParamsType>();
-		List<Integer> labels_id = new ArrayList<Integer>();
+		List<Integer> labels_id_list = new ArrayList<Integer>();
     	List<String> words = getWords(extCommand.curCommand);
     	
     	Frame frame = savedFrame;
@@ -113,11 +113,15 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
 			break;
 		}
 
+		int saved_label_id = 0;
 		
-		for (int i = 0; i < wFeatures.length; i++)
-			labels_id.add(svm.classify(wFeatures[i]));
+		for (int i = 0; i < wFeatures.length; i++) {
+			wFeatures[i][wFeatures.length - 1] = (float)saved_label_id; // add the label id of the previous word at the end of feature vector 
+			saved_label_id = svm.classify(wFeatures[i]);
+			labels_id_list.add(saved_label_id);
+		}
 		
-		labels = convertToEnum(labels_id);
+		labels = convertToEnum(labels_id_list);
 		makeGroups(words, labels);
 		FramingResult framingResult = frame.fill(words, labels);
 		publishProgress(frame.getResponse());

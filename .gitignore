@@ -4,6 +4,15 @@ bin-debug/
 bin-release/
 RinoServer/models/libsvm-3.17/
 
+RinoServer/models/main/action
+RinoServer/models/main/a_call
+RinoServer/models/main/a_sms
+RinoServer/models/main/a_email
+RinoServer/models/main/a_site
+RinoServer/models/main/a_search
+RinoServer/models/main/a_alarm
+RinoServer/models/main/a_balance
+
 # Other files and folders
 .settings/
 .metadata
