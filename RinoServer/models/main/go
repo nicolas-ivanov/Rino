@@ -59,10 +59,10 @@ train-predict (){
 	}
 	
 	# predict	
-	$l/svm-predict -b 1 $q/scaled_$trainData $q/model_$type $q/predicted_$trainData | { read a1 a2 a3 a4 a5
+	#~ $l/svm-predict -b 1 $q/scaled_$trainData $q/model_$type $q/predicted_$trainData | { read a1 a2 a3 a4 a5
 		#~ printf "%-10s %-10s %-12s " $type $a3 $a4
 		#~ printf "%-10s %s \n" $type $as >> accuracy
-	}
+	#~ }
 	#~ $l/svm-predict -q -b 1 $q/scaled_$trainData $q/model_$type $q/predicted_$trainData
 }
 
@@ -134,7 +134,7 @@ do
 	}
 	
 	cp $q/model_$type $r
-	cp $q/range_$type $r
+	cp $q/range_$trainData $r/range_$type
 done
 
 

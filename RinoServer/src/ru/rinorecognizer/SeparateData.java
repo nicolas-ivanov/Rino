@@ -108,20 +108,19 @@ public class SeparateData {
 	
 	public static void main(String[] args) 
 	{		
-		String path = "/home/nicolas/Develop/workspace/RinoServer/models/main/saved/";
-//		String path = "../main/saved/";
-		String trainSourceDir = path + "train/";
-		String testSourceDir = path + "test/";
-		double ratio = 0.5;
+//		String path = "/home/nicolas/Develop/workspace/RinoServer/models/main/saved/";
+//		String trainSourceDir = path + "train/";
+//		String testSourceDir = path + "test/";
+//		double ratio = 0.5;
 		
-//		if (args.length != 3) {
-//			System.out.println("SeparateData: wrong parameters number: " + args.length);
-//			return;
-//		}	
-//		String path = "../main/saved/";
-//		String trainDir = path + args[0] + "/"; 
-//		String testDir = path + args[1] + "/";
-//		double ratio = new Double(args[2]);
+		if (args.length != 3) {
+			System.out.println("SeparateData: wrong parameters number: " + args.length);
+			return;
+		}	
+		String path = "../main/saved/";
+		String trainSourceDir = path + args[0] + "/"; 
+		String testSourceDir = path + args[1] + "/";
+		double ratio = new Double(args[2]);
 
 
 		SeparateData s = new SeparateData();
