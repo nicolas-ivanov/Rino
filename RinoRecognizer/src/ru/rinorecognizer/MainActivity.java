@@ -68,6 +68,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		SvmClassifier svm_site;
 		SvmClassifier svm_alarm;
 		SvmClassifier svm_balance;
+		SvmClassifier svm_cancel;
 	}
 	
 	private SvmBunch svm_bunch;
@@ -108,6 +109,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		svm_bunch.svm_search = new SvmClassifier(getPath("model_a_search"), getPath("range_a_search"));
 		svm_bunch.svm_alarm = new SvmClassifier(getPath("model_a_alarm"), getPath("range_a_alarm"));
 		svm_bunch.svm_balance = new SvmClassifier(getPath("model_a_balance"), getPath("range_a_balance"));
+		svm_bunch.svm_cancel = new SvmClassifier(getPath("model_a_cancel"), getPath("range_a_cancel"));
 		
 		
 		// Check to see if a recognition activity is present

@@ -108,6 +108,9 @@ a_alarm	нет поставь будильник				& p_name
 a_call	позвони								# кому?
 a_balance	нет покажи баланс				& p_name
 
+a_call	позвони								# кому?
+a_cancel	отмена							& p_name
+
 
 # cancellation, 2 s_change words
 
@@ -375,6 +378,9 @@ a_alarm	нет поставь будильник								& quote
 a_sms	смс													# что написать?
 a_balance	нет покажи баланс								& quote
 
+a_sms	смс													# что написать?
+a_cancel	отмена											& quote
+
 
 # cancellation, 2 s_change words
 
@@ -639,6 +645,9 @@ a_alarm	нет поставь будильник								& quote
 
 a_email	письмо												# что написать?
 a_balance	нет покажи баланс								& quote
+
+a_email	письмо												# что написать?
+a_cancel	отмена											& quote
 
 
 # cancellation, 2 s_change words
@@ -937,6 +946,9 @@ a_alarm	нет поставь будильник										& quote
 a_search	поиск													# что нужно найти?
 a_balance	нет покажи баланс										& quote
 
+a_search	поиск													# что нужно найти?
+a_cancel	отмена													& quote
+
 
 # cancellation, 2 s_change words
 
@@ -1094,6 +1106,9 @@ a_alarm	нет поставь будильник				& p_site
 
 a_site	сайт								# какой сайт открыть?
 a_balance	нет покажи баланс				& p_site
+
+a_site	сайт								# какой сайт открыть?
+a_cancel	отмена							& p_site
 
 
 # cancellation, 2 s_change words
@@ -1316,6 +1331,9 @@ a_alarm	нет поставь будильник										& p_time
 a_alarm	будильник 													# на какое время?
 a_balance	нет покажи баланс										& p_time
 
+a_alarm	будильник 													# на какое время?
+a_cancel	отмена													& p_time
+
 
 # cancellation, 2 s_change words
 
@@ -1344,6 +1362,9 @@ a_balance	хотя нет покажи баланс									& p_time
 # cancellation, 3 s_change words
 
 a_alarm	будильник 													# на какое время?
+a_cancel	отмена													& p_time
+
+a_alarm	будильник 													# на какое время?
 a_call	хотя нет лучше позвони васе									& p_time
 
 a_alarm	будильник 													# на какое время?
@@ -1366,6 +1387,21 @@ a_balance	хотя нет лучше покажи баланс							& p_time
 
 
 
+
+
+# A_CANCEL section #####################################################
+
+a_cancel	отмена
+a_cancel	ладно неважно
+a_cancel	неважно уже
+a_cancel	забей на это
+a_cancel	ладно забей на это
+
+a_cancel	будильник 													# на какое время?
+a_cancel	Time:7														& p_time
+
+a_cancel	будильник 													# на какое время?
+a_cancel	Time:7 Time:30												& p_time
 
 
 

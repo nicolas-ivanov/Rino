@@ -46,38 +46,44 @@ public class EmailFrame extends Frame {
 
 
 		
-		// check uri;
-		if (emailUriList.size() == 0) {
-			response = "Кому нужно отправить email?";
-			expParameter = IdTranslator.ParamsType.P_NAME;
-		}
-		else if (emailUriList.size() == 1) {
-			Uri emailUri = emailUriList.get(0);
-			intent = new Intent(Intent.ACTION_SENDTO, emailUri);			
-			intent.putExtra(Intent.EXTRA_SUBJECT, "Hello from Rino");
-			
-			response = mainActivity.getStr(R.string.sending_email);
-			expParameter = null;
-		}
-		else { // (listUri.size() >= 2)
-			response = "Очень много вариантов... Кому нужно отправить email?"; 
-			expParameter = IdTranslator.ParamsType.P_NAME;
-			emailUriList = null;
-		}
-		
-		
-		// check text;
 		if (textList.size() == 0) {
-			textList.add(""); 
+			response = "Что нужно написать?";
+			expParameter = IdTranslator.ParamsType.QUOTE;
 		}
-		else if (textList.size() >= 1) {
-			String text = "";
-			for (String t: textList)
-				text += " " + t;
-			
-			if (intent != null)
-				intent.putExtra(Intent.EXTRA_TEXT, text + "\n\nBest regards,\nRinoRecognizer");
-		}		
+		else {
+			// check uri;
+			if (emailUriList.size() == 0) {
+				response = "Кому нужно отправить email?";
+				expParameter = IdTranslator.ParamsType.P_NAME;
+			}
+			else if (emailUriList.size() == 1) {
+				Uri emailUri = emailUriList.get(0);
+				intent = new Intent(Intent.ACTION_SENDTO, emailUri);			
+				intent.putExtra(Intent.EXTRA_SUBJECT, "Hello from Rino");
+				
+				response = mainActivity.getStr(R.string.sending_email);
+				expParameter = null;
+			}
+			else { // (listUri.size() >= 2)
+				response = "Очень много вариантов... Кому нужно отправить email?"; 
+				expParameter = IdTranslator.ParamsType.P_NAME;
+				emailUriList = null;
+			}
+		
+		
+			// check text;
+			if (textList.size() == 0) {
+				textList.add(""); 
+			}
+			else if (textList.size() >= 1) {
+				String text = "";
+				for (String t: textList)
+					text += " " + t;
+				
+				if (intent != null)
+					intent.putExtra(Intent.EXTRA_TEXT, text + "\n\nBest regards,\nRinoRecognizer");
+			}	
+		}
 		
 		FramingResult framingResult = new FramingResult();
 		framingResult.intent = intent;

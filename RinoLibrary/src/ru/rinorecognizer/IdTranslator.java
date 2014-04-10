@@ -21,6 +21,7 @@ public class IdTranslator {
 		case A_SITE: 	actionID = 5; break;
 		case A_ALARM: 	actionID = 6; break;
 		case A_BALANCE:	actionID = 7; break;
+		case A_CANCEL:	actionID = 8; break;
 		default: 		actionID = 0;
 		System.out.println("IdTranslator: actionType '" + actionType + "' is incorrect");
 		}
@@ -44,6 +45,7 @@ public class IdTranslator {
 		case 5: 	actionType = ActionType.A_SITE; 	break;
 		case 6: 	actionType = ActionType.A_ALARM; 	break;
 		case 7: 	actionType = ActionType.A_BALANCE; 	break;
+		case 8: 	actionType = ActionType.A_CANCEL; 	break;
 		default: 	actionType = null;
 		System.out.println("IdTranslator: actionID '" + actionID + "' is incorrect");
 		}

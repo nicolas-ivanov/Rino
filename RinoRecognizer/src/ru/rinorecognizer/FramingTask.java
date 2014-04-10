@@ -7,13 +7,7 @@ import java.util.Locale;
 
 import ru.rinorecognizer.IdTranslator.ActionType;
 import ru.rinorecognizer.IdTranslator.ParamsType;
-import ru.rinorecognizer.frames.AlarmFrame;
-import ru.rinorecognizer.frames.BalanceFrame;
-import ru.rinorecognizer.frames.CallFrame;
-import ru.rinorecognizer.frames.EmailFrame;
-import ru.rinorecognizer.frames.SearchFrame;
-import ru.rinorecognizer.frames.SiteFrame;
-import ru.rinorecognizer.frames.SmsFrame;
+import ru.rinorecognizer.frames.*;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -53,7 +47,7 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
 		ActionType a_type = IdTranslator.getActionEnum(actionID);
 		
 		if (debugMode)
-			publishProgress("Command type: " + a_type.toString().toLowerCase(Locale.US));
+			publishProgress(a_type.toString().toLowerCase(Locale.US));
 		
     	
     	// step 2: map each word of a command with a label to get parameters
@@ -111,12 +105,19 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
 				frame = new BalanceFrame(mainActivity);
 			svm = svm_bunch.svm_balance;
 			break;
+
+		case A_CANCEL:
+			if ((frame == null) || (!frame.type.equals(a_type)))
+				frame = new CancelFrame(mainActivity);
+			svm = svm_bunch.svm_cancel;
+			break;
 		}
 
 		int saved_label_id = 0;
 		
 		for (int i = 0; i < wFeatures.length; i++) {
-			wFeatures[i][wFeatures.length - 1] = (float)saved_label_id; // add the label id of the previous word at the end of feature vector 
+//			wFeatures[i][wFeatures.length - 1] = (float)saved_label_id; // add the label id of the previous word at the end of feature vector 
+			wFeatures[i][wFeatures.length - 1] = 0; // add the label id of the previous word at the end of feature vector 
 			saved_label_id = svm.classify(wFeatures[i]);
 			labels_id_list.add(saved_label_id);
 		}
@@ -200,9 +201,9 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
     
     private void publishLabels(List<ParamsType>labels)
     {
-		String labels_str = "Labels:" + System.getProperty("line.separator");
+		String labels_str = "";
 		for (int i = 0; i < labels.size(); i++)
-			labels_str += " " + labels.get(i).toString();
+			labels_str += labels.get(i).toString() + " ";
 		
 		publishProgress(labels_str.toLowerCase(Locale.US));
     }

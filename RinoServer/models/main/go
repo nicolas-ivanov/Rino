@@ -29,6 +29,7 @@ echo >> accuracy
 #~ models="./action"
 
 #~ models="./a_call"
+#~ models="./a_cancel"
 
 #~ models="./action
 #~ ./a_call
@@ -41,7 +42,8 @@ models="./action
 ./a_search
 ./a_site
 ./a_alarm
-./a_balance"
+./a_balance
+./a_cancel"
 
 
 train-predict (){
@@ -60,14 +62,14 @@ train-predict (){
 	
 	# predict	
 	$l/svm-predict -b 1 $q/scaled_$trainData $q/model_$type $q/predicted_$trainData | { read a1 a2 a3 a4 a5
-		printf "%-4s %-12s " $a3 $a4
+		printf "%-8s %-12s " $a3 $a4
 		#~ printf "%-10s %s \n" $type $as >> accuracy
 	}
 	#~ $l/svm-predict -q -b 1 $q/scaled_$trainData $q/model_$type $q/predicted_$trainData
 }
 
 # get train and test data sets
-java -classpath $server ru.rinorecognizer.SeparateData $trainData $testData 0.3
+#~ java -classpath $server ru.rinorecognizer.SeparateData $trainData $testData 0.3
 
 # get classification models
 for q in $models

@@ -100,8 +100,8 @@ public class ParamsConvert {
 						float[] tVector = wordsVectors[k];
 						
 						tVector[tVector.length - 1] = saved_label_id;
-						saved_label_id = wordsLabels[k];
-//						saved_label_id = 0;
+//						saved_label_id = wordsLabels[k];
+						saved_label_id = 0;
 						
 						String fullString = wordsLabels[k] + "";
 						String paramsString = wordsLabels[k] + "";
@@ -159,7 +159,7 @@ public class ParamsConvert {
 	{		
 //		String path = "/home/nicolas/Develop/workspace/RinoServer/models/main/";
 //		String data = "train";
-//		String modelName = "a_alarm";
+//		String modelName = "a_cancel";
 		
 		if (args.length != 2) {
 			System.out.println("ParamsConvert: wrong parameters number: " + args.length);
