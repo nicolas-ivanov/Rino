@@ -11,37 +11,24 @@ public class CommandFeaturesGetter {
 
 	private static final Pattern structurePattern = Pattern.compile("([-?\\d,]+)\\t+(\\w+)\\t+([^\\t~]+)");
 
-	private int getParamsNum() throws IOException {
-
-		InputStream input = getClass().getResourceAsStream("patterns.txt");
-		BufferedReader patternsReader = new BufferedReader(new InputStreamReader(input));
-
-		String rawPattern;
-		int paramsNum = 0;
-
-		while ((rawPattern = patternsReader.readLine()) != null) {
-			if (rawPattern.equals(""))
-				continue; // skip empty lines
-
-			paramsNum++;
-		}
-		patternsReader.close();
-
-		return paramsNum;
-	}
-	
-
 	public float[] getVector(ExtendedCommand extCommand) {
 		try {
 			// if (!checkPatterns())
 			// return null;
 			
 			String command = extCommand.curCommand;
+			
+			int semSetsNum = new PatternsHandler().getSemanticSetsNum();
+			int actionsNum = IdTranslator.getActionsNum();
+			int paramsNum = IdTranslator.getParamsNum();
 
-			int paramsNum = getParamsNum() + 3; // Params Num + prevType + prevComplete + expParameter
+			int vFeaturesNum = semSetsNum	// number of semantic sets
+					+ actionsNum + 1 		// number of action types for prevType
+					+ 1 					// for prevComplete value
+					+ paramsNum + 1; 		// number of params types for expectedParam
 
 			String[] words = command.split(" ");
-			float[] pVector = new float[paramsNum];
+			float[] pVector = new float[vFeaturesNum];
 
 			for (int i = 0; i < pVector.length; i++)
 				pVector[i] = 0;
@@ -85,9 +72,12 @@ public class CommandFeaturesGetter {
 				patternsReader.close();
 			}
 			
-			pVector[pVector.length - 3] = extCommand.prevType;
-			pVector[pVector.length - 2] = extCommand.prevComplete;
-			pVector[pVector.length - 1] = extCommand.expParameter;
+			// write value of prevComplete
+			pVector[semSetsNum] = extCommand.prevComplete;
+			// encode integer id of prevType as boolean vector
+			pVector[semSetsNum + 1 + extCommand.prevType] = 1;
+			// encode integer id of expParameter as boolean vector
+			pVector[semSetsNum+ 1 + actionsNum + extCommand.expParameter] = 1;	
 			
 			return pVector;
 

@@ -85,7 +85,7 @@ public class ActionsConvert {
 					extCommand.prevComplete = prevComplete;
 					
 					if (comment.startsWith("&"))
-						extCommand.expParameter = IdTranslator.getParamID(comment.replaceFirst("& ", ""));
+						extCommand.expParameter = IdTranslator.getParamOrdinal(comment.replaceFirst("& ", ""));
 					else
 						extCommand.expParameter = 0;
 

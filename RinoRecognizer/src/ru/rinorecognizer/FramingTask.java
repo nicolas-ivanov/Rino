@@ -114,12 +114,14 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
 		}
 
 		int saved_label_id = 0;
+		int saved_label_ordinal = 0;
 		
 		for (int i = 0; i < wFeatures.length; i++) {
-//			wFeatures[i][wFeatures.length - 1] = (float)saved_label_id; // add the label id of the previous word at the end of feature vector 
-			wFeatures[i][wFeatures.length - 1] = 0; // add the label id of the previous word at the end of feature vector 
+			 // add the label id of the previous word at the end of feature vector 
+			wFeatures[i][wFeatures.length - IdTranslator.getParamsNum() + saved_label_ordinal] = 1;
 			saved_label_id = svm.classify(wFeatures[i]);
 			labels_id_list.add(saved_label_id);
+			saved_label_ordinal = IdTranslator.getParamOrdinal(IdTranslator.getParamEnumFromID(saved_label_id));
 		}
 		
 		labels = convertToEnum(labels_id_list);
@@ -179,21 +181,7 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
 		List<ParamsType> p_type = new ArrayList<ParamsType>();
 		
     	for (int i = 0; i < p_type_id.size(); i++)
-    		switch (p_type_id.get(i)) {
-    		case 10: p_type.add(ParamsType.ACTION); 	break;
-    		case  1: p_type.add(ParamsType.P_NAME); 	break;
-    		case  2: p_type.add(ParamsType.P_NUMBER); 	break;
-    		case  3: p_type.add(ParamsType.P_EMAIL); 	break;
-    		case  4: p_type.add(ParamsType.P_SITE); 	break;
-    		case  5: p_type.add(ParamsType.P_TIME);		break;
-    		case  0: p_type.add(ParamsType.OTHER); 		break;
-    		case -1: p_type.add(ParamsType.QUOTE); 		break;
-    		case -2: p_type.add(ParamsType.Q_MARK); 	break;
-    		case -3: p_type.add(ParamsType.PREPOS);		break;
-    		case -4: p_type.add(ParamsType.CHANGE);		break;
-    		default:
-    				System.out.println("Parameter's ID '" + p_type_id.get(i) + "' is incorrect");
-    		}
+    		p_type.add(IdTranslator.getParamEnumFromID(p_type_id.get(i)));
     	
     	return p_type;
     }

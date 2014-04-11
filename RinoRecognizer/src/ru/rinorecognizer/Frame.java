@@ -32,7 +32,7 @@ public abstract class Frame {
 	}
 	
 	public int getExpParameterID() {
-		return IdTranslator.getParamID(expParameter);
+		return IdTranslator.getParamOrdinal(expParameter);
 	}
 	
 	public int getTypeID() {		

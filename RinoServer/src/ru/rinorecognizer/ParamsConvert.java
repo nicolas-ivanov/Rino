@@ -76,7 +76,7 @@ public class ParamsConvert {
 					
 					if (comment != null) {
 						if (comment.startsWith("& "))
-							extCommand.expParameter = IdTranslator.getParamID(comment.replaceFirst("& ", ""));
+							extCommand.expParameter = IdTranslator.getParamOrdinal(comment.replaceFirst("& ", ""));
 					}
 					
 	
@@ -88,20 +88,18 @@ public class ParamsConvert {
 					int[] wordsLabels = wfg.getLabels(extCommand);
 					float[][] wordsVectors = wfg.getVectors(extCommand);
 	
-					
-					
-					// Write parameters and labels to files
-					// + add label id of the previous word at the end of each vector
-
 					int saved_label_id = 0;
-					
+
+					// Write parameters and labels to files
 					for (int k = 0; k < wordsVectors.length; k++) {
 	
 						float[] tVector = wordsVectors[k];
-						
-						tVector[tVector.length - 1] = saved_label_id;
-//						saved_label_id = wordsLabels[k];
-						saved_label_id = 0;
+						int startOfPrevLabelBlock = tVector.length - IdTranslator.getParamsNum();
+
+						// add encoded label id of the previous word at the end of each vector
+						tVector[startOfPrevLabelBlock + saved_label_id] = 1;
+						saved_label_id = IdTranslator.getParamOrdinal(IdTranslator.getParamEnumFromID(wordsLabels[k]));
+//						saved_label_id = 0;
 						
 						String fullString = wordsLabels[k] + "";
 						String paramsString = wordsLabels[k] + "";

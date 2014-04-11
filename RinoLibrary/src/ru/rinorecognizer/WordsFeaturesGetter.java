@@ -2,22 +2,16 @@ package ru.rinorecognizer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+//import ru.rinorecognizer.IdTranslator;
 
 public class WordsFeaturesGetter {
 	
 	private static final Pattern structurePattern = Pattern.compile("([-?\\d,]+)\\t+(\\w+)\\t+([^\\t~]+)");
 
 	
-	private BufferedReader getBufferedReader() {
-		InputStream input = getClass().getResourceAsStream("patterns.txt");
-		return new BufferedReader(new InputStreamReader(input));
-	}
-	
-
 	public int[] getLabels(ExtendedCommand extCommand) 
 	{    	
 		try {			
@@ -28,10 +22,11 @@ public class WordsFeaturesGetter {
 			String[] words = command.split(" ");
 			int[] wordsLabels = new int[words.length];
 
-			// Get labels vector for every word of the command
+			// Get a label value for every word of the command
 			for (int k = 0; k < words.length; k++) {
 
-				BufferedReader patternsReader = getBufferedReader();
+				BufferedReader patternsReader = new PatternsHandler().getPatternsReader();
+
 				Boolean wordFound = false;				
 				String rawPattern;
 				String w = words[k];
@@ -90,30 +85,27 @@ public class WordsFeaturesGetter {
 	}
 	
 	
-	private int getParamsNum() throws IOException {
-		BufferedReader patternsReader = getBufferedReader();
-		String rawPattern;
-		int paramsNum = 0;
-
-		while ((rawPattern = patternsReader.readLine()) != null) {
-			if (rawPattern.equals(""))
-				continue; // skip empty lines
-
-			paramsNum++;
-		}
-		patternsReader.close();
-		
-		return paramsNum;
-	}
-	
 
 	public float[][] getVectors(ExtendedCommand extCommand) 
 	{    	
-		try {
-			int paramsNum = getParamsNum() + 1; // number of semantic groups + relative position in command
-			
+		try {			
 			String command = extCommand.curCommand;
 			int expParam = extCommand.expParameter;
+			
+			int semSetsNum = new PatternsHandler().getSemanticSetsNum();
+			int paramsNum = IdTranslator.getParamsNum();
+			int wBlockLength = semSetsNum + 1; // number of semantic groups + a value relative position in command
+			
+			final int leftLeafSize = 2;
+			final int rightLeafSize = 2;
+			int windowSize = 1 + leftLeafSize + rightLeafSize;
+			
+			int windowLength = windowSize * wBlockLength;
+			int vLength = 
+					windowLength
+					+ paramsNum 	// for encoding expected parameter index
+					+ paramsNum;	// for encoding label id of the previous word
+
 			
 			/// Start of main section ///////////////////////////////////////////////////
 			
@@ -123,7 +115,7 @@ public class WordsFeaturesGetter {
 			// Get parameters vector for every word of the command
 			for (int wNum = 0; wNum < words.length; wNum++) {
 				
-				float[] wVector = new float[paramsNum];
+				float[] wVector = new float[wBlockLength];
 				
 				for (int i=0; i<wVector.length; i++)
 					wVector[i] = 0;
@@ -138,7 +130,7 @@ public class WordsFeaturesGetter {
 				
 				int pNum = 0;
 				String rawPattern;				
-				BufferedReader patternsReader = getBufferedReader();
+				BufferedReader patternsReader = new PatternsHandler().getPatternsReader();
 				
 				// Check if the word is a keyword of a certain set
 				while ((rawPattern = patternsReader.readLine()) != null) {
@@ -176,43 +168,40 @@ public class WordsFeaturesGetter {
 			// Get parameters vectors for trigrams of words
 			float[][] ngramsVectors = new float[words.length][];
 			
-			final int left_leaf_size = 2;
-			final int right_leaf_size = 2;
-			int window_size = 1 + left_leaf_size + right_leaf_size;
 			
 			for (int curr_word_num = 0; curr_word_num < wordsVectors.length; curr_word_num++) {
 				
-				float[] tVector = new float[window_size * paramsNum + 1 + 1]; // first +1 is for expected parameter index, last +1 is for label id of the previous word
+				float[] tVector = new float[vLength]; 
 
-				// get word's own params
-				for (int i = 0; i < paramsNum; i++) {
+				// get word's own parameters
+				for (int i = 0; i < wBlockLength; i++) {
 					tVector[i] = wordsVectors[curr_word_num][i];
 				}
 				
 			
-				// get left leaf params
-				for (int leaf_word_num = 0; leaf_word_num < left_leaf_size; leaf_word_num++) {
+				// get left leaf parameters
+				for (int leaf_word_num = 0; leaf_word_num < leftLeafSize; leaf_word_num++) {
 					
-					int leaf_word_pos = curr_word_num - left_leaf_size + leaf_word_num;
+					int leaf_word_pos = curr_word_num - leftLeafSize + leaf_word_num;
 					
 					if (leaf_word_pos >= 0)
-						for (int p = 0; p < paramsNum; p++)
-							tVector[paramsNum * (leaf_word_num + 1) + p] = wordsVectors[leaf_word_pos][p];
+						for (int p = 0; p < wBlockLength; p++)
+							tVector[wBlockLength * (leaf_word_num + 1) + p] = wordsVectors[leaf_word_pos][p];
 				}
 				
 				
-				// get right leaf params
-				for (int leaf_word_num = 0; leaf_word_num < right_leaf_size; leaf_word_num++) {
+				// get right leaf parameters
+				for (int leaf_word_num = 0; leaf_word_num < rightLeafSize; leaf_word_num++) {
 					
 					int leaf_word_pos = curr_word_num + leaf_word_num + 1;
 					
 					if (leaf_word_pos < words.length)
-						for (int p = 0; p < paramsNum; p++)
-							tVector[paramsNum * (1 + left_leaf_size + leaf_word_num) + p] = wordsVectors[leaf_word_pos][p];
+						for (int p = 0; p < wBlockLength; p++)
+							tVector[wBlockLength * (1 + leftLeafSize + leaf_word_num) + p] = wordsVectors[leaf_word_pos][p];
 				}
 				
-				// get the expected parameter index
-				tVector[tVector.length - 2] = expParam;
+				// encode the expected parameter index
+				tVector[windowLength - 1 + expParam] = 1;
 				
 				ngramsVectors[curr_word_num] = tVector;
 			}	

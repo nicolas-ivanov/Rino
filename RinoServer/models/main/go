@@ -29,6 +29,7 @@ echo >> accuracy
 #~ models="./action"
 
 #~ models="./a_call"
+
 #~ models="./a_cancel"
 
 #~ models="./action
@@ -90,16 +91,7 @@ do
 	
 	java -classpath $server ru.rinorecognizer.ScaleData $trainData $type
 	java -classpath $server ru.rinorecognizer.ScaleData $testData $type
-	
-	### python $t/checkdata.py $q/params_$trainData > null	
-	### python $t/checkdata.py $q/params_$testData >> null	
-	#~ 
-	#~ $l/svm-scale -l 0 -u 1 -s $q/range_$type $q/params_$trainData > $q/scaled_$trainData
-	#~ $l/svm-scale -r $q/range_$type $q/params_$testData > $q/scaled_$testData
-	#~ 
-	#~ cp $q/params_$trainData  $q/scaled_$trainData
-	#~ cp $q/params_$testData  $q/scaled_$testData
-	
+		
 	
 	if [ "$mode" == "fast" ]
 	then {
