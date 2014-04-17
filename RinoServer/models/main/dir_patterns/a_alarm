@@ -1,0 +1,7 @@
+a_alarm
+
+будильник
+постав\p{InCyrillic}+
+установ\p{InCyrillic}+
+заве\p{InCyrillic}+
+разбуди\p{InCyrillic}*

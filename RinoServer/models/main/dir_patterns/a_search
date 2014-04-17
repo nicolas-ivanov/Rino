@@ -1,0 +1,17 @@
+a_search
+
+поиск\p{InCyrillic}*
+найди
+найти
+ищи
+искать
+покаж\p{InCyrillic}+
+показ\p{InCyrillic}*
+\p{InCyrillic}*смотр\p{InCyrillic}*
+\p{InCyrillic}зна\p{InCyrillic}+
+скаж\p{InCyrillic}*
+расска\p{InCyrillic}+
+значит\p{InCyrillic}*
+означа\p{InCyrillic}+
+стать\p{InCyrillic}+
+определен\p{InCyrillic}+

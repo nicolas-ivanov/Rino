@@ -57,6 +57,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private PackageManager packageManager;
 	private InputMethodManager inputManager;
 	private DialogDBHelper dialogDBHelper;
+	private DataWriter dataWriter;
 
 	
 	public static class SvmBunch {
@@ -72,7 +73,6 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	
 	private SvmBunch svm_bunch;
-	
 	
 
 //////////////// Common Methods ////////////////////////////////////////////////////////////////////
@@ -92,6 +92,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		dialogListView = (ListView) findViewById(R.id.history_list);
 
 		inputManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+		dataWriter = new DataWriter();
 		
 		dialogDBHelper = new DialogDBHelper(this);
 		dialogList = dialogDBHelper.getDialogHistory();
@@ -166,7 +167,11 @@ public class MainActivity extends Activity implements OnClickListener {
 				commands = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 				String command = commands.get(0);
 				Log.d(TAG, this.getLocalClassName() + ": res = '" + command + "'");
-				startFramingTask(command);
+				
+//				startFramingTask(command);
+
+				dataWriter.write(command);
+				addRequest(command);
 				break;
 				
 			case RESULT_CANCELED:
@@ -195,9 +200,7 @@ public class MainActivity extends Activity implements OnClickListener {
 //////////////// Dialog List Updating //////////////////////////////////////////////////////////////
 
 	public void addRequest(String request) {
-//		newPhraseList.add(0, "«" + request + "»");
 		String str = "- " + request + "\n";
-//		String str = " - " + request.substring(0, 1).toUpperCase(Locale.US) + request.substring(1) + ".\n";
 		dialogList.add(0, str);
 		
 		dialogListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dialogList));
@@ -207,15 +210,8 @@ public class MainActivity extends Activity implements OnClickListener {
 	public void addAnswer(String answer) {
 		String request = dialogList.get(0);
 		dialogList.remove(0);
-		
-//		String str = request + System.getProperty("line.separator") + "- " + answer 
-//				+ System.getProperty("line.separator");		
-		
 		String str = request + "- " + answer + "\n";		
-		
 
-//		String str = " - " + request;
-//		String str = " - " + request.substring(0, 1).toUpperCase(Locale.US) + request.substring(1) + "- " + answer + ".\n";
 		newPhraseList.add(str);
 		dialogList.add(0, str);
 		dialogListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dialogList));
@@ -226,7 +222,6 @@ public class MainActivity extends Activity implements OnClickListener {
 //////////////// Framing Task //////////////////////////////////////////////////////////////////////
 	
 	private void startFramingTask(String command) {	
-//		addRequest(command);    
 		
 		if (framingTask != null) {
 			framingTask.cancel(true);

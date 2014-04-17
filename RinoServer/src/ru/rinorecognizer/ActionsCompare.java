@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -60,27 +61,15 @@ public class ActionsCompare {
 				
 				String predictionsID = predictionsMatcher.group(1);
 				String predictionsProb = predictionsMatcher.group(2);
-				String predictionsLabel = "";
+				IdTranslator.ActionType predictionsLabel;
 				
 				if (! originalsID.equals(predictionsID)) {
 					mistakesWriter.write(String.format("%-50s %-10s %-70s ", originalsText, originalsLabel, originalsParams));
 
 					Integer pID = new Integer(predictionsID);
-					
-					switch (pID) {
-					case 1:	predictionsLabel = "a_call"; break;
-					case 2:	predictionsLabel = "a_sms"; break;
-					case 3:	predictionsLabel = "a_email"; break;
-					case 4:	predictionsLabel = "a_search"; break;
-					case 5:	predictionsLabel = "a_site"; break;
-					case 6:	predictionsLabel = "a_alarm"; break;
-					case 7:	predictionsLabel = "a_balance"; break;
-					default:
-						System.out.println("Label '" + pID + "' is incorrect");
-						return;
-					}
+					predictionsLabel = IdTranslator.getActionEnum(pID);
 	
-					mistakesWriter.write(String.format("%-10s", predictionsLabel));
+					mistakesWriter.write(String.format("%-10s", predictionsLabel.toString().toLowerCase(Locale.ENGLISH)));
 					
 					String[] probs = predictionsProb.split(" ");
 					for (int i = 0; i < probs.length; i++)

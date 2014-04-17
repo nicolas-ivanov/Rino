@@ -93,8 +93,8 @@ public class SeparateData {
 			String sourceFile = f.getAbsolutePath();
 			trainDir = trainSourceDir + "../../train/";
 			testDir = trainSourceDir + "../../test/";
-			String trainTmpFile = trainDir + f.getName();
-			String testTmpFile = testDir + f.getName();
+			String trainTmpFile = trainDir + f.getName() + String.format("_%.1f", sRatio);
+			String testTmpFile = testDir + f.getName() + String.format("_%.1f", 1 - sRatio);
 			
 			new File(trainDir).mkdirs();
 			new File(testDir).mkdirs();

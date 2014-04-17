@@ -1,0 +1,10 @@
+p_time
+
+Time
+\d{1,2}
+утр\p{InCyrillic}+
+вечер\p{InCyrillic}*
+час\p{InCyrillic}*
+минут\p{InCyrillic}*
+завтра
+полчаса

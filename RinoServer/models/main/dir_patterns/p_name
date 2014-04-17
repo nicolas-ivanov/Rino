@@ -1,0 +1,17 @@
+p_name
+
+Name
+Surname
+Middlename
+мам\p{InCyrillic}+
+пап\p{InCyrillic}+
+кол\p{InCyrillic}+
+паш\p{InCyrillic}+
+дмитри\p{InCyrillic}+
+дим\p{InCyrillic}+
+вас\p{InCyrillic}*
+леш\p{InCyrillic}*
+ван\p{InCyrillic}*
+саш\p{InCyrillic}*
+наст\p{InCyrillic}*
+даш\p{InCyrillic}*

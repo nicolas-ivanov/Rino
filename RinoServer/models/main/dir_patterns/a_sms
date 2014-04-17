@@ -1,0 +1,14 @@
+a_sms
+
+смс\p{InCyrillic}*
+sms
+сообщение
+напиш\p{InCyrillic}+
+напис\p{InCyrillic}+
+набрать
+набер\p{InCyrillic}+
+набир\p{InCyrillic}+
+отправ\p{InCyrillic}+
+перешл\p{InCyrillic}+
+пересл\p{InCyrillic}+
+номер\p{InCyrillic}*

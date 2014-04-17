@@ -26,11 +26,11 @@ testData="test"
 echo $(date) > accuracy
 echo >> accuracy
 
-#~ models="./action"
+models="./action"
 
 #~ models="./a_call"
 
-models="./a_search"
+#~ models="./a_search"
 
 #~ models="./a_cancel"
 
@@ -72,7 +72,7 @@ train-predict (){
 }
 
 # get train and test data sets
-#~ java -classpath $server ru.rinorecognizer.SeparateData $trainData $testData 0.3
+#~ java -classpath $server ru.rinorecognizer.SeparateData $trainData $testData 0.4
 
 # get classification models
 for q in $models
