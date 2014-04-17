@@ -85,7 +85,7 @@ public class SearchFrame extends Frame {
 				
 				response += "Что нужно найти?";
 				expParameter = IdTranslator.ParamsType.QUOTE;
-				searchList = null;
+				searchList.clear();
 			}
 		}
 		else 

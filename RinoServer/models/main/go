@@ -30,21 +30,23 @@ echo >> accuracy
 
 #~ models="./a_call"
 
+models="./a_search"
+
 #~ models="./a_cancel"
 
 #~ models="./action
 #~ ./a_call
 #~ ./a_sms"
 
-models="./action
-./a_call
-./a_sms
-./a_email
-./a_search
-./a_site
-./a_alarm
-./a_balance
-./a_cancel"
+#~ models="./action
+#~ ./a_call
+#~ ./a_sms
+#~ ./a_email
+#~ ./a_search
+#~ ./a_site
+#~ ./a_alarm
+#~ ./a_balance
+#~ ./a_cancel"
 
 
 train-predict (){

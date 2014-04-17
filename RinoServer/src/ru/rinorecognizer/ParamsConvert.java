@@ -88,7 +88,7 @@ public class ParamsConvert {
 					int[] wordsLabels = wfg.getLabels(extCommand);
 					float[][] wordsVectors = wfg.getVectors(extCommand);
 	
-					int saved_label_id = 0;
+					int saved_label_ordinal = 0;
 
 					// Write parameters and labels to files
 					for (int k = 0; k < wordsVectors.length; k++) {
@@ -97,9 +97,9 @@ public class ParamsConvert {
 						int startOfPrevLabelBlock = tVector.length - IdTranslator.getParamsNum();
 
 						// add encoded label id of the previous word at the end of each vector
-						tVector[startOfPrevLabelBlock + saved_label_id] = 1;
-						saved_label_id = IdTranslator.getParamOrdinal(IdTranslator.getParamEnumFromID(wordsLabels[k]));
-//						saved_label_id = 0;
+						tVector[startOfPrevLabelBlock + saved_label_ordinal] = 1;
+						saved_label_ordinal = IdTranslator.getParamOrdinal(IdTranslator.getParamEnumFromID(wordsLabels[k]));
+//						saved_label_ordinal = 0;
 						
 						String fullString = wordsLabels[k] + "";
 						String paramsString = wordsLabels[k] + "";

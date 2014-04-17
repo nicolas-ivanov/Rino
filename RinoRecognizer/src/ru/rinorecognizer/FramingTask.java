@@ -115,10 +115,12 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
 
 		int saved_label_id = 0;
 		int saved_label_ordinal = 0;
+		int startOfPrevLabelBlock = wFeatures[0].length - IdTranslator.getParamsNum();
 		
 		for (int i = 0; i < wFeatures.length; i++) {
 			 // add the label id of the previous word at the end of feature vector 
-			wFeatures[i][wFeatures.length - IdTranslator.getParamsNum() + saved_label_ordinal] = 1;
+			wFeatures[i][startOfPrevLabelBlock + saved_label_ordinal] = 1;
+			float curFeatures[] = wFeatures[i];
 			saved_label_id = svm.classify(wFeatures[i]);
 			labels_id_list.add(saved_label_id);
 			saved_label_ordinal = IdTranslator.getParamOrdinal(IdTranslator.getParamEnumFromID(saved_label_id));

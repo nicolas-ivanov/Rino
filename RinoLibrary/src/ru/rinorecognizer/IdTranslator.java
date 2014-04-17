@@ -142,11 +142,11 @@ public class IdTranslator {
 			case 4: 	paramType = ParamsType.P_SITE; 	break;
 			case 5: 	paramType = ParamsType.P_TIME; 	break;
 			case 6: 	paramType = ParamsType.QUOTE; 	break;
-			case  0:	paramType = ParamsType.OTHER; 		break;
-			case -1:	paramType = ParamsType.QUOTE; 		break;
+			case  0:	paramType = ParamsType.OTHER; 	break;
+			case -1:	paramType = ParamsType.QUOTE; 	break;
 			case -2:	paramType = ParamsType.Q_MARK; 	break;
-			case -3:	paramType = ParamsType.PREPOS;		break;
-			case -4:	paramType = ParamsType.CHANGE;		break;
+			case -3:	paramType = ParamsType.PREPOS;	break;
+			case -4:	paramType = ParamsType.CHANGE;	break;
 			default: 	paramType = null;
 			System.out.println("IdTranslator: paramID '" + paramID + "' is incorrect");
 		}
