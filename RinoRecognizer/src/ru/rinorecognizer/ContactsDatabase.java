@@ -24,13 +24,14 @@ public class ContactsDatabase {
 		contacts.add(new Contact(name, numbers));
 	}
 	
-	public void addContact(String name, String givenName, String familyName, String middleName, Collection<String> numbers) {
+	public void addContact(String name, String givenName, String familyName, String middleName, 
+			Collection<String> numbers, Collection<String> emails) {
 		if (name != null) name = name.toLowerCase();
 		if (givenName != null) givenName = givenName.toLowerCase();
 		if (familyName != null) familyName = familyName.toLowerCase();
 		if (middleName != null) middleName = middleName.toLowerCase();
 		contacts.add(new Contact(name, givenName, familyName, middleName,
-				numbers));
+				numbers, emails));
 	}
 	
 	//TODO: maybe we should place function for min distance somewhere else

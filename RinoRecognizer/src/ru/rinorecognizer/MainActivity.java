@@ -168,10 +168,10 @@ public class MainActivity extends Activity implements OnClickListener {
 				String command = commands.get(0);
 				Log.d(TAG, this.getLocalClassName() + ": res = '" + command + "'");
 				
-//				startFramingTask(command);
+				startFramingTask(command);
 
-				dataWriter.write(command);
-				addRequest(command);
+//				dataWriter.write(command);
+//				addRequest(command);
 				break;
 				
 			case RESULT_CANCELED:

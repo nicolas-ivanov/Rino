@@ -32,6 +32,7 @@ public class SmsFrame extends Frame {
 			switch (labels.get(i)) {
 			case P_NAME: 
 				newUri = Uri.parse("smsto:" + Contact.getPhoneNumber(wgroups.get(i), mainActivity));
+				Contact.getContactInfo(wgroups.get(i), mainActivity);
 				uriList.add(newUri);
 				break;
 				
