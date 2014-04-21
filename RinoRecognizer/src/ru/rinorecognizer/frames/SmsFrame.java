@@ -1,9 +1,11 @@
 package ru.rinorecognizer.frames;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import ru.rinorecognizer.Contact;
+import ru.rinorecognizer.ContactsDBHelper;
 import ru.rinorecognizer.Frame;
 import ru.rinorecognizer.FramingResult;
 import ru.rinorecognizer.IdTranslator;
@@ -13,32 +15,32 @@ import android.net.Uri;
 
 
 public class SmsFrame extends Frame {
-	private List<Uri> uriList;
+	private List<Contact> contactList;
 	private List<String> textList;
 	
 	public SmsFrame(MainActivity main){
 		super(main, IdTranslator.ActionType.A_SMS);
-		uriList = new ArrayList<Uri>();
+		contactList = new ArrayList<Contact>();
 		textList = new ArrayList<String>();
 	}
 	
 	public FramingResult fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
 	{
-		Uri newUri = null;
 		String newText = null;
 		Intent intent = null;
 		
 		for (int i = 0; i < wgroups.size(); i++)
 			switch (labels.get(i)) {
+			
 			case P_NAME: 
-				newUri = Uri.parse("smsto:" + Contact.getPhoneNumber(wgroups.get(i), mainActivity));
-				Contact.getContactInfo(wgroups.get(i), mainActivity);
-				uriList.add(newUri);
+				contactList = ContactsDBHelper.getPhoneNumber(wgroups.get(i), mainActivity);
 				break;
 				
 			case P_NUMBER: 
-				newUri = Uri.parse("smsto:" + wgroups.get(i));
-				uriList.add(newUri);
+				Contact c = new Contact();
+				c.name = "Телефон";
+				c.number = wgroups.get(i);
+				contactList.add(c);
 				break;
 				
 			case QUOTE: 
@@ -56,22 +58,30 @@ public class SmsFrame extends Frame {
 			expParameter = IdTranslator.ParamsType.QUOTE;
 		}
 		else {
-			// check uri;
-			if (uriList.size() == 0) {
+			if (contactList.size() == 0) {
 				response = "Кому отправить смс?"; 
 				expParameter = IdTranslator.ParamsType.P_NAME;
 				isComplete = false;
 			}
-			else if (uriList.size() == 1) {
-				Uri numUri = uriList.get(0);
+			else if (contactList.size() == 1) {
+				Contact c = contactList.get(0);
+				Uri newUri = Uri.parse("smsto:" + c.number);
 				intent = new Intent(Intent.ACTION_SENDTO, newUri);
-				response = "Отправляю смс на номер " + " " + numUri.getSchemeSpecificPart();
+				response = "Отправляю смс абоненту «" + c.name + "»";
 				expParameter = null;
 			}
-			else { // (listUri.size() >= 2)
-				response = "Слишком много вариантов... Кому отправить смс?"; 
+			else { 
+				response = "Слишком много вариантов:\n";
+				Iterator<Contact> iter = contactList.iterator();
+				
+		        while (iter.hasNext()) {
+		        	Contact c = iter.next();
+		        	response += "\t " + c.name + " (" + c.number + ")\n";
+		        }
+		        response += "Кому отправить смс?";
+		        
 				expParameter = IdTranslator.ParamsType.P_NAME;
-				uriList = null;
+				contactList = null;
 			}
 			
 			

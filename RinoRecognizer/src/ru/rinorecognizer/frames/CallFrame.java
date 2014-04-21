@@ -1,9 +1,11 @@
 package ru.rinorecognizer.frames;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import ru.rinorecognizer.Contact;
+import ru.rinorecognizer.ContactsDBHelper;
 import ru.rinorecognizer.Frame;
 import ru.rinorecognizer.FramingResult;
 import ru.rinorecognizer.IdTranslator;
@@ -14,51 +16,60 @@ import android.net.Uri;
 
 
 public class CallFrame extends Frame {
-	private List<Uri> listUri;
+	private List<Contact> contactList;
 	// optional
 	
 	public CallFrame(MainActivity main){
 		super(main, IdTranslator.ActionType.A_CALL);
-		listUri = new ArrayList<Uri>();
+		contactList = new ArrayList<Contact>();
 	}
 	
 	public FramingResult fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
 	{		
-		Uri newUri = null;
 		Intent intent = null;
 		
 		for (int i = 0; i < wgroups.size(); i++) {
 			switch (labels.get(i)) {
 			case P_NAME: 
-				newUri = Uri.parse("tel:" + Contact.getPhoneNumber(wgroups.get(i), mainActivity));
-				listUri.add(newUri);
+				contactList = ContactsDBHelper.getPhoneNumber(wgroups.get(i), mainActivity);
 				break;
 				
 			case P_NUMBER:
-				newUri = Uri.parse("tel:" + wgroups.get(i));
-				listUri.add(newUri);
+				Contact c = new Contact();
+				c.name = "Телефон";
+				c.number = wgroups.get(i);
+				contactList.add(c);
 				break;
 				
 			default: break;
 			}
 		}
 		
-		// check();
-		if (listUri.size() == 0) {
+
+		if (contactList.size() == 0) {
 			response = "Кому нужно позвонить?"; 
 			expParameter = IdTranslator.ParamsType.P_NAME;
 		}
-		else if (listUri.size() == 1) {
-			Uri numUri = listUri.get(0);
-			intent = new Intent(Intent.ACTION_CALL, numUri);
-			response = mainActivity.getStr(R.string.calling_number) + " " + numUri.getSchemeSpecificPart();
+		else if (contactList.size() == 1) {
+			Contact c = contactList.get(0);
+			Uri newUri = Uri.parse("tel:" + c.number);
+			intent = new Intent(Intent.ACTION_CALL, newUri);
+			response = mainActivity.getStr(R.string.calling_number) + " " + newUri.getSchemeSpecificPart();
 			expParameter = null;
 			isComplete = true;
 		}
-		else { // (listUri.size() >= 2)
-			response = "Слишком много вариантов... Кому позвонить?";
+		else {
+			response = "Слишком много вариантов:\n";
+			Iterator<Contact> iter = contactList.iterator();
+			
+	        while (iter.hasNext()) {
+	        	Contact c = iter.next();
+	        	response += "\t " + c.name + " (" + c.number + ")\n";
+	        }
+	        response += "Кому позвонить?";
+	        
 			expParameter = IdTranslator.ParamsType.P_NAME;
-			listUri = null;
+			contactList = null;
 		}
 
 		FramingResult framingResult = new FramingResult();
