@@ -47,7 +47,7 @@ public class ContactsDBHelper {
 	        while (mCursor.moveToNext()) {
 				Contact c = new Contact();
 				c.name = mCursor.getString(mCursor.getColumnIndex(Phone.DISPLAY_NAME_PRIMARY));
-				c.number = PhoneNumberUtils.formatNumber(mCursor.getString(mCursor.getColumnIndex(Phone.NUMBER)));
+				c.number = formatNumber(mCursor.getString(mCursor.getColumnIndex(Phone.NUMBER)));
 				contactList.add(c);
 	        }
 	    
@@ -97,4 +97,18 @@ public class ContactsDBHelper {
 	    
 		return contactList;
 	}
+	
+	
+	private static String formatNumber(String number) {
+		
+		if (number.matches("8\\d{10}"))
+			number = "+7" + number.substring(1);
+		
+		PhoneNumberUtils.formatNumber(number);
+		
+		return number;
+	}
+	
+	
+	
 }
