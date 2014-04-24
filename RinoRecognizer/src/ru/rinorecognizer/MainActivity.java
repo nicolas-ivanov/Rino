@@ -48,7 +48,6 @@ public class MainActivity extends Activity implements OnClickListener {
 	private Button textButton;
 	private EditText textField;
 	private ProgressBar progress;
-	private TextView coloredTextView;
 	private ListView dialogListView;
 
 	private FramingTask framingTask;
@@ -87,8 +86,6 @@ public class MainActivity extends Activity implements OnClickListener {
 		progress = (ProgressBar) findViewById(R.id.progressBar);
 		textField = (EditText) findViewById(R.id.text_field);
 		textButton = (Button) findViewById(R.id.text_button);
-		coloredTextView = (TextView) findViewById(R.id.colored_textview);
-		coloredTextView.setVisibility(View.GONE);
 		dialogListView = (ListView) findViewById(R.id.history_list);
 
 		inputManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
