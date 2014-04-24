@@ -24,12 +24,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 
 public class MainActivity extends Activity implements OnClickListener {
@@ -94,8 +96,22 @@ public class MainActivity extends Activity implements OnClickListener {
 		dialogDBHelper = new DialogDBHelper(this);
 		dialogList = dialogDBHelper.getDialogHistory();
 		newPhraseList = new ArrayList<String>();
-		dialogListView.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, dialogList));
+		dialogListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dialogList));
+		
+		dialogListView.setOnItemClickListener(new OnItemClickListener() {
+		      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		    	  String command = dialogList.get(position).replaceAll("\n.*|- ", "");
+		    	  textField.setText(command);
+		      }
+		});		
+		
+		dialogListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+		      public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+		    	  String command = dialogList.get(position).replaceAll("\n.*|- ", "");
+		    	  startFramingTask(command);
+		    	  return true;
+		      }
+		});
 
 		
 		svm_bunch = new SvmBunch();
@@ -153,20 +169,15 @@ public class MainActivity extends Activity implements OnClickListener {
 
 	  
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d(TAG, this.getLocalClassName() + ": got result, requestCode="
-				+ requestCode + ", resultCode=" + resultCode);
-
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {		
 		if (requestCode == VOICE_RECOGNITION_REQUEST_CODE) {
 			switch (resultCode) {
 			case RESULT_OK:
 				// Fill the list view with the strings the recognizer thought it could have heard
 				commands = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 				String command = commands.get(0);
-				Log.d(TAG, this.getLocalClassName() + ": res = '" + command + "'");
 				
 				startFramingTask(command);
-
 //				dataWriter.write(command);
 //				addRequest(command);
 				break;
@@ -181,7 +192,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	
 	
-//////////////// Voice Recognition Activity ////////////////////////////////////////////////////////
+//////////////// Voice Recognition Activity ///////////////////////////////////////////////////////
 	
 	private void startVoiceRecognitionActivity() {		
 		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -194,7 +205,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	
 	
-//////////////// Dialog List Updating //////////////////////////////////////////////////////////////
+//////////////// Dialog List Updating /////////////////////////////////////////////////////////////
 
 	public void addRequest(String request) {
 		String str = "- " + request + "\n";
@@ -214,9 +225,9 @@ public class MainActivity extends Activity implements OnClickListener {
 		dialogListView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dialogList));
 	}
 
+
 	
-	
-//////////////// Framing Task //////////////////////////////////////////////////////////////////////
+//////////////// Framing Task /////////////////////////////////////////////////////////////////////
 	
 	private void startFramingTask(String command) {	
 		
@@ -278,7 +289,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	
 
-//////////////// Auxiliary Methods /////////////////////////////////////////////////////////////////
+//////////////// Auxiliary Methods ////////////////////////////////////////////////////////////////
 
 	private void hideSoftKeyboard() {
 		InputMethodManager inputManager = (InputMethodManager) this.
