@@ -4,7 +4,7 @@ import java.util.Locale;
 
 public class IdTranslator {
 
-	public static enum ActionType {A_CHATTER, A_CALL, A_SMS, A_EMAIL, A_SEARCH, A_SITE, A_ALARM, A_BALANCE, A_CANCEL};
+	public static enum ActionType {ACTION, A_CALL, A_SMS, A_EMAIL, A_SEARCH, A_SITE, A_ALARM, A_BALANCE, A_CANCEL};
 	public static enum ParamsType {OTHER, ACTION, P_NAME, P_NUMBER, P_EMAIL, P_SITE, P_TIME, QUOTE, Q_MARK, PREPOS, CHANGE};
 
 	
@@ -22,7 +22,7 @@ public class IdTranslator {
 
 	// Actions Section
 	
-	public static int getActionID(ActionType actionType) {		
+	public static int getActionID(ActionType actionType) {
 		return actionType.ordinal();
 	}	
 	
@@ -39,7 +39,10 @@ public class IdTranslator {
 	// Params Section
 	
 	public static int getParamOrdinal(ParamsType paramType) {
-		return paramType.ordinal();
+		if (paramType != null)
+			return paramType.ordinal();
+		else
+			return 0;
 	}	
 	
 	public static int getParamOrdinal(String paramType) {		
@@ -71,6 +74,6 @@ public class IdTranslator {
 			default: 	paramType = null;
 			System.out.println("IdTranslator: paramID '" + paramID + "' is incorrect");
 		}
-	return paramType;
-}
+		return paramType;
+	}
 }

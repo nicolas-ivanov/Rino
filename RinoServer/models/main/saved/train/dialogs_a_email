@@ -1,0 +1,266 @@
+#!/bin/bash #this line is for highlighting purpose only
+# A_EMAIL section ######################################################
+
+# with text
+a_email	письмо												# что написать?
+a_email	_привет												& quote
+
+a_email	письмо												# что написать?
+a_email	_привет _вася										& quote
+
+a_email	письмо												# что написать?
+a_email	_привет _как _дела									& quote
+
+a_email	письмо												# что написать?
+a_email	_привет _вася _как _дела
+
+
+# with ambiguous "напиши" and text
+
+a_email	письмо												# что написать?
+a_email	напиши _привет										& quote
+
+a_email	письмо												# что написать?
+a_email	напиши _привет _вася								& quote
+
+a_email	письмо												# что написать?
+a_email	напиши _привет _как _дела							& quote
+
+a_email	письмо												# что написать?
+a_email	напиши _привет _вася _как _дела
+
+
+# with s_text and text
+
+a_email	письмо												# что написать?
+a_email	с текстом _привет									& quote
+
+a_email	письмо												# что написать?
+a_email	с текстом _привет _вася								& quote
+
+a_email	письмо												# что написать?
+a_email	с текстом _привет _как _дела						& quote
+
+a_email	письмо												# что написать?
+a_email	с текстом _привет _вася _как _дела
+
+
+# with name
+
+a_email	письмо												# кому?
+a_email	васе												& p_name
+
+a_email	письмо												# кому?
+a_email	васе петрову										& p_name
+
+a_email	письмо												# кому?
+a_email	василию ивановичу петрову							& p_name
+
+
+# with a_email + name
+
+a_email	письмо												# кому?
+a_email	письмо васе											& p_name
+
+a_email	письмо												# кому?
+a_email	письмо васе петрову									& p_name
+
+a_email	письмо												# кому?
+a_email	письмо василию ивановичу петрову					& p_name
+
+
+# with ambiguous "отправь" + name
+
+a_email	письмо												# кому?
+a_email	отправь васе										& p_name
+
+a_email	письмо												# кому?
+a_email	отправь васе петрову								& p_name
+
+a_email	письмо												# кому?
+a_email	отправь василию ивановичу петрову					& p_name
+
+
+# with ambiguous "отправь" + a_email and name
+
+a_email	письмо												# кому?
+a_email	отправь письмо васе									& p_name
+
+a_email	письмо												# кому?
+a_email	отправь письмо васе петрову							& p_name
+
+a_email	письмо												# кому?
+a_email	отправь письмо василию ивановичу петрову			& p_name
+
+
+# with full command
+
+a_email	письмо												# кому?
+a_email	письмо васе с текстом _привет						& p_name
+
+a_email	письмо												# кому?
+a_email	письмо василию ивановичу с текстом _привет			& p_name
+
+a_email	письмо												# кому?
+a_email	письмо василию ивановичу петрову с текстом _привет	& p_name
+
+#####
+# complicated text (action keywords included)
+
+a_email	письмо												# что написать?
+a_email	_почему _не _звонишь								& quote
+
+a_email	письмо												# что написать?
+a_email	_отправь _сообщение _васе							& quote
+
+a_email	письмо												# что написать?
+a_email	_получил _твое _письмо								& quote
+
+a_email	письмо												# что написать?
+a_email	_разбуди _меня _завтра _в _7						& quote
+
+a_email	письмо												# что написать?
+a_email	_открой _браузер									& quote
+
+a_email	письмо												# что написать?
+a_email	_пополни _мой _баланс								& quote
+
+a_email	письмо												# что написать?
+a_email	_проверь _баланс									& quote
+
+
+# complicated text (params keywords included)
+
+a_email	письмо												# что написать?
+a_email	_привет _от _саши									& quote
+
+a_email	письмо												# что написать?
+a_email	_позвони _на _номер _8 _917 _123 _45 _67			& quote
+
+a_email	письмо												# что написать?
+a_email	_sasha _собака _gmail.com							& quote
+
+a_email	письмо												# что написать?
+a_email	_зайди _на _yandex.ru								& quote
+
+a_email	письмо												# что написать?
+a_email	_завтра _буду _в _7 _часов							& quote
+
+#####
+# complicated text: action keywords included + a_email
+
+a_email	письмо												# что написать?
+a_email	напиши _почему _не _звонишь							& quote
+
+a_email	письмо												# что написать?
+a_email	напиши _напиши _мне									& quote
+
+a_email	письмо												# что написать?
+a_email	напиши _получил _твое _письмо						& quote
+
+a_email	письмо												# что написать?
+a_email	напиши _разбуди _меня _завтра _в _7					& quote
+
+a_email	письмо												# что написать?
+a_email	напиши _открой _браузер								& quote
+
+a_email	письмо												# что написать?
+a_email	напиши _пополни _мой _баланс						& quote
+
+a_email	письмо												# что написать?
+a_email	напиши _проверь _баланс
+
+
+# complicated text: params keywords included + s_text
+
+a_email	письмо												# что написать?
+a_email	напиши _привет _от _саши							& quote
+
+a_email	письмо												# что написать?
+a_email	напиши _позвони _на _номер _8 _917 _123 _45 _67		& quote
+
+a_email	письмо												# что написать?
+a_email	напиши _sasha _собака _gmail.com					& quote
+
+a_email	письмо												# что написать?
+a_email	напиши _зайди _на _yandex.ru						& quote
+
+a_email	письмо												# что написать?
+a_email	напиши _завтра _буду _в _7 _часов					& quote
+
+
+# cancellation, 1 s_change word
+
+a_email	письмо												# что написать?
+a_call	нет позвони васе									& quote
+
+a_email	письмо												# что написать?
+a_sms	нет напиши смс										& quote
+
+a_email	письмо												# что написать?
+a_email	нет напиши письмо									& quote
+
+a_email	письмо												# что написать?
+a_search	нет найди мне статью							& quote
+
+a_email	письмо												# что написать?
+a_site	нет открой мне сайт									& quote
+
+a_email	письмо												# что написать?
+a_alarm	нет поставь будильник								& quote
+
+a_email	письмо												# что написать?
+a_balance	нет покажи баланс								& quote
+
+a_email	письмо												# что написать?
+a_cancel	отмена											& quote
+
+
+# cancellation, 2 s_change words
+
+a_email	письмо												# что написать?
+a_call	хотя нет позвони васе								& quote
+
+a_email	письмо												# что написать?
+a_sms	хотя нет напиши смс									& quote
+
+a_email	письмо												# что написать?
+a_email	хотя нет напиши письмо								& quote
+
+a_email	письмо												# что написать?
+a_search	хотя нет найди мне статью						& quote
+
+a_email	письмо												# что написать?
+a_site	хотя нет открой мне сайт							& quote
+
+a_email	письмо												# что написать?
+a_alarm	хотя нет поставь будильник							& quote
+
+a_email	письмо												# что написать?
+a_balance	хотя нет покажи баланс							& quote
+
+
+# cancellation, 3 s_change words
+
+a_email	письмо												# что написать?
+a_call	хотя нет лучше позвони васе							& quote
+
+a_email	письмо												# что написать?
+a_sms	хотя нет лучше напиши смс							& quote
+
+a_email	письмо												# что написать?
+a_email	хотя нет лучше напиши письмо						& quote
+
+a_email	письмо												# что написать?
+a_search	хотя нет лучше найди мне статью					& quote
+
+a_email	письмо												# что написать?
+a_site	хотя нет лучше открой мне сайт						& quote
+
+a_email	письмо												# что написать?
+a_alarm	хотя нет лучше поставь будильник					& quote
+
+a_email	письмо												# что написать?
+a_balance	хотя нет лучше покажи баланс					& quote
+
+

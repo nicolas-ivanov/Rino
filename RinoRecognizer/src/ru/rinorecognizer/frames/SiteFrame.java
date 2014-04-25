@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.rinorecognizer.Frame;
-import ru.rinorecognizer.FramingResult;
 import ru.rinorecognizer.IdTranslator;
 import ru.rinorecognizer.MainActivity;
 import ru.rinorecognizer.parsers.SiteParser;
@@ -20,10 +19,9 @@ public class SiteFrame extends Frame {
 		wwwUriList = new ArrayList<Uri>();
 	}
 	
-	public FramingResult fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
+	public Frame fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
 	{			
 		Uri siteUri = null;
-		Intent intent = null;
 		
 		for (int i = 0; i < wgroups.size(); i++) 
 		{
@@ -62,12 +60,8 @@ public class SiteFrame extends Frame {
 			expParameter = IdTranslator.ParamsType.P_SITE;
 			wwwUriList = null;
 		}
-				
-		FramingResult framingResult = new FramingResult();
-		framingResult.savedFrame = this;
-		framingResult.intent = intent;
-		
-		return framingResult;
+
+		return this;
 	}	
 	
 	protected boolean check() {

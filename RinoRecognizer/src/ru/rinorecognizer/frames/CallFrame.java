@@ -7,7 +7,6 @@ import java.util.List;
 import ru.rinorecognizer.Contact;
 import ru.rinorecognizer.ContactsDBHelper;
 import ru.rinorecognizer.Frame;
-import ru.rinorecognizer.FramingResult;
 import ru.rinorecognizer.IdTranslator;
 import ru.rinorecognizer.MainActivity;
 import ru.rinorecognizer.R;
@@ -24,10 +23,8 @@ public class CallFrame extends Frame {
 		contactList = new ArrayList<Contact>();
 	}
 	
-	public FramingResult fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
-	{		
-		Intent intent = null;
-		
+	public Frame fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
+	{				
 		for (int i = 0; i < wgroups.size(); i++) {
 			switch (labels.get(i)) {
 			case P_NAME: 
@@ -72,11 +69,7 @@ public class CallFrame extends Frame {
 			contactList = null;
 		}
 
-		FramingResult framingResult = new FramingResult();
-		framingResult.intent = intent;
-		framingResult.savedFrame = this;
-
-		return framingResult;
+		return this;
 	}
 	
 	protected boolean check() {

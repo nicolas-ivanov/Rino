@@ -1,0 +1,264 @@
+#!/bin/bash #this line is for highlighting purpose only
+# A_SMS section ########################################################
+
+# with text
+a_sms	смс													# что написать?
+a_sms	_привет												& quote
+
+a_sms	смс													# что написать?
+a_sms	_привет _вася										& quote
+
+a_sms	смс													# что написать?
+a_sms	_привет _как _дела									& quote
+
+a_sms	смс													# что написать?
+a_sms	_привет _вася _как _дела							& quote
+
+
+# with ambiguous "напиши" and text
+
+a_sms	смс													# что написать?
+a_sms	напиши _привет										& quote
+
+a_sms	смс													# что написать?
+a_sms	напиши _привет _вася								& quote
+
+a_sms	смс													# что написать?
+a_sms	напиши _привет _как _дела							& quote
+
+a_sms	смс													# что написать?
+a_sms	напиши _привет _вася _как _дела						& quote
+
+
+# with s_text and text
+
+a_sms	смс													# что написать?
+a_sms	с текстом _привет									& quote
+
+a_sms	смс													# что написать?
+a_sms	с текстом _привет _вася								& quote
+
+a_sms	смс													# что написать?
+a_sms	с текстом _привет _как _дела						& quote
+
+a_sms	смс													# что написать?
+a_sms	с текстом _привет _вася _как _дела					& quote
+
+
+# with name
+
+a_sms	смс													# кому?
+a_sms	васе												& p_name
+
+a_sms	смс													# кому?
+a_sms	васе петрову										& p_name
+
+a_sms	смс													# кому?
+a_sms	василию ивановичу петрову							& p_name
+
+
+# with a_sms + name
+
+a_sms	смс													# кому?
+a_sms	смс васе											& p_name
+
+a_sms	смс													# кому?
+a_sms	смс васе петрову									& p_name
+
+a_sms	смс													# кому?
+a_sms	смс василию ивановичу петрову						& p_name
+
+
+# with ambiguous "отправь" + name
+
+a_sms	смс													# кому?
+a_sms	отправь васе										& p_name
+
+a_sms	смс													# кому?
+a_sms	отправь васе петрову								& p_name
+
+a_sms	смс													# кому?
+a_sms	отправь василию ивановичу петрову					& p_name
+
+
+# with ambiguous "отправь" + a_sms and name
+
+a_sms	смс													# кому?
+a_sms	отправь смс васе									& p_name
+
+a_sms	смс													# кому?
+a_sms	отправь смс васе петрову							& p_name
+
+a_sms	смс													# кому?
+a_sms	отправь смс василию ивановичу петрову				& p_name
+
+
+# with full command
+
+a_sms	смс													# кому?
+a_sms	смс васе с текстом _привет							& p_name
+
+a_sms	смс													# кому?
+a_sms	смс василию ивановичу с текстом _привет				& p_name
+
+a_sms	смс													# кому?
+a_sms	смс василию ивановичу петрову с текстом _привет		& p_name
+
+#####
+# complicated text (action keywords included)
+
+a_sms	смс													# что написать?
+a_sms	_почему _не _звонишь								& quote
+
+a_sms	смс													# что написать?
+a_sms	_отправь _сообщение _васе							& quote
+
+a_sms	смс													# что написать?
+a_sms	_получил _твое _письмо								& quote
+
+a_sms	смс													# что написать?
+a_sms	_разбуди _меня _завтра _в _7						& quote
+
+a_sms	смс													# что написать?
+a_sms	_открой _браузер									& quote
+
+a_sms	смс													# что написать?
+a_sms	_пополни _мой _баланс								& quote
+
+a_sms	смс													# что написать?
+a_sms	_проверь _баланс									& quote
+
+
+# complicated text (params keywords included)
+
+a_sms	смс													# что написать?
+a_sms	_привет _от _саши									& quote
+
+a_sms	смс													# что написать?
+a_sms	_позвони _на _номер _8 _917 _123 _45 _67			& quote
+
+a_sms	смс													# что написать?
+a_sms	_sasha _собака _gmail.com							& quote
+
+a_sms	смс													# что написать?
+a_sms	_зайди _на _yandex.ru								& quote
+
+a_sms	смс													# что написать?
+a_sms	_завтра _буду _в _7 _часов							& quote
+
+#####
+# complicated text: action keywords included + a_sms
+
+a_sms	смс													# что написать?
+a_sms	напиши _почему _не _звонишь							& quote
+
+a_sms	смс													# что написать?
+a_sms	напиши _напиши _мне									& quote
+
+a_sms	смс													# что написать?
+a_sms	напиши _получил _твое _письмо						& quote
+
+a_sms	смс													# что написать?
+a_sms	напиши _разбуди _меня _завтра _в _7					& quote
+
+a_sms	смс													# что написать?
+a_sms	напиши _открой _браузер								& quote
+
+a_sms	смс													# что написать?
+a_sms	напиши _пополни _мой _баланс						& quote
+
+a_sms	смс													# что написать?
+a_sms	напиши _проверь _баланс								& quote
+
+
+# complicated text: params keywords included + s_text
+
+a_sms	смс													# что написать?
+a_sms	напиши _привет _от _саши							& quote
+
+a_sms	смс													# что написать?
+a_sms	напиши _позвони _на _номер _8 _917 _123 _45 _67		& quote
+
+a_sms	смс													# что написать?
+a_sms	напиши _sasha _собака _gmail.com					& quote
+
+a_sms	смс													# что написать?
+a_sms	напиши _зайди _на _yandex.ru						& quote
+
+a_sms	смс													# что написать?
+a_sms	напиши _завтра _буду _в _7 _часов					& quote
+
+
+# cancellation, 1 s_change word
+
+a_sms	смс													# что написать?
+a_call	нет позвони васе									& quote
+
+a_sms	смс													# что написать?
+a_sms	нет напиши смс										& quote
+
+a_sms	смс													# что написать?
+a_email	нет напиши письмо									& quote
+
+a_sms	смс													# что написать?
+a_search	нет найди мне статью							& quote
+
+a_sms	смс													# что написать?
+a_site	нет открой мне сайт									& quote
+
+a_sms	смс													# что написать?
+a_alarm	нет поставь будильник								& quote
+
+a_sms	смс													# что написать?
+a_balance	нет покажи баланс								& quote
+
+a_sms	смс													# что написать?
+a_cancel	отмена											& quote
+
+
+# cancellation, 2 s_change words
+
+a_sms	смс													# что написать?
+a_call	хотя нет позвони васе								& quote
+
+a_sms	смс													# что написать?
+a_sms	хотя нет напиши смс									& quote
+
+a_sms	смс													# что написать?
+a_email	хотя нет напиши письмо								& quote
+
+a_sms	смс													# что написать?
+a_search	хотя нет найди мне статью						& quote
+
+a_sms	смс													# что написать?
+a_site	хотя нет открой мне сайт							& quote
+
+a_sms	смс													# что написать?
+a_alarm	хотя нет поставь будильник							& quote
+
+a_sms	смс													# что написать?
+a_balance	хотя нет покажи баланс							& quote
+
+
+# cancellation, 3 s_change words
+
+a_sms	смс													# что написать?
+a_call	хотя нет лучше позвони васе							& quote
+
+a_sms	смс													# что написать?
+a_sms	хотя нет лучше напиши смс							& quote
+
+a_sms	смс													# что написать?
+a_email	хотя нет лучше напиши письмо						& quote
+
+a_sms	смс													# что написать?
+a_search	хотя нет лучше найди мне статью					& quote
+
+a_sms	смс													# что написать?
+a_site	хотя нет лучше открой мне сайт						& quote
+
+a_sms	смс													# что написать?
+a_alarm	хотя нет лучше поставь будильник					& quote
+
+a_sms	смс													# что написать?
+a_balance	хотя нет лучше покажи баланс					& quote

@@ -3,7 +3,6 @@ package ru.rinorecognizer.frames;
 import java.util.List;
 
 import ru.rinorecognizer.Frame;
-import ru.rinorecognizer.FramingResult;
 import ru.rinorecognizer.IdTranslator;
 import ru.rinorecognizer.MainActivity;
 import ru.rinorecognizer.parsers.TimeParser;
@@ -20,10 +19,9 @@ public class AlarmFrame extends Frame {
 		super(main, IdTranslator.ActionType.A_ALARM);
 	}
 	
-	public FramingResult fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
+	public Frame fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
 	{			
 		String timePatch = "";
-		Intent intent = null;
 		
 		for (int i = 0; i < wgroups.size(); i++) 
 		{
@@ -51,12 +49,8 @@ public class AlarmFrame extends Frame {
 			response = "Непонятное время: «" + timePatch + "»\n На сколько нужно поставить будильник?";
 			expParameter = IdTranslator.ParamsType.P_TIME;
 		}
-
-		FramingResult framingResult = new FramingResult();
-		framingResult.savedFrame = this; 
-		framingResult.intent = intent;
 		
-		return framingResult;
+		return this;
 	}	
 	
 	

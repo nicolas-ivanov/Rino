@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.rinorecognizer.Frame;
-import ru.rinorecognizer.FramingResult;
 import ru.rinorecognizer.IdTranslator;
 import ru.rinorecognizer.MainActivity;
 import ru.rinorecognizer.parsers.SearchParser;
@@ -24,11 +23,10 @@ public class SearchFrame extends Frame {
 		searchList = new ArrayList<String>();
 	}
 	
-	public FramingResult fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
+	public Frame fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
 	{			
 		Uri siteUri = null;		
 		String newText = null;
-		Intent intent = null;
 		String searchStr = "";
 		
 		for (int i = 0; i < wgroups.size(); i++)
@@ -101,13 +99,7 @@ public class SearchFrame extends Frame {
 			wwwUriList = null;
 		}
 		
-
-		
-		FramingResult framingResult = new FramingResult();
-		framingResult.intent = intent;
-		framingResult.savedFrame = this;
-
-		return framingResult;
+		return this;
 	}	
 
 	protected boolean check() {

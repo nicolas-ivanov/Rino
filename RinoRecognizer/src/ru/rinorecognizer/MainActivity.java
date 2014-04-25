@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -60,20 +61,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private DialogDBHelper dialogDBHelper;
 	private DataWriter dataWriter;
 
-	
-	public static class SvmBunch {
-		SvmClassifier svm_A;
-		SvmClassifier svm_call;
-		SvmClassifier svm_sms;
-		SvmClassifier svm_email;
-		SvmClassifier svm_search;
-		SvmClassifier svm_site;
-		SvmClassifier svm_alarm;
-		SvmClassifier svm_balance;
-		SvmClassifier svm_cancel;
-	}
-	
-	private SvmBunch svm_bunch;
+	public ArrayList<SvmClassifier> svmArrayList;
 	
 
 //////////////// Common Methods ////////////////////////////////////////////////////////////////////
@@ -114,16 +102,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		});
 
 		
-		svm_bunch = new SvmBunch();
-		svm_bunch.svm_A = new SvmClassifier(getPath("model_action"), getPath("range_action"));
-		svm_bunch.svm_call = new SvmClassifier(getPath("model_a_call"), getPath("range_a_call"));
-		svm_bunch.svm_sms = new SvmClassifier(getPath("model_a_sms"), getPath("range_a_sms"));
-		svm_bunch.svm_site = new SvmClassifier(getPath("model_a_site"), getPath("range_a_site"));
-		svm_bunch.svm_email = new SvmClassifier(getPath("model_a_email"), getPath("range_a_email"));
-		svm_bunch.svm_search = new SvmClassifier(getPath("model_a_search"), getPath("range_a_search"));
-		svm_bunch.svm_alarm = new SvmClassifier(getPath("model_a_alarm"), getPath("range_a_alarm"));
-		svm_bunch.svm_balance = new SvmClassifier(getPath("model_a_balance"), getPath("range_a_balance"));
-		svm_bunch.svm_cancel = new SvmClassifier(getPath("model_a_cancel"), getPath("range_a_cancel"));
+		svmArrayList = getSvmList();
 		
 		
 		// Check to see if a recognition activity is present
@@ -238,7 +217,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	    textButton.setVisibility(View.GONE);
 	    progress.setVisibility(View.VISIBLE);
 	    
-	    framingTask = new FramingTask(this, svm_bunch, savedFrame);
+	    framingTask = new FramingTask(this, svmArrayList, savedFrame);
 	    ExtendedCommand extCommand = new ExtendedCommand();
 	    extCommand.curCommand = command;
 	    
@@ -259,9 +238,9 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 	public void endFramingTask() {
 		try {			
-			FramingResult result = framingTask.get();
-			Intent intent = result.intent;
-			this.savedFrame = result.savedFrame;
+			Frame curFrame = framingTask.get();
+			Intent intent = curFrame.intent;
+			this.savedFrame = curFrame;
 		    
 			progress.setVisibility(View.GONE);
 		    textButton.setVisibility(View.VISIBLE);
@@ -309,7 +288,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	
 //////////////// SVM Initialization ////////////////////////////////////////////////////////////////
 	
-	public String getPath(String fileName) 
+	private String getPath(String fileName) 
 	{
 	    try {
 	    	String path = Environment.getExternalStorageDirectory().getPath();
@@ -356,5 +335,45 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 	
 	
+	private ArrayList<SvmClassifier> getSvmList()
+	{	
+		ArrayList<SvmClassifier> svmArrayList = new ArrayList<SvmClassifier>();
+		
+    	String path = Environment.getExternalStorageDirectory().getPath();
+    	File dir = new File(path, "Rino");
+		
+		int actionsNum = IdTranslator.ActionType.values().length;
+		
+		for (int actionID = 0; actionID < actionsNum; actionID++) 
+		{			
+			String actionName = IdTranslator.ActionType.values()[actionID]
+					.toString().toLowerCase(Locale.ENGLISH);
+			
+			String modelName = "model_" + actionName;
+			String rangeName = "range_" + actionName;
+			
+			File modelFile = new File(dir, modelName);
+	    	File rangeFile = new File(dir, rangeName);
+			
+	    	if (!modelFile.isFile())
+		        Log.e(this.toString(), ": model file '" + modelFile + "' is not found");
+	    	
+	    	else if (!rangeFile.isFile())
+		        Log.e(this.toString(), ": range file '" + rangeFile + "' is not found");	    		
+	    	
+	    	else
+	    		svmArrayList.add(actionID, new SvmClassifier(getPath(modelName), getPath(rangeName)));
+		}
+		
+		return svmArrayList;
+	}
 }
+
+
+
+
+
+
+
+
 

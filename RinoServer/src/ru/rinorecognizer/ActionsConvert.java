@@ -37,17 +37,13 @@ public class ActionsConvert {
 			LinkedList<float[]> vList = new LinkedList<float[]>();
 			
 			
-			for (File file : files) {
-
-//				System.out.println("Action: " + file.toString());
+			for (File file : files) {	
 				
 			    if (file.isFile())
 					dataReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 
-				
 				int prevType = 0;
 				int prevComplete = 1;
-				
 
 				while ((line = dataReader.readLine()) != null) {
 

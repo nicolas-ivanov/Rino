@@ -7,7 +7,6 @@ import java.util.List;
 import ru.rinorecognizer.Contact;
 import ru.rinorecognizer.ContactsDBHelper;
 import ru.rinorecognizer.Frame;
-import ru.rinorecognizer.FramingResult;
 import ru.rinorecognizer.IdTranslator;
 import ru.rinorecognizer.MainActivity;
 import ru.rinorecognizer.R;
@@ -25,10 +24,9 @@ public class EmailFrame extends Frame {
 		textList = new ArrayList<String>();
 	}
 	
-	public FramingResult fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
+	public Frame fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
 	{		
 		String newText = null;
-		Intent intent = null;
 		
 		for (int i = 0; i < wgroups.size(); i++)
 			switch (labels.get(i)) {
@@ -92,12 +90,8 @@ public class EmailFrame extends Frame {
 					intent.putExtra(Intent.EXTRA_TEXT, text + "\n\nBest regards,\nRinoRecognizer");
 			}	
 		}
-		
-		FramingResult framingResult = new FramingResult();
-		framingResult.intent = intent;
-		framingResult.savedFrame = this;
 
-		return framingResult;
+		return this;
 	}	
 	
 	protected boolean check() {

@@ -7,136 +7,96 @@ import java.util.Locale;
 
 import ru.rinorecognizer.IdTranslator.ActionType;
 import ru.rinorecognizer.IdTranslator.ParamsType;
-import ru.rinorecognizer.frames.*;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
 
 
-public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResult> {
+public class FramingTask extends AsyncTask<ExtendedCommand, String, Frame> {
 	
 	private MainActivity mainActivity;
-	private MainActivity.SvmBunch svm_bunch;
+	private ArrayList<SvmClassifier> svmList;
 	private Frame savedFrame;
 	
 	private Boolean debugMode = true;
 
 	
-	FramingTask(MainActivity mainActivity, MainActivity.SvmBunch svmBunch, Frame savedFrame){
+	FramingTask(MainActivity mainActivity, ArrayList<SvmClassifier> svmList, Frame savedFrame)
+	{
 		this.mainActivity = mainActivity;
-		this.svm_bunch = svmBunch;
+		this.svmList = svmList;
 		this.savedFrame = savedFrame;
 	}
 	
-	@Override
-    protected FramingResult doInBackground(ExtendedCommand... extCommandList) 
-    {    	
-		ExtendedCommand extCommand = extCommandList[0];
-    		
-    	// step 1: detect command type
-    	CommandFeaturesGetter cfGetter = new CommandFeaturesGetter(); 
-    	float[] cFeatures = cfGetter.getVector(extCommand);
-		int actionID = svm_bunch.svm_A.classify(cFeatures);
-		
-		if (actionID == extCommand.prevType)
-			publishProgress(extCommand.curCommand);
-		else
-			publishProgress(extCommand.curCommand, ""); // "" is needed to distinguish addAnswer() and addRequest() cases
-		
-		ActionType a_type = IdTranslator.getActionEnum(actionID);
-		
-		if (debugMode)
-			publishProgress(a_type.toString().toLowerCase(Locale.US));
-		
-    	
-    	// step 2: map each word of a command with a label to get parameters
-
-    	WordsFeaturesGetter wfGetter = new WordsFeaturesGetter(); 
-    	float[][] wFeatures = wfGetter.getVectors(extCommand);
-
-		List<ParamsType> labels = new ArrayList<ParamsType>();
-		List<Integer> labels_id_list = new ArrayList<Integer>();
-    	List<String> words = getWords(extCommand.curCommand);
-    	
-    	Frame frame = savedFrame;
-    	SvmClassifier svm = null;
-    	
-    	
-		switch (a_type) {
-		case A_CALL:
-			if ((frame == null) || (!frame.type.equals(a_type)))
-				frame = new CallFrame(mainActivity);
-			svm = svm_bunch.svm_call;
-			break;
+		@Override
+	    protected Frame doInBackground(ExtendedCommand... extCommandList) 
+	    {    	
+			ExtendedCommand extCommand = extCommandList[0];
+	    		
+	    	// step 1: detect command type
+	    	CommandFeaturesGetter cfGetter = new CommandFeaturesGetter(); 
+	    	float[] cFeatures = cfGetter.getVector(extCommand);
+	    	
+	    	SvmClassifier svmAction = svmList.get(IdTranslator.getActionID(IdTranslator.ActionType.ACTION));
+			int actionID = svmAction.classify(cFeatures);
 			
-		case A_SMS:
-			if ((frame == null) || (!frame.type.equals(a_type)))
-				frame = new SmsFrame(mainActivity);
-			svm = svm_bunch.svm_sms;
-			break;
 			
-		case A_EMAIL:
-			if ((frame == null) || (!frame.type.equals(a_type)))
-				frame = new EmailFrame(mainActivity);
-			svm = svm_bunch.svm_email;
-			break;
+			if (actionID == extCommand.prevType)
+				publishProgress(extCommand.curCommand);
+			else
+				publishProgress(extCommand.curCommand, ""); // "" is needed to distinguish addAnswer() and addRequest() cases
 			
-		case A_SITE:
-			if ((frame == null) || (!frame.type.equals(a_type)))
-				frame = new SiteFrame(mainActivity);
-			svm = svm_bunch.svm_site;
-			break;		
-		
-		case A_SEARCH:
-			if ((frame == null) || (!frame.type.equals(a_type)))
-				frame = new SearchFrame(mainActivity);
-			svm = svm_bunch.svm_search;
-			break;
 			
-		case A_ALARM:
-			if ((frame == null) || (!frame.type.equals(a_type)))
-				frame = new AlarmFrame(mainActivity);
-			svm = svm_bunch.svm_alarm;
-			break;
+			ActionType a_type = IdTranslator.getActionEnum(actionID);
+			
+			if (debugMode)
+				publishProgress(a_type.toString().toLowerCase(Locale.US));
+			
+	    	
+	    	// step 2: map each word of a command with a label to get parameters
+	
+	    	WordsFeaturesGetter wfGetter = new WordsFeaturesGetter(); 
+	    	float[][] wFeatures = wfGetter.getVectors(extCommand);
+	
+			List<ParamsType> labels = new ArrayList<ParamsType>();
+			List<Integer> labels_id_list = new ArrayList<Integer>();
+	    	List<String> words = getWords(extCommand.curCommand);
+	    	
+	    	
+	    	SvmClassifier svm = svmList.get(actionID);
+	    	Frame frame = savedFrame;
+	
+			if ((frame == null) || (!frame.type.equals(a_type))) {
+				frame = FrameTranslator.getProperActionFrame(mainActivity, a_type);
+			}
 
-		case A_BALANCE:
-			if ((frame == null) || (!frame.type.equals(a_type)))
-				frame = new BalanceFrame(mainActivity);
-			svm = svm_bunch.svm_balance;
-			break;
-
-		case A_CANCEL:
-			if ((frame == null) || (!frame.type.equals(a_type)))
-				frame = new CancelFrame(mainActivity);
-			svm = svm_bunch.svm_cancel;
-			break;
+			
+			int saved_label_id = 0;
+			int saved_label_ordinal = 0;
+			int startOfPrevLabelBlock = wFeatures[0].length - IdTranslator.getParamsNum();
+			
+			for (int i = 0; i < wFeatures.length; i++) {
+				 // add the label id of the previous word at the end of feature vector 
+				wFeatures[i][startOfPrevLabelBlock + saved_label_ordinal] = 1;
+	//			float curFeatures[] = wFeatures[i]; // for debug
+				saved_label_id = svm.classify(wFeatures[i]);
+				labels_id_list.add(saved_label_id);
+				saved_label_ordinal = IdTranslator.getParamOrdinal(IdTranslator.getParamEnumFromID(saved_label_id));
+			}
+			
+			labels = convertToEnum(labels_id_list);
+			makeGroups(words, labels);
+			Frame resultFrame = frame.fill(words, labels);
+			publishProgress(resultFrame.getResponse());
+			
+	    	return resultFrame;
 		}
-
-		int saved_label_id = 0;
-		int saved_label_ordinal = 0;
-		int startOfPrevLabelBlock = wFeatures[0].length - IdTranslator.getParamsNum();
-		
-		for (int i = 0; i < wFeatures.length; i++) {
-			 // add the label id of the previous word at the end of feature vector 
-			wFeatures[i][startOfPrevLabelBlock + saved_label_ordinal] = 1;
-//			float curFeatures[] = wFeatures[i];
-			saved_label_id = svm.classify(wFeatures[i]);
-			labels_id_list.add(saved_label_id);
-			saved_label_ordinal = IdTranslator.getParamOrdinal(IdTranslator.getParamEnumFromID(saved_label_id));
-		}
-		
-		labels = convertToEnum(labels_id_list);
-		makeGroups(words, labels);
-		FramingResult framingResult = frame.fill(words, labels);
-		publishProgress(frame.getResponse());
-		
-    	return framingResult;
-	}
     
     
     @Override
-    protected void onProgressUpdate(String... answer) {
+    protected void onProgressUpdate(String... answer) 
+    {
     	super.onProgressUpdate(answer);
     	
     	if (answer.length == 1)
@@ -147,9 +107,10 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, FramingResul
     
     
     @Override
-    protected void onPostExecute(FramingResult framingResult) {
+    protected void onPostExecute(Frame resultFrame) 
+    {
     	Log.d(MainActivity.TAG, "AsyncTask: finished");
-	    super.onPostExecute(framingResult);
+	    super.onPostExecute(resultFrame);
 	    mainActivity.endFramingTask();
 	}
     

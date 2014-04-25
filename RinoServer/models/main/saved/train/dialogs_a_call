@@ -1,0 +1,142 @@
+#!/bin/bash #this line is for highlighting purpose only
+# A_CALL section #######################################################
+
+# with name or number
+
+a_call	позвони						# кому позвонить?
+a_call	васе						& p_name
+
+a_call	позвони						# кому позвонить?
+a_call	василию ивановичу			& p_name
+
+a_call	позвони						# кому позвонить?
+a_call	василию ивановичу петрову	& p_name
+
+a_call	позвони						# кому позвонить?
+a_call	100							& p_number
+
+a_call	позвони						# кому позвонить?
+a_call	по номеру 100				& p_number
+
+a_call	позвони						# кому позвонить?
+a_call	по телефонному номеру 100	& p_number
+
+
+# with a_call + name or number
+
+a_call	позвони								# кому позвонить?
+a_call	позвони васе						& p_name
+
+a_call	позвони								# кому позвонить?
+a_call	позвони василию ивановичу			& p_name
+
+a_call	позвони								# кому позвонить?
+a_call	позвони василию ивановичу петрову	& p_name
+
+a_call	позвони								# кому позвонить?
+a_call	позвони 100							& p_number
+
+a_call	позвони								# кому позвонить?
+a_call	позвони по номеру 100				& p_number
+
+a_call	позвони								# кому позвонить?
+a_call	позвони по телефонному номеру 100	& p_number
+
+
+# with ambiguous "набери" + name or number
+
+a_call	позвони								# кому позвонить?
+a_call	набери васю							& p_name
+
+a_call	позвони								# кому позвонить?
+a_call	набери василия ивановича			& p_name
+
+a_call	позвони								# кому позвонить?
+a_call	набери василия ивановича петрова	& p_name
+
+a_call	позвони								# кому позвонить?
+a_call	набери 100							& p_number
+
+a_call	позвони								# кому позвонить?
+a_call	набери номер 100					& p_number
+
+a_call	позвони								# кому позвонить?
+a_call	набери телефонный номер 100			& p_number
+
+
+
+###
+# cancellation, 1 s_change word
+
+a_call	позвони								# кому?
+a_call	нет позвони васе					& p_name
+
+a_call	позвони								# кому?
+a_sms	нет напиши смс						& p_name
+
+a_call	позвони								# кому?
+a_email	нет напиши письмо					& p_name
+
+a_call	позвони								# кому?
+a_search	нет найди мне статью			& p_name
+
+a_call	позвони								# кому?
+a_site	нет открой мне сайт					& p_name
+
+a_call	позвони								# кому?
+a_alarm	нет поставь будильник				& p_name
+
+a_call	позвони								# кому?
+a_balance	нет покажи баланс				& p_name
+
+a_call	позвони								# кому?
+a_cancel	отмена							& p_name
+
+
+# cancellation, 2 s_change words
+
+a_call	позвони								# кому?
+a_call	хотя нет позвони васе				& p_name
+
+a_call	позвони								# кому?
+a_sms	хотя нет напиши смс					& p_name
+
+a_call	позвони								# кому?
+a_email	хотя нет напиши письмо				& p_name
+
+a_call	позвони								# кому?
+a_search	хотя нет найди мне статью		& p_name
+
+a_call	позвони								# кому?
+a_site	хотя нет открой мне сайт			& p_name
+
+a_call	позвони								# кому?
+a_alarm	хотя нет поставь будильник			& p_name
+
+a_call	позвони								# кому?
+a_balance	хотя нет покажи баланс			& p_name
+
+
+# cancellation, 3 s_change words
+
+a_call	позвони								# кому?
+a_call	хотя нет лучше позвони васе			& p_name
+
+a_call	позвони								# кому?
+a_sms	хотя нет лучше напиши смс			& p_name
+
+a_call	позвони								# кому?
+a_email	хотя нет лучше напиши письмо		& p_name
+
+a_call	позвони								# кому?
+a_search	хотя нет лучше найди мне статью	& p_name
+
+a_call	позвони								# кому?
+a_site	хотя нет лучше открой мне сайт		& p_name
+
+a_call	позвони								# кому?
+a_alarm	хотя нет лучше поставь будильник	& p_name
+
+a_call	позвони								# кому?
+a_balance	хотя нет лучше покажи баланс	& p_name
+

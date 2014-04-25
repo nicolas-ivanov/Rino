@@ -1,0 +1,300 @@
+#!/bin/bash #this line is for highlighting purpose only
+# A_SEARCH section #####################################################
+
+# with 1 search-word					& quote
+
+a_search	поиск													# что нужно найти?
+a_search	_дзен													& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _дзен												& quote
+
+a_search	поиск													# что нужно найти?
+a_search	что такое _дзен											& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди что такое _дзен									& quote
+
+
+# with 1 search-word + source
+
+a_search	поиск													# что нужно найти?
+a_search	_дзен в википедии										& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _дзен в википедии									& quote
+
+a_search	поиск													# что нужно найти?
+a_search	что такое _дзен в википедии								& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди что такое _дзен в википедии						& quote
+
+
+# with source + 1 search-word
+
+a_search	поиск													# что нужно найти?
+a_search	википедия _дзен											& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди в википедии _дзен									& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди в википедии статью про _дзен						& quote
+
+
+#####
+# with 2 search-words + source
+
+a_search	поиск													# что нужно найти?
+a_search	_дзен _буддизм											& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _дзен _буддизм									& quote
+
+a_search	поиск													# что нужно найти?
+a_search	что такое _дзен _буддизм								& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди что такое _дзен _буддизм							& quote
+
+
+# with 2 search-words + source
+
+a_search	поиск													# что нужно найти?
+a_search	_дзен _буддизм в википедии								& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _дзен _буддизм в википедии						& quote
+
+a_search	поиск													# что нужно найти?
+a_search	что такое _дзен _буддизм в википедии					& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди что такое _дзен _буддизм в википедии				& quote
+
+
+# with source + 2 search-words
+
+a_search	поиск													# что нужно найти?
+a_search	википедия _дзен _буддизм								& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди в википедии _дзен _буддизм						& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди в википедии статью про _дзен _буддизм				& quote
+
+
+
+#####
+# with 3 search-words + source
+
+a_search	поиск													# что нужно найти?
+a_search	_основы _дзен _буддизма									& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _основы _дзен _буддизма							& quote
+
+a_search	поиск													# что нужно найти?
+a_search	что такое _основы _дзен _буддизма						& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди что такое _основы _дзен _буддизма					& quote
+
+
+# with 3 search-words + source
+
+a_search	поиск													# что нужно найти?
+a_search	_основы _дзен _буддизма в википедии						& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _основы _дзен _буддизма в википедии				& quote
+
+a_search	поиск													# что нужно найти?
+a_search	что такое _основы _дзен _буддизма в википедии			& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди что такое _основы _дзен _буддизма в википедии		& quote
+
+
+# with source + 3 search-words
+
+a_search	поиск													# что нужно найти?
+a_search	википедия _основы _дзен _буддизма						& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди в википедии _основы _дзен _буддизма				& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди в википедии статью про _основы _дзен _буддизма
+
+
+#####
+# complicated text (action keywords included)					& quote
+
+a_search	поиск													# что нужно найти?
+a_search	_как _позвонить _в _австралию							& quote
+
+a_search	поиск													# что нужно найти?
+a_search	_как _писать _смс _сообщения							& quote
+
+a_search	поиск													# что нужно найти?
+a_search	_как _писать _электронные _письма						& quote
+
+a_search	поиск													# что нужно найти?
+a_search	_как _искать _в _интернете								& quote
+
+a_search	поиск													# что нужно найти?
+a_search	_как _открыть _сайт _в _браузере						& quote
+
+a_search	поиск													# что нужно найти?
+a_search	_как _поставить _будильник								& quote
+
+a_search	поиск													# что нужно найти?
+a_search	_как _проверить баланс									& quote
+
+
+# complicated text (params keywords included)
+
+a_search	поиск													# что нужно найти?
+a_search	_как _позвонить _васе									& quote
+
+a_search	поиск													# что нужно найти?
+a_search	_как _написать _смс _с _текстом _привет					& quote
+
+a_search	поиск													# что нужно найти?
+a_search	_как _написать _письмо _с _текстом _привет				& quote
+
+a_search	поиск													# что нужно найти?
+a_search	_как _найти _в _интернете _что _такое _дзен				& quote
+
+a_search	поиск													# что нужно найти?
+a_search	_как _открыть _yandex.ru _в _браузере					& quote
+
+a_search	поиск													# что нужно найти?
+a_search	_как _поставить _будильник _на _7 _утра					& quote
+
+
+# complicated text: action keywords included + a_search					& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _как _позвонить _в _австралию						& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _как _писать _смс _сообщения						& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _как _писать _электронные _письма					& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _как _искать _в _интернете						& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _как _открыть _сайт _в _браузере					& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _как _поставить _будильник						& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _как _проверить баланс							& quote
+
+
+# complicated text: params keywords included + a_search
+
+a_search	поиск													# что нужно найти?
+a_search	найди _как _позвонить _васе								& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _как _написать _смс _с _текстом _привет			& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _как _написать _письмо _с _текстом _привет		& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _как _найти _в _интернете _что _такое _дзен		& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _как _открыть _yandex.ru _в _браузере				& quote
+
+a_search	поиск													# что нужно найти?
+a_search	найди _как _поставить _будильник _на _7 _утра			& quote
+
+
+#####
+# cancellation, 1 s_change word
+
+a_search	поиск													# что нужно найти?
+a_call	нет позвони васе											& quote
+
+a_search	поиск													# что нужно найти?
+a_sms	нет напиши смс												& quote
+
+a_search	поиск													# что нужно найти?
+a_email	нет напиши письмо											& quote
+
+a_search	поиск													# что нужно найти?
+a_search	нет найди мне статью									& quote
+
+a_search	поиск													# что нужно найти?
+a_site	нет открой мне сайт											& quote
+
+a_search	поиск													# что нужно найти?
+a_alarm	нет поставь будильник										& quote
+
+a_search	поиск													# что нужно найти?
+a_balance	нет покажи баланс										& quote
+
+a_search	поиск													# что нужно найти?
+a_cancel	отмена													& quote
+
+
+# cancellation, 2 s_change words
+
+a_search	поиск													# что нужно найти?
+a_call	хотя нет позвони васе										& quote
+
+a_search	поиск													# что нужно найти?
+a_sms	хотя нет напиши смс											& quote
+
+a_search	поиск													# что нужно найти?
+a_email	хотя нет напиши письмо										& quote
+
+a_search	поиск													# что нужно найти?
+a_search	хотя нет найди мне статью								& quote
+
+a_search	поиск													# что нужно найти?
+a_site	хотя нет открой мне сайт									& quote
+
+a_search	поиск													# что нужно найти?
+a_alarm	хотя нет поставь будильник									& quote
+
+a_search	поиск													# что нужно найти?
+a_balance	хотя нет покажи баланс									& quote
+
+
+# cancellation, 3 s_change words
+
+a_search	поиск													# что нужно найти?
+a_call	хотя нет лучше позвони васе									& quote
+
+a_search	поиск													# что нужно найти?
+a_sms	хотя нет лучше напиши смс									& quote
+
+a_search	поиск													# что нужно найти?
+a_email	хотя нет лучше напиши письмо								& quote
+
+a_search	поиск													# что нужно найти?
+a_search	хотя нет лучше найди мне статью							& quote
+
+a_search	поиск													# что нужно найти?
+a_site	хотя нет лучше открой мне сайт								& quote
+
+a_search	поиск													# что нужно найти?
+a_alarm	хотя нет лучше поставь будильник							& quote
+
+a_search	поиск													# что нужно найти?
+a_balance	хотя нет лучше покажи баланс							& quote
+
+
+
