@@ -82,7 +82,8 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, Frame> {
 	//			float curFeatures[] = wFeatures[i]; // for debug
 				saved_label_id = svm.classify(wFeatures[i]);
 				labels_id_list.add(saved_label_id);
-				saved_label_ordinal = IdTranslator.getParamOrdinal(IdTranslator.getParamEnumFromID(saved_label_id));
+//				saved_label_ordinal = IdTranslator.getParamOrdinal(IdTranslator.getParamEnumFromID(saved_label_id));
+				saved_label_ordinal = saved_label_id;
 			}
 			
 			labels = convertToEnum(labels_id_list);
@@ -143,8 +144,10 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, Frame> {
     {
 		List<ParamsType> p_type = new ArrayList<ParamsType>();
 		
-    	for (int i = 0; i < p_type_id.size(); i++)
-    		p_type.add(IdTranslator.getParamEnumFromID(p_type_id.get(i)));
+    	for (int i = 0; i < p_type_id.size(); i++) {
+//    		p_type.add(IdTranslator.getParamEnumFromID(p_type_id.get(i)));
+    		p_type.add(IdTranslator.getParamEnum(p_type_id.get(i)));
+    	}
     	
     	return p_type;
     }

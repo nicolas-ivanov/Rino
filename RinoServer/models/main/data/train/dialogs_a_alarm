@@ -3,146 +3,146 @@
 # numbers
 
 a_alarm	будильник 													# на какое время?
-a_alarm	Time:7														& p_time
+a_alarm	P_TIME:7													& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	Time:7 Time:30												& p_time
+a_alarm	P_TIME:7 P_TIME:30											& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	Time:7 часов												& p_time
+a_alarm	P_TIME:7 часов												& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	Time:7 часов утра											& p_time
+a_alarm	P_TIME:7 часов утра											& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	Time:7 часов Time:30 минут									& p_time
-
-
-a_alarm	будильник 													# на какое время?
-a_alarm	на Time:7													& p_time
-
-a_alarm	будильник 													# на какое время?
-a_alarm	на Time:7 Time:30											& p_time
-
-a_alarm	будильник 													# на какое время?
-a_alarm	на Time:7 часов Time:30 минут								& p_time
+a_alarm	P_TIME:7 часов P_TIME:30 минут								& p_time
 
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь на Time:7											& p_time
+a_alarm	на P_TIME:7													& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь на Time:7 Time:30									& p_time
+a_alarm	на P_TIME:7 P_TIME:30										& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь на Time:7 часов Time:30 минут						& p_time
+a_alarm	на P_TIME:7 часов P_TIME:30 минут							& p_time
 
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь будильник на Time:7									& p_time
+a_alarm	поставь на P_TIME:7											& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь будильник на Time:7 Time:30							& p_time
+a_alarm	поставь на P_TIME:7 P_TIME:30								& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь будильник на Time:7 часов Time:30 минут				& p_time
+a_alarm	поставь на P_TIME:7 часов P_TIME:30 минут					& p_time
+
+
+a_alarm	будильник 													# на какое время?
+a_alarm	поставь будильник на P_TIME:7								& p_time
+
+a_alarm	будильник 													# на какое время?
+a_alarm	поставь будильник на P_TIME:7 P_TIME:30						& p_time
+
+a_alarm	будильник 													# на какое время?
+a_alarm	поставь будильник на P_TIME:7 часов P_TIME:30 минут			& p_time
 
 
 
 # 1 txtnums
 
 a_alarm	будильник 													# на какое время?
-a_alarm	Time:семь													& p_time
+a_alarm	P_TIME:семь													& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	Time:семь Time:30											& p_time
+a_alarm	P_TIME:семь P_TIME:30										& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	Time:семь часов												& p_time
+a_alarm	P_TIME:семь часов											& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	Time:семь часов утра										& p_time
+a_alarm	P_TIME:семь часов утра										& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	Time:семь часов Time:30 минут								& p_time
-
-
-a_alarm	будильник 													# на какое время?
-a_alarm	на Time:семь												& p_time
-
-a_alarm	будильник 													# на какое время?
-a_alarm	на Time:семь Time:30										& p_time
-
-a_alarm	будильник 													# на какое время?
-a_alarm	на Time:семь часов Time:30 минут							& p_time
+a_alarm	P_TIME:семь часов P_TIME:30 минут							& p_time
 
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь на Time:семь										& p_time
+a_alarm	на P_TIME:семь												& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь на Time:семь Time:30								& p_time
+a_alarm	на P_TIME:семь P_TIME:30									& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь на Time:семь часов Time:30 минут					& p_time
+a_alarm	на P_TIME:семь часов P_TIME:30 минут						& p_time
 
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь будильник на Time:семь								& p_time
+a_alarm	поставь на P_TIME:семь										& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь будильник на Time:семь Time:30						& p_time
+a_alarm	поставь на P_TIME:семь P_TIME:30							& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь будильник на Time:семь часов Time:30 минут			& p_time
+a_alarm	поставь на P_TIME:семь часов P_TIME:30 минут				& p_time
+
+
+a_alarm	будильник 													# на какое время?
+a_alarm	поставь будильник на P_TIME:семь							& p_time
+
+a_alarm	будильник 													# на какое время?
+a_alarm	поставь будильник на P_TIME:семь P_TIME:30					& p_time
+
+a_alarm	будильник 													# на какое время?
+a_alarm	поставь будильник на P_TIME:семь часов P_TIME:30 минут		& p_time
 
 
 # 2 txtnums
 
 a_alarm	будильник 													# на какое время?
-a_alarm	Time:семь													& p_time
+a_alarm	P_TIME:семь													& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	Time:семь Time:тридцать										& p_time
+a_alarm	P_TIME:семь P_TIME:тридцать									& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	Time:семь часов												& p_time
+a_alarm	P_TIME:семь часов											& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	Time:семь часов утра										& p_time
+a_alarm	P_TIME:семь часов утра										& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	Time:семь часов Time:тридцать минут							& p_time
-
-
-a_alarm	будильник 													# на какое время?
-a_alarm	на Time:семь												& p_time
-
-a_alarm	будильник 													# на какое время?
-a_alarm	на Time:семь Time:тридцать									& p_time
-
-a_alarm	будильник 													# на какое время?
-a_alarm	на Time:семь часов Time:тридцать минут						& p_time
+a_alarm	P_TIME:семь часов P_TIME:тридцать минут						& p_time
 
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь на Time:семь										& p_time
+a_alarm	на P_TIME:семь												& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь на Time:семь Time:тридцать							& p_time
+a_alarm	на P_TIME:семь P_TIME:тридцать								& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь на Time:семь часов Time:тридцать минут				& p_time
+a_alarm	на P_TIME:семь часов P_TIME:тридцать минут					& p_time
 
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь будильник на Time:семь								& p_time
+a_alarm	поставь на P_TIME:семь										& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь будильник на Time:семь Time:тридцать				& p_time
+a_alarm	поставь на P_TIME:семь P_TIME:тридцать						& p_time
 
 a_alarm	будильник 													# на какое время?
-a_alarm	поставь будильник на Time:семь часов Time:тридцать минут	& p_time
+a_alarm	поставь на P_TIME:семь часов P_TIME:тридцать минут			& p_time
+
+
+a_alarm	будильник 													# на какое время?
+a_alarm	поставь будильник на P_TIME:семь							& p_time
+
+a_alarm	будильник 													# на какое время?
+a_alarm	поставь будильник на P_TIME:семь P_TIME:тридцать			& p_time
+
+a_alarm	будильник 													# на какое время?
+a_alarm	поставь будильник на P_TIME:семь часов P_TIME:тридцать минут	& p_time
 
 
 # cancellation, 1 s_change word

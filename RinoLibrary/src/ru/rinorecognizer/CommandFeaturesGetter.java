@@ -9,7 +9,8 @@ import java.util.regex.Pattern;
 
 public class CommandFeaturesGetter {
 
-	private static final Pattern structurePattern = Pattern.compile("([-?\\d,]+)\\t+(\\w+)\\t+([^\\t~]+)");
+	private static final Pattern structurePattern = Pattern.compile("(\\w+)\\t+(\\w+)\\t+([^\\t~]+)");
+	private static final Pattern paramsLabelPattern = Pattern.compile("(\\w+):(\\w+)");
 
 	public float[] getVector(ExtendedCommand extCommand) {
 		try {
@@ -42,8 +43,11 @@ public class CommandFeaturesGetter {
 				String rawPattern;
 
 				if (w.length() > 0) {
-					w = w.replaceFirst("_", "");
-					w = w.replaceFirst("Time:", "");
+					Matcher paramsLabelMatcher = paramsLabelPattern.matcher(w);
+					
+					if (paramsLabelMatcher.matches()) {
+						w = paramsLabelMatcher.group(2);
+					}
 				}
 
 				int pNum = 0;

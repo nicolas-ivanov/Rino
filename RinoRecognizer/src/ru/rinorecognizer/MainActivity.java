@@ -156,13 +156,13 @@ public class MainActivity extends Activity implements OnClickListener {
 				commands = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 				String command = commands.get(0);
 				
-				startFramingTask(command);
-//				dataWriter.write(command);
-//				addRequest(command);
+//				startFramingTask(command);
+				dataWriter.write(command);
+				addRequest(command);
 				break;
 				
 			case RESULT_CANCELED:
-//				addAnswer(getStr(R.string.recognition_is_cancelled));
+				addAnswer(getStr(R.string.recognition_is_cancelled));
 		        break;
 			}
 		}

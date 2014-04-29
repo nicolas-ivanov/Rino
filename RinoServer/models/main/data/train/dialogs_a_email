@@ -3,46 +3,46 @@
 
 # with text
 a_email	письмо												# что написать?
-a_email	_привет												& quote
+a_email	QUOTE:привет												& quote
 
 a_email	письмо												# что написать?
-a_email	_привет _вася										& quote
+a_email	QUOTE:привет QUOTE:вася										& quote
 
 a_email	письмо												# что написать?
-a_email	_привет _как _дела									& quote
+a_email	QUOTE:привет QUOTE:как QUOTE:дела									& quote
 
 a_email	письмо												# что написать?
-a_email	_привет _вася _как _дела
+a_email	QUOTE:привет QUOTE:вася QUOTE:как QUOTE:дела
 
 
 # with ambiguous "напиши" and text
 
 a_email	письмо												# что написать?
-a_email	напиши _привет										& quote
+a_email	напиши QUOTE:привет										& quote
 
 a_email	письмо												# что написать?
-a_email	напиши _привет _вася								& quote
+a_email	напиши QUOTE:привет QUOTE:вася								& quote
 
 a_email	письмо												# что написать?
-a_email	напиши _привет _как _дела							& quote
+a_email	напиши QUOTE:привет QUOTE:как QUOTE:дела							& quote
 
 a_email	письмо												# что написать?
-a_email	напиши _привет _вася _как _дела
+a_email	напиши QUOTE:привет QUOTE:вася QUOTE:как QUOTE:дела
 
 
 # with s_text and text
 
 a_email	письмо												# что написать?
-a_email	с текстом _привет									& quote
+a_email	с текстом QUOTE:привет									& quote
 
 a_email	письмо												# что написать?
-a_email	с текстом _привет _вася								& quote
+a_email	с текстом QUOTE:привет QUOTE:вася								& quote
 
 a_email	письмо												# что написать?
-a_email	с текстом _привет _как _дела						& quote
+a_email	с текстом QUOTE:привет QUOTE:как QUOTE:дела						& quote
 
 a_email	письмо												# что написать?
-a_email	с текстом _привет _вася _как _дела
+a_email	с текстом QUOTE:привет QUOTE:вася QUOTE:как QUOTE:дела
 
 
 # with name
@@ -96,97 +96,97 @@ a_email	отправь письмо василию ивановичу петро
 # with full command
 
 a_email	письмо												# кому?
-a_email	письмо васе с текстом _привет						& p_name
+a_email	письмо васе с текстом QUOTE:привет						& p_name
 
 a_email	письмо												# кому?
-a_email	письмо василию ивановичу с текстом _привет			& p_name
+a_email	письмо василию ивановичу с текстом QUOTE:привет			& p_name
 
 a_email	письмо												# кому?
-a_email	письмо василию ивановичу петрову с текстом _привет	& p_name
+a_email	письмо василию ивановичу петрову с текстом QUOTE:привет	& p_name
 
 #####
 # complicated text (action keywords included)
 
 a_email	письмо												# что написать?
-a_email	_почему _не _звонишь								& quote
+a_email	QUOTE:почему QUOTE:не QUOTE:звонишь								& quote
 
 a_email	письмо												# что написать?
-a_email	_отправь _сообщение _васе							& quote
+a_email	QUOTE:отправь QUOTE:сообщение QUOTE:васе							& quote
 
 a_email	письмо												# что написать?
-a_email	_получил _твое _письмо								& quote
+a_email	QUOTE:получил QUOTE:твое QUOTE:письмо								& quote
 
 a_email	письмо												# что написать?
-a_email	_разбуди _меня _завтра _в _7						& quote
+a_email	QUOTE:разбуди QUOTE:меня QUOTE:завтра QUOTE:в QUOTE:7						& quote
 
 a_email	письмо												# что написать?
-a_email	_открой _браузер									& quote
+a_email	QUOTE:открой QUOTE:браузер									& quote
 
 a_email	письмо												# что написать?
-a_email	_пополни _мой _баланс								& quote
+a_email	QUOTE:пополни QUOTE:мой QUOTE:баланс								& quote
 
 a_email	письмо												# что написать?
-a_email	_проверь _баланс									& quote
+a_email	QUOTE:проверь QUOTE:баланс									& quote
 
 
 # complicated text (params keywords included)
 
 a_email	письмо												# что написать?
-a_email	_привет _от _саши									& quote
+a_email	QUOTE:привет QUOTE:от QUOTE:саши									& quote
 
 a_email	письмо												# что написать?
-a_email	_позвони _на _номер _8 _917 _123 _45 _67			& quote
+a_email	QUOTE:позвони QUOTE:на QUOTE:номер QUOTE:8 QUOTE:917 QUOTE:123 QUOTE:45 QUOTE:67			& quote
 
 a_email	письмо												# что написать?
-a_email	_sasha _собака _gmail.com							& quote
+a_email	QUOTE:sasha QUOTE:собака QUOTE:gmail.com							& quote
 
 a_email	письмо												# что написать?
-a_email	_зайди _на _yandex.ru								& quote
+a_email	QUOTE:зайди QUOTE:на QUOTE:yandex.ru								& quote
 
 a_email	письмо												# что написать?
-a_email	_завтра _буду _в _7 _часов							& quote
+a_email	QUOTE:завтра QUOTE:буду QUOTE:в QUOTE:7 QUOTE:часов							& quote
 
 #####
 # complicated text: action keywords included + a_email
 
 a_email	письмо												# что написать?
-a_email	напиши _почему _не _звонишь							& quote
+a_email	напиши QUOTE:почему QUOTE:не QUOTE:звонишь							& quote
 
 a_email	письмо												# что написать?
-a_email	напиши _напиши _мне									& quote
+a_email	напиши QUOTE:напиши QUOTE:мне									& quote
 
 a_email	письмо												# что написать?
-a_email	напиши _получил _твое _письмо						& quote
+a_email	напиши QUOTE:получил QUOTE:твое QUOTE:письмо						& quote
 
 a_email	письмо												# что написать?
-a_email	напиши _разбуди _меня _завтра _в _7					& quote
+a_email	напиши QUOTE:разбуди QUOTE:меня QUOTE:завтра QUOTE:в QUOTE:7					& quote
 
 a_email	письмо												# что написать?
-a_email	напиши _открой _браузер								& quote
+a_email	напиши QUOTE:открой QUOTE:браузер								& quote
 
 a_email	письмо												# что написать?
-a_email	напиши _пополни _мой _баланс						& quote
+a_email	напиши QUOTE:пополни QUOTE:мой QUOTE:баланс						& quote
 
 a_email	письмо												# что написать?
-a_email	напиши _проверь _баланс
+a_email	напиши QUOTE:проверь QUOTE:баланс
 
 
 # complicated text: params keywords included + s_text
 
 a_email	письмо												# что написать?
-a_email	напиши _привет _от _саши							& quote
+a_email	напиши QUOTE:привет QUOTE:от QUOTE:саши							& quote
 
 a_email	письмо												# что написать?
-a_email	напиши _позвони _на _номер _8 _917 _123 _45 _67		& quote
+a_email	напиши QUOTE:позвони QUOTE:на QUOTE:номер QUOTE:8 QUOTE:917 QUOTE:123 QUOTE:45 QUOTE:67		& quote
 
 a_email	письмо												# что написать?
-a_email	напиши _sasha _собака _gmail.com					& quote
+a_email	напиши QUOTE:sasha QUOTE:собака QUOTE:gmail.com					& quote
 
 a_email	письмо												# что написать?
-a_email	напиши _зайди _на _yandex.ru						& quote
+a_email	напиши QUOTE:зайди QUOTE:на QUOTE:yandex.ru						& quote
 
 a_email	письмо												# что написать?
-a_email	напиши _завтра _буду _в _7 _часов					& quote
+a_email	напиши QUOTE:завтра QUOTE:буду QUOTE:в QUOTE:7 QUOTE:часов					& quote
 
 
 # cancellation, 1 s_change word

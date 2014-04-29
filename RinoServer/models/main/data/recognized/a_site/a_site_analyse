@@ -1,0 +1,16 @@
+#!/bin/bash #this line is for highlighting purpose only
+
+# words are missing
+a_site	пожалуйста P_SITE:lenta.ru
+a_site	открой браузер P_SITE:yandex.ru
+
+# wrong recognition
+a_site	оцифровка P_SITE:yandex.ru
+a_site	пожалуйста как P_SITE:yandex.ru
+a_site	попробовали P_SITE:yandex.ru
+a_site	P_SITE:yandex.ru правда
+a_site	пожалуйста кроме P_SITE:google P_SITE:com
+
+# other
+a_site	открой P_SITE:гугл P_SITE:ком
+a_site	открой пожалуйста P_SITE:гугл P_SITE:ком

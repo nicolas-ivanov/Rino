@@ -36,5 +36,10 @@
 			<type>2</type>
 			<location>/home/nicolas/Develop/workspace/RinoLibrary/src</location>
 		</link>
+		<link>
+			<name>src_demo</name>
+			<type>2</type>
+			<location>/home/nicolas/Develop/google-voice-typing-integration/VoiceImeDemo/src</location>
+		</link>
 	</linkedResources>
 </projectDescription>

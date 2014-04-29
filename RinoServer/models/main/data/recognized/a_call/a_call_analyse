@@ -1,0 +1,19 @@
+#!/bin/bash #this line is for highlighting purpose only
+# wrong parameter
+a_call	набери пожалуйста P_NAME:рогова
+a_call	позвонить P_NAME:бро
+a_call	пожалуйста позвони P_NAME:вася 2
+a_call	позвонить P_NAME:троп пожалуйста
+a_call	соедини меня с P_NAME:электрон
+a_call	пожалуйста денис P_NAME:вася петров
+a_call	соедините пожалуйста спасибо P_NAME:вова
+a_call	соедини P_NAME:петров пожалуйста
+a_call	набери пожалуйста P_NAME:олега P_NAME:петрова 7
+
+# words are missing
+a_call	пожалуйста номер телефона 8 917 123 45 67
+a_call	плюс 7 917 123 45 67
+a_call	телефона плюс 7 917 123 45 67
+a_call	пожалуйста P_NAME:петров P_NAME:василий P_NAME:иванович
+
+

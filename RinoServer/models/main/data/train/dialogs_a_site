@@ -3,82 +3,82 @@
 # 1 word
 
 a_site	сайт								# какой сайт открыть?
-a_site	msu.ru								& p_site
+a_site	P_SITE:msu.ru								& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	сайт msu.ru							& p_site
+a_site	сайт P_SITE:msu.ru							& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	покажи msu.ru						& p_site
+a_site	покажи P_SITE:msu.ru						& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	открой msu.ru						& p_site
+a_site	открой P_SITE:msu.ru						& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	открой в браузере msu.ru			& p_site
+a_site	открой в браузере P_SITE:msu.ru			& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	покажи сайт msu.ru					& p_site
+a_site	покажи сайт P_SITE:msu.ru					& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	открой сайт msu.ru					& p_site
+a_site	открой сайт P_SITE:msu.ru					& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	открой в браузере сайт msu.ru		& p_site
+a_site	открой в браузере сайт P_SITE:msu.ru		& p_site
 
 
 # 2 words
 
 a_site	сайт								# какой сайт открыть?
-a_site	msu ru								& p_site
+a_site	P_SITE:msu P_SITE:ru								& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	сайт msu ru							& p_site
+a_site	сайт P_SITE:msu P_SITE:ru							& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	покажи msu ru						& p_site
+a_site	покажи P_SITE:msu P_SITE:ru						& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	открой msu ru						& p_site
+a_site	открой P_SITE:msu P_SITE:ru						& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	открой в браузере msu ru			& p_site
+a_site	открой в браузере P_SITE:msu P_SITE:ru			& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	покажи сайт msu ru					& p_site
+a_site	покажи сайт P_SITE:msu P_SITE:ru					& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	открой сайт msu ru					& p_site
+a_site	открой сайт P_SITE:msu P_SITE:ru					& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	открой в браузере сайт msu ru		& p_site
+a_site	открой в браузере сайт P_SITE:msu P_SITE:ru		& p_site
 
 
 # 3 words
 
 a_site	сайт								# какой сайт открыть?
-a_site	msu . ru							& p_site
+a_site	P_SITE:msu P_SITE:. P_SITE:ru							& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	сайт msu . ru						& p_site
+a_site	сайт P_SITE:msu P_SITE:. P_SITE:ru						& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	покажи msu . ru						& p_site
+a_site	покажи P_SITE:msu P_SITE:. P_SITE:ru						& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	открой msu . ru						& p_site
+a_site	открой P_SITE:msu P_SITE:. P_SITE:ru						& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	открой в браузере msu . ru			& p_site
+a_site	открой в браузере P_SITE:msu P_SITE:. P_SITE:ru			& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	покажи сайт msu . ru				& p_site
+a_site	покажи сайт P_SITE:msu P_SITE:. P_SITE:ru				& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	открой сайт msu . ru				& p_site
+a_site	открой сайт P_SITE:msu P_SITE:. P_SITE:ru				& p_site
 
 a_site	сайт								# какой сайт открыть?
-a_site	открой в браузере сайт msu . ru		& p_site
+a_site	открой в браузере сайт P_SITE:msu P_SITE:. P_SITE:ru		& p_site
 
 
 #####

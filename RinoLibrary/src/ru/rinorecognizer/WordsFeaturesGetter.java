@@ -8,8 +8,9 @@ import java.util.regex.Pattern;
 //import ru.rinorecognizer.IdTranslator;
 
 public class WordsFeaturesGetter {
-	
-	private static final Pattern structurePattern = Pattern.compile("([-?\\d,]+)\\t+(\\w+)\\t+([^\\t~]+)");
+
+	private static final Pattern structurePattern = Pattern.compile("(\\w+)\\t+(\\w+)\\t+([^\\t~]+)");
+	private static final Pattern paramsLabelPattern = Pattern.compile("(\\w+):(\\w+)");
 
 	
 	public int[] getLabels(ExtendedCommand extCommand) 
@@ -32,14 +33,12 @@ public class WordsFeaturesGetter {
 				String w = words[k];
 				
 				if (w.length() > 0) {
-					if (w.startsWith("_")) {
-						w = w.replaceFirst("_", "");
-						wordsLabels[k] = -1;
-						wordFound = true;
-					}
-					if (w.startsWith("Time:")) {
-						w = w.replaceFirst("Time:", "");
-						wordsLabels[k] = 5;
+
+					Matcher paramsLabelMatcher = paramsLabelPattern.matcher(w);
+					
+					if (paramsLabelMatcher.matches()) {
+						wordsLabels[k] = IdTranslator.getParamOrdinal(paramsLabelMatcher.group(1));
+						w = paramsLabelMatcher.group(2);
 						wordFound = true;
 					}
 				}
@@ -63,7 +62,7 @@ public class WordsFeaturesGetter {
 					if (typeMatcher.matches()) {
 						
 						if (!wordFound) {
-							wordsLabels[k] = Integer.parseInt(structureMatcher.group(1));
+							wordsLabels[k] = IdTranslator.getParamOrdinal(structureMatcher.group(2));
 							wordFound  = true;
 						}
 					}
@@ -124,8 +123,11 @@ public class WordsFeaturesGetter {
 				String w = words[wNum];
 				
 				if (w.length() > 0) {
-					w = w.replaceFirst("_", "");
-					w = w.replaceFirst("Time:", "");
+					Matcher paramsLabelMatcher = paramsLabelPattern.matcher(w);
+					
+					if (paramsLabelMatcher.matches()) {
+						w = paramsLabelMatcher.group(2);
+					}
 				}
 				
 				int pNum = 0;

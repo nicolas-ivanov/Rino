@@ -98,7 +98,8 @@ public class ParamsConvert {
 
 						// add encoded label id of the previous word at the end of each vector
 						tVector[startOfPrevLabelBlock + saved_label_ordinal] = 1;
-						saved_label_ordinal = IdTranslator.getParamOrdinal(IdTranslator.getParamEnumFromID(wordsLabels[k]));
+//						saved_label_ordinal = IdTranslator.getParamOrdinal(IdTranslator.getParamEnumFromID(wordsLabels[k]));
+						saved_label_ordinal = wordsLabels[k];
 //						saved_label_ordinal = 0;
 						
 						String fullString = wordsLabels[k] + "";

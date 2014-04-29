@@ -1,0 +1,11 @@
+#!/bin/bash #this line is for highlighting purpose only
+
+# wrong parameter
+a_alarm	разбуди меня всем
+a_alarm	разбуди меня P_TIME:730
+a_alarm	разбуди меня пожалуйста P_TIME:730
+a_alarm	пожалуйста разбуди меня P_TIME:730
+a_alarm	разбуди меня P_TIME:730
+
+# wrong recognition
+a_alarm	возьми пожалуйста P_TIME:730

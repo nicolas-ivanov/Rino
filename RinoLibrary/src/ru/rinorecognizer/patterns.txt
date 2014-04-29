@@ -1,23 +1,29 @@
-10		a_call			\p{InCyrillic}*звон\p{InCyrillic}+|набрать|набер\p{InCyrillic}+|набир\p{InCyrillic}+|соедин\p{InCyrillic}+|телефон\p{InCyrillic}*|номер\p{InCyrillic}*|выз\p{InCyrillic}+
-10		a_sms			нов\p{InCyrillic}*|смс\p{InCyrillic}*|sms|сообщение
-10		a_email			e?mail|письмо|электронн\p{InCyrillic}+|почт\p{InCyrillic}+|адрес\p{InCyrillic}*
-10		a_search		поиск\p{InCyrillic}*|найди|найти|ищи|искать|расска\p{InCyrillic}+|значит\p{InCyrillic}*|означа\p{InCyrillic}+|стать\p{InCyrillic}+|определен\p{InCyrillic}+
-10		a_site			покаж\p{InCyrillic}+|откр\p{InCyrillic}+|браузер\p{InCyrillic}+
-10		a_alarm			будильник|постав\p{InCyrillic}+|установ\p{InCyrillic}+|заве\p{InCyrillic}+|разбуди\p{InCyrillic}*
-10		a_balance		баланс|определ\p{InCyrillic}*|день\p{InCyrillic}+|денег|средств\p{InCyrillic}*|оста\p{InCyrillic}+
-10		a_cancel		отмена|неважно|забей
+a_call		a_action	\p{InCyrillic}*звон\p{InCyrillic}+|набрать|набер\p{InCyrillic}+|набир\p{InCyrillic}+|соедин\p{InCyrillic}+|телефон\p{InCyrillic}*|номер\p{InCyrillic}*|выз\p{InCyrillic}+
+a_sms		a_action	нов\p{InCyrillic}*|смс\p{InCyrillic}*|sms|сообщение
+a_email		a_action	e?mail|письмо|электронн\p{InCyrillic}+|почт\p{InCyrillic}+|адрес\p{InCyrillic}*
+a_search	a_action	поиск\p{InCyrillic}*|найди|найти|ищи|искать|расска\p{InCyrillic}+|значит\p{InCyrillic}*|означа\p{InCyrillic}+|стать\p{InCyrillic}+|определен\p{InCyrillic}+
+a_site		a_action	покаж\p{InCyrillic}+|откр\p{InCyrillic}+|браузер\p{InCyrillic}+
+a_alarm		a_action	будильник|постав\p{InCyrillic}+|установ\p{InCyrillic}+|заве\p{InCyrillic}+|разбуди\p{InCyrillic}*
+a_balance	a_action	баланс|определ\p{InCyrillic}*|день\p{InCyrillic}+|денег|средств\p{InCyrillic}*|оста\p{InCyrillic}+
+a_cancel	a_action	отмена|неважно|забей
 
-1		p_name			Name|Surname|Middlename|мам\p{InCyrillic}+|пап\p{InCyrillic}+|кол\p{InCyrillic}+|паш\p{InCyrillic}+|дмитри\p{InCyrillic}+|дим\p{InCyrillic}+|вас\p{InCyrillic}*|леш\p{InCyrillic}*|ван\p{InCyrillic}*|саш\p{InCyrillic}*|наст\p{InCyrillic}*|даш\p{InCyrillic}*|маш\p{InCyrillic}*|ан\p{InCyrillic}*|пет\p{InCyrillic}*|дим\p{InCyrillic}*|оля\p{InCyrillic}*|андр\p{InCyrillic}*|антон\p{InCyrillic}*|иванов\p{InCyrillic}*|петров\p{InCyrillic}*
-2		p_number		Number|\+?\d+|[\+\*#]|плюс|звездочка|решетка
-3		p_email			Address|[^S]+@[^S]+|@|собака|at
-4		p_site			Site|сайт|интернет\p{InCyrillic}*|\.|точка|ru|com|org|net|su|ру|ком|орг|нэт|су|\w+\.ru|\w+\.com|\w+\.org|\w+\.net|\w+\.su|yandex|яндекс\p{InCyrillic}*|google|гугл\p{InCyrillic}*|rambler|рамблер\p{InCyrillic}*|википед\p{InCyrillic}+|wikipedia|вики|wiki|вконтакте|vkontakte|фэйсбук|facebook
-5		p_time			Hour|\d{1,2}|час\p{InCyrillic}*|минут\p{InCyrillic}*|завтра|полчаса|утр\p{InCyrillic}+|вечер\p{InCyrillic}*
+param		p_name		Name|кол\p{InCyrillic}+|паш\p{InCyrillic}+|дмитри\p{InCyrillic}+|дим\p{InCyrillic}+|вас\p{InCyrillic}*|леш\p{InCyrillic}*|ван\p{InCyrillic}*|саш\p{InCyrillic}*|наст\p{InCyrillic}*|даш\p{InCyrillic}*|маш\p{InCyrillic}*|ан\p{InCyrillic}*|пет\p{InCyrillic}*|дим\p{InCyrillic}*|оля\p{InCyrillic}*|андр\p{InCyrillic}*|антон\p{InCyrillic}*
+param		p_name		Surname|иванов\p{InCyrillic}*|петров\p{InCyrillic}*
+param		p_name		Middlename|+николаев\p{InCyrillic}+|павлов\p{InCyrillic}+|дмитриев\p{InCyrillic}+|дмитриев\p{InCyrillic}+|васильев\p{InCyrillic}*|алексеев\p{InCyrillic}*|иванов\p{InCyrillic}*|александров\p{InCyrillic}*
+param		p_name		Nickname|мам\p{InCyrillic}+|пап\p{InCyrillic}
 
--2		s_text			текст\p{InCyrillic}*|напиш\p{InCyrillic}*|напис\p{InCyrillic}*|набер\p{InCyrillic}*|набра\p{InCyrillic}*
--2		s_search		что|кто|тако\p{InCyrillic}*|нибудь|значит|слов\p{InCyrillic}*|поняти\p{InCyrillic}*|скольк\p{InCyrillic}*
--3		s_prepos		в|без|до|из|к|на|по|о|от|перед|при|через|с|у|за|над|об|под|про|для
--4		s_change		нет|лучше|хотя|вместо|впрочем
+param		p_number	Number|\+?\d+|[\+\*#]|плюс|звездочка|решетка
+param		p_number	минус|ноль|один|два|три|четыре|пять|шесть|семь|восемь|девять|десять|одиннадцать|двенадцать|тринадцать|четырнадцать|пятьнадцать|шестнадцать|семнадцать|восемнадцать|девятнадцать|двадцать|тридцать|сорок|пятьдесять|шестьдесят|семьдесят|восемьдесят|девяносто|сто|двести|триста|четыреста|пятьсот|шестьсот|семьсот|восемьсот|девятьсот|тысяч*
 
-10		d_write			напиш\p{InCyrillic}+|напис\p{InCyrillic}+|набрать|набер\p{InCyrillic}+|набир\p{InCyrillic}+|отправ\p{InCyrillic}+|перешл\p{InCyrillic}+|пересл\p{InCyrillic}+
-10		d_look			покаж\p{InCyrillic}+|показ\p{InCyrillic}*|\p{InCyrillic}*смотр\p{InCyrillic}*|\p{InCyrillic}зна\p{InCyrillic}+|скаж\p{InCyrillic}*
-2		d_txtnums		минус|ноль|один|два|три|четыре|пять|шесть|семь|восемь|девять|десять|одиннадцать|двенадцать|тринадцать|четырнадцать|пятьнадцать|шестнадцать|семнадцать|восемнадцать|девятнадцать|двадцать|тридцать|сорок|пятьдесять|шестьдесят|семьдесят|восемьдесят|девяносто|сто|двести|триста|четыреста|пятьсот|шестьсот|семьсот|восемьсот|девятьсот|тысяч*
+param		p_email		Address|[^S]+@[^S]+|@|собака|at
+param		p_site		Site|сайт|интернет\p{InCyrillic}*|\.|точка|ru|com|org|net|su|ру|ком|орг|нэт|су|\w+\.ru|\w+\.com|\w+\.org|\w+\.net|\w+\.su|yandex|яндекс\p{InCyrillic}*|google|гугл\p{InCyrillic}*|rambler|рамблер\p{InCyrillic}*|википед\p{InCyrillic}+|wikipedia|вики|wiki|вконтакте|vkontakte|фэйсбук|facebook
+param		p_time		Hour|\d{1,2}|час\p{InCyrillic}*|минут\p{InCyrillic}*|завтра|полчаса|утр\p{InCyrillic}+|вечер\p{InCyrillic}*
+
+s_text		q_mark		текст\p{InCyrillic}*|напиш\p{InCyrillic}*|напис\p{InCyrillic}*|набер\p{InCyrillic}*|набра\p{InCyrillic}*
+s_search	q_mark		что|кто|тако\p{InCyrillic}*|нибудь|значит|слов\p{InCyrillic}*|поняти\p{InCyrillic}*|скольк\p{InCyrillic}*
+s_prepos	q_mark		в|без|до|из|к|на|по|о|от|перед|при|через|с|у|за|над|об|под|про|для
+s_change	change		нет|лучше|хотя|вместо|впрочем
+
+d_write		a_action	напиш\p{InCyrillic}+|напис\p{InCyrillic}+|набрать|набер\p{InCyrillic}+|набир\p{InCyrillic}+|отправ\p{InCyrillic}+|перешл\p{InCyrillic}+|пересл\p{InCyrillic}+
+d_look		a_action	покаж\p{InCyrillic}+|показ\p{InCyrillic}*|\p{InCyrillic}*смотр\p{InCyrillic}*|\p{InCyrillic}зна\p{InCyrillic}+|скаж\p{InCyrillic}*
+

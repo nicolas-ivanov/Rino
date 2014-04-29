@@ -8,7 +8,8 @@ public class IdTranslator {
 	public static enum ParamsType {OTHER, ACTION, P_NAME, P_NUMBER, P_EMAIL, P_SITE, P_TIME, QUOTE, Q_MARK, PREPOS, CHANGE};
 
 	
-	// GetNum Section
+
+////// GetNum Section ////////////////////////////////////////////////////////////////
 	
 	public static int getActionsNum() {
 		return ActionType.values().length;
@@ -20,7 +21,8 @@ public class IdTranslator {
 	
 	
 
-	// Actions Section
+
+////// Actions Section ////////////////////////////////////////////////////////////////
 	
 	public static int getActionID(ActionType actionType) {
 		return actionType.ordinal();
@@ -36,7 +38,7 @@ public class IdTranslator {
 	
 
 
-	// Params Section
+////// Params Section ////////////////////////////////////////////////////////////////
 	
 	public static int getParamOrdinal(ParamsType paramType) {
 		if (paramType != null)
@@ -54,26 +56,52 @@ public class IdTranslator {
 	}
 	
 
-	public static ParamsType getParamEnumFromID(int paramID) {
+//	public static ParamsType getParamEnumFromID(int paramID) {
+//
+//		ParamsType paramType;
+//		
+//		switch (paramID) {	
+//			case 10: 	paramType = ParamsType.ACTION;	break;
+//			case 1: 	paramType = ParamsType.P_NAME;	break;
+//			case 2: 	paramType = ParamsType.P_NUMBER;break;
+//			case 3: 	paramType = ParamsType.P_EMAIL; break;
+//			case 4: 	paramType = ParamsType.P_SITE; 	break;
+//			case 5: 	paramType = ParamsType.P_TIME; 	break;
+//			case 6: 	paramType = ParamsType.QUOTE; 	break;
+//			case  0:	paramType = ParamsType.OTHER; 	break;
+//			case -1:	paramType = ParamsType.QUOTE; 	break;
+//			case -2:	paramType = ParamsType.Q_MARK; 	break;
+//			case -3:	paramType = ParamsType.PREPOS;	break;
+//			case -4:	paramType = ParamsType.CHANGE;	break;
+//			default: 	paramType = null;
+//			System.out.println("IdTranslator: paramID '" + paramID + "' is incorrect");
+//		}
+//		return paramType;
+//	}	
 
-		ParamsType paramType;
-		
-		switch (paramID) {	
-			case 10: 	paramType = ParamsType.ACTION;	break;
-			case 1: 	paramType = ParamsType.P_NAME;	break;
-			case 2: 	paramType = ParamsType.P_NUMBER;break;
-			case 3: 	paramType = ParamsType.P_EMAIL; break;
-			case 4: 	paramType = ParamsType.P_SITE; 	break;
-			case 5: 	paramType = ParamsType.P_TIME; 	break;
-			case 6: 	paramType = ParamsType.QUOTE; 	break;
-			case  0:	paramType = ParamsType.OTHER; 	break;
-			case -1:	paramType = ParamsType.QUOTE; 	break;
-			case -2:	paramType = ParamsType.Q_MARK; 	break;
-			case -3:	paramType = ParamsType.PREPOS;	break;
-			case -4:	paramType = ParamsType.CHANGE;	break;
-			default: 	paramType = null;
-			System.out.println("IdTranslator: paramID '" + paramID + "' is incorrect");
-		}
-		return paramType;
-	}
+	
+//////////////////////////////////////////////////////////////////////////////
+	
+//	public static int getParamIdFromEnum(ParamsType paramType) {
+//
+//		ParamsType ;
+//		
+//		switch (paramType) {	
+//			case ParamsType.ACTION: 10	break;
+//			case 1: 	paramType = ParamsType.P_NAME;	break;
+//			case 2: 	paramType = ParamsType.P_NUMBER;break;
+//			case 3: 	paramType = ParamsType.P_EMAIL; break;
+//			case 4: 	paramType = ParamsType.P_SITE; 	break;
+//			case 5: 	paramType = ParamsType.P_TIME; 	break;
+//			case 6: 	paramType = ParamsType.QUOTE; 	break;
+//			case  0:	paramType = ParamsType.OTHER; 	break;
+//			case -1:	paramType = ParamsType.QUOTE; 	break;
+//			case -2:	paramType = ParamsType.Q_MARK; 	break;
+//			case -3:	paramType = ParamsType.PREPOS;	break;
+//			case -4:	paramType = ParamsType.CHANGE;	break;
+//			default: 	paramType = null;
+//			System.out.println("IdTranslator: paramID '" + paramID + "' is incorrect");
+//		}
+//		return paramType;
+//	}
 }

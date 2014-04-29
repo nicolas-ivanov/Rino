@@ -2,16 +2,7 @@ package ru.rinorecognizer;
 
 import java.util.List;
 
-import ru.rinorecognizer.IdTranslator.ActionType;
 import ru.rinorecognizer.IdTranslator.ParamsType;
-import ru.rinorecognizer.frames.AlarmFrame;
-import ru.rinorecognizer.frames.BalanceFrame;
-import ru.rinorecognizer.frames.CallFrame;
-import ru.rinorecognizer.frames.CancelFrame;
-import ru.rinorecognizer.frames.EmailFrame;
-import ru.rinorecognizer.frames.SearchFrame;
-import ru.rinorecognizer.frames.SiteFrame;
-import ru.rinorecognizer.frames.SmsFrame;
 import android.content.Intent;
 
 
