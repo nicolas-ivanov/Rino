@@ -27,13 +27,21 @@ public class ActionsCompare {
 			predictionsReader = new BufferedReader(new InputStreamReader(new FileInputStream(predictionsFile)));
 			mistakesWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(mistakesFile)));
 			
-			mistakesWriter.write(String.format("%-50s %-10s %-70s %-10s " +
-					"%6s %6s %6s %6s %6s %6s %6s\n", 
-					"Original text", "O.label", "Original params", "P.label", 
-					"call", "sms", "mail", "search", "site", "alrm", "blnc"));
+			mistakesWriter.write(String.format("%-125s %-10s %-80s %-13s ", 
+					"Original text", "O.label", "Original params", "P.label"));
 			
 			String originalsLine;
-			String predictionsLine = predictionsReader.readLine(); // labels 1 2 3 4 5 ...
+			
+			// Process the first line of predictions file ("labels 1 2 3 4 5 ...")
+			String predictionsLine = predictionsReader.readLine();
+			String[] prIDs = predictionsLine.split(" ");
+			
+			for (int i = 1; i < prIDs.length; i++)
+				mistakesWriter.write(String.format(" %-8s", 
+						IdTranslator.getActionEnum(Integer.parseInt(prIDs[i])).toString().toLowerCase(Locale.ENGLISH)));
+			
+			mistakesWriter.write("\n\n");
+			
 			
 			while ((originalsLine = originalsReader.readLine()) != null) {
 				
@@ -54,17 +62,17 @@ public class ActionsCompare {
 					break;
 				}
 
-				String originalsID = originalsMatcher.group(1);
-				String originalsLabel = originalsMatcher.group(2);
-				String originalsText = originalsMatcher.group(3);
-				String originalsParams = originalsMatcher.group(4);
+				String originalsID = originalsMatcher.group(1).trim();
+				String originalsLabel = originalsMatcher.group(2).trim();
+				String originalsText = originalsMatcher.group(3).trim();
+				String originalsParams = originalsMatcher.group(4).trim();
 				
 				String predictionsID = predictionsMatcher.group(1);
 				String predictionsProb = predictionsMatcher.group(2);
 				IdTranslator.ActionType predictionsLabel;
 				
 				if (! originalsID.equals(predictionsID)) {
-					mistakesWriter.write(String.format("%-50s %-10s %-70s ", originalsText, originalsLabel, originalsParams));
+					mistakesWriter.write(String.format("%-125s %-10s %-80s ", originalsText, originalsLabel, originalsParams));
 
 					Integer pID = new Integer(predictionsID);
 					predictionsLabel = IdTranslator.getActionEnum(pID);
@@ -73,7 +81,7 @@ public class ActionsCompare {
 					
 					String[] probs = predictionsProb.split(" ");
 					for (int i = 0; i < probs.length; i++)
-						mistakesWriter.write(String.format(" %6.2f", new Float(probs[i])));
+						mistakesWriter.write(String.format(" %8.2f", new Float(probs[i])));
 					
 					mistakesWriter.write("\n");
 					

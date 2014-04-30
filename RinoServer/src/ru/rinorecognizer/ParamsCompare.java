@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,7 +27,7 @@ public class ParamsCompare {
 			predictionsReader = new BufferedReader(new InputStreamReader(new FileInputStream(predictionsFile)));
 			mistakesWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(mistakesFile)));
  
-			mistakesWriter.write(String.format("  %-16s %-8s %-70s %-9s ",
+			mistakesWriter.write(String.format("  %-16s %-15s %-74s %-15s ",
 					"Original text", "O.label", "Original params", "P.label"));			
 			
 			String originalsLine;
@@ -38,7 +39,8 @@ public class ParamsCompare {
 			String[] prIDs = predictionsLine.split(" ");
 			
 			for (int i = 1; i < prIDs.length; i++)
-				mistakesWriter.write(String.format(" %-6s", "[" + prIDs[i] + "]"));
+				mistakesWriter.write(String.format(" %-8s", 
+						IdTranslator.getParamEnum(Integer.parseInt(prIDs[i])).toString().toLowerCase(Locale.ENGLISH)));
 			
 			mistakesWriter.write("\n\n");
 			
@@ -71,11 +73,13 @@ public class ParamsCompare {
 				}
 				
 
-				String originalsID = originalsMatcher.group(1);
-				String originalsParams = originalsMatcher.group(2);
-				String originalsText = originalsMatcher.group(3);
+				String originalsID = originalsMatcher.group(1).trim();
+				String originalsLabel = IdTranslator.getParamEnum(Integer.parseInt(originalsID)).toString().toLowerCase(Locale.ENGLISH);
+				String originalsParams = originalsMatcher.group(2).trim();
+				String originalsText = originalsMatcher.group(3).trim();
 				
 				String predictionsID = predictionsMatcher.group(1);
+				String predictionsLabel = IdTranslator.getParamEnum(Integer.parseInt(predictionsID)).toString().toLowerCase(Locale.ENGLISH);
 				String predictionsProb = predictionsMatcher.group(2);
 				
 				// Compare indices
@@ -90,12 +94,12 @@ public class ParamsCompare {
 					savedLines += "  ";
 				
 				
-				savedLines += String.format("%-15s %3s %5s %-70s %3s %5s", 
-						originalsText, originalsID, "", originalsParams, predictionsID, "");
+				savedLines += String.format("%-15s %10s %5s %-70s %10s %5s", 
+						originalsText, originalsLabel, "", originalsParams, predictionsLabel, "");
 
 				String[] probs = predictionsProb.split(" ");
 				for (int i = 0; i < probs.length; i++)
-					savedLines += String.format(" %6.2f", new Float(probs[i]));
+					savedLines += String.format(" %8.2f", new Float(probs[i]));
 				
 				savedLines += "\n";			
 					

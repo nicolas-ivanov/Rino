@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,8 +67,10 @@ public class ActionsSupport {
 				String verboseLine = null;
 				String predictedLine = null;				
 				
-				// skip unnecessary lines
+				// get correspondence between classes' indexes and probability's order
 				predictedLine = predictedReader.readLine();
+				predictedLine = predictedLine.replaceFirst("labels ", "");
+				String[] corr = predictedLine.split(" "); 
 				
 				
 				while ((scaledLine = scaledReader.readLine()) != null) {
@@ -97,24 +100,38 @@ public class ActionsSupport {
 							System.out.println(this.toString() + ": Line '" + predictedLine + "' is incorrect");
 							break;
 						}
-						Integer predicted_class = new Integer(predictedMatcher.group(1));
+						String predicted_id = predictedMatcher.group(1).trim();
 						String[] predicted_probs = predictedMatcher.group(2).split(" ");
-						Float probability = new Float(predicted_probs[predicted_class - 1]);
 						
-						supportWriter.write(String.format("%6.4f \t", probability));						
-						supportWriter.write(verboseLine + "\n");
-						supportWriter.flush();
+						// find probability for the current command
+						Boolean found = false;
+						int i = 0;
+						while ((i < corr.length) && !(found = predicted_id.equals(corr[i]))) {
+							i++;
+						}
+						
+						if (!found) {
+							System.out.println(this.toString() + ": No matching: " + predicted_id + " in " + Arrays.toString(corr));
+							break;
+						}
+						else {	
+							Float probability = new Float(predicted_probs[i]);
+							
+							supportWriter.write(String.format("%6.4f \t", probability));						
+							supportWriter.write(verboseLine + "\n");
+							supportWriter.flush();
 
-						probNum++;
-						probSum += probability;
-						
-						if (probability > probMax)
-							probMax = probability;
-						else if (probability < probMin)
-							probMin = probability;
-						
-						savedVLine = verboseLine;
-						break;
+							probNum++;
+							probSum += probability;
+							
+							if (probability > probMax)
+								probMax = probability;
+							else if (probability < probMin)
+								probMin = probability;
+							
+							savedVLine = verboseLine;
+							break;							
+						}
 					}
 
 				}
