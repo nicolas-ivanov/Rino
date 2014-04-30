@@ -16,7 +16,7 @@ public class SeparateData {
 
 	private static final Pattern sourcePattern = Pattern.compile("(\\w+)\\t([^\\t]+)(?:\\t+([#&] .+))?");	
 
-    Random generator = new Random(2);    
+    Random generator = new Random(1);    
 
 	public void separateFile(String inFile, String trainFile, String testFile, double ratio) {
 		try {
@@ -117,7 +117,7 @@ public class SeparateData {
 			System.out.println("SeparateData: wrong parameters number: " + args.length);
 			return;
 		}	
-		String path = "../main/saved/";
+		String path = "../main/data/";
 		String trainSourceDir = path + args[0] + "/"; 
 		String testSourceDir = path + args[1] + "/";
 		double ratio = new Double(args[2]);
