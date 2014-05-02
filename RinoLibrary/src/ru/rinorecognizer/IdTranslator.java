@@ -4,12 +4,23 @@ import java.util.Locale;
 
 public class IdTranslator {
 
-	public static enum ActionType {ACTION, A_CALL, A_SMS, A_EMAIL, A_SEARCH, A_SITE, A_ALARM, A_BALANCE, A_CANCEL};
-	public static enum ParamsType {OTHER, ACTION, P_NAME, P_NUMBER, P_EMAIL, P_SITE, P_TIME, QUOTE, Q_MARK, PREPOS, CHANGE};
+	public static enum LabelsType {OTHER, ACTION, P_NAME, P_NUMBER, P_EMAIL, P_SITE, P_TIME, QUOTE, Q_MARK, PREPOS, CHANGE};
+	public static enum ModelsType {ACTION, A_CALL, A_SMS, A_EMAIL, A_SEARCH, A_SITE, A_ALARM, A_BALANCE, A_CANCEL};
+
+	public static enum ActionType {A_CANCEL, A_CALL, A_SMS, A_EMAIL, A_SEARCH, A_SITE, A_ALARM, A_BALANCE};
+	public static enum ParamsType {OTHER, P_NAME, P_NUMBER, P_EMAIL, P_SITE, P_TIME, QUOTE};
 
 	
 
 ////// GetNum Section ////////////////////////////////////////////////////////////////
+	
+	public static int getModelsNum() {
+		return ModelsType.values().length;
+	}
+	
+	public static int getLabelsNum() {
+		return LabelsType.values().length;
+	}
 	
 	public static int getActionsNum() {
 		return ActionType.values().length;
@@ -20,7 +31,6 @@ public class IdTranslator {
 	}
 	
 	
-
 
 ////// Actions Section ////////////////////////////////////////////////////////////////
 	
@@ -55,53 +65,22 @@ public class IdTranslator {
 		return ParamsType.values()[paramID];
 	}
 	
-
-//	public static ParamsType getParamEnumFromID(int paramID) {
-//
-//		ParamsType paramType;
-//		
-//		switch (paramID) {	
-//			case 10: 	paramType = ParamsType.ACTION;	break;
-//			case 1: 	paramType = ParamsType.P_NAME;	break;
-//			case 2: 	paramType = ParamsType.P_NUMBER;break;
-//			case 3: 	paramType = ParamsType.P_EMAIL; break;
-//			case 4: 	paramType = ParamsType.P_SITE; 	break;
-//			case 5: 	paramType = ParamsType.P_TIME; 	break;
-//			case 6: 	paramType = ParamsType.QUOTE; 	break;
-//			case  0:	paramType = ParamsType.OTHER; 	break;
-//			case -1:	paramType = ParamsType.QUOTE; 	break;
-//			case -2:	paramType = ParamsType.Q_MARK; 	break;
-//			case -3:	paramType = ParamsType.PREPOS;	break;
-//			case -4:	paramType = ParamsType.CHANGE;	break;
-//			default: 	paramType = null;
-//			System.out.println("IdTranslator: paramID '" + paramID + "' is incorrect");
-//		}
-//		return paramType;
-//	}	
-
 	
-//////////////////////////////////////////////////////////////////////////////
+
+////// Labels Section ////////////////////////////////////////////////////////////////
 	
-//	public static int getParamIdFromEnum(ParamsType paramType) {
-//
-//		ParamsType ;
-//		
-//		switch (paramType) {	
-//			case ParamsType.ACTION: 10	break;
-//			case 1: 	paramType = ParamsType.P_NAME;	break;
-//			case 2: 	paramType = ParamsType.P_NUMBER;break;
-//			case 3: 	paramType = ParamsType.P_EMAIL; break;
-//			case 4: 	paramType = ParamsType.P_SITE; 	break;
-//			case 5: 	paramType = ParamsType.P_TIME; 	break;
-//			case 6: 	paramType = ParamsType.QUOTE; 	break;
-//			case  0:	paramType = ParamsType.OTHER; 	break;
-//			case -1:	paramType = ParamsType.QUOTE; 	break;
-//			case -2:	paramType = ParamsType.Q_MARK; 	break;
-//			case -3:	paramType = ParamsType.PREPOS;	break;
-//			case -4:	paramType = ParamsType.CHANGE;	break;
-//			default: 	paramType = null;
-//			System.out.println("IdTranslator: paramID '" + paramID + "' is incorrect");
-//		}
-//		return paramType;
-//	}
+	public static LabelsType getLabelEnum(int labelID) {
+		return LabelsType.values()[labelID];
+	}
+	
+	public static int getLabelOrdinal(LabelsType labelType) {
+		if (labelType != null)
+			return labelType.ordinal();
+		else
+			return 0;
+	}	
+	
+	public static int getLabelOrdinal(String labelType) {		
+		return getLabelOrdinal(LabelsType.valueOf(labelType.toUpperCase(Locale.ENGLISH)));
+	}
 }

@@ -156,9 +156,9 @@ public class MainActivity extends Activity implements OnClickListener {
 				commands = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 				String command = commands.get(0);
 				
-//				startFramingTask(command);
-				dataWriter.write(command);
-				addRequest(command);
+				startFramingTask(command);
+//				dataWriter.write(command);
+//				addRequest(command);
 				break;
 				
 			case RESULT_CANCELED:
@@ -342,11 +342,11 @@ public class MainActivity extends Activity implements OnClickListener {
     	String path = Environment.getExternalStorageDirectory().getPath();
     	File dir = new File(path, "Rino");
 		
-		int actionsNum = IdTranslator.ActionType.values().length;
+		int actionsNum = IdTranslator.ModelsType.values().length;
 		
 		for (int actionID = 0; actionID < actionsNum; actionID++) 
 		{			
-			String actionName = IdTranslator.ActionType.values()[actionID]
+			String actionName = IdTranslator.ModelsType.values()[actionID]
 					.toString().toLowerCase(Locale.ENGLISH);
 			
 			String modelName = "model_" + actionName;

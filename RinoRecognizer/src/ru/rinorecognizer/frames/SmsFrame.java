@@ -7,7 +7,9 @@ import java.util.List;
 import ru.rinorecognizer.Contact;
 import ru.rinorecognizer.ContactsDBHelper;
 import ru.rinorecognizer.Frame;
-import ru.rinorecognizer.IdTranslator;
+import ru.rinorecognizer.IdTranslator.ActionType;
+import ru.rinorecognizer.IdTranslator.LabelsType;
+import ru.rinorecognizer.IdTranslator.ParamsType;
 import ru.rinorecognizer.MainActivity;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,12 +20,12 @@ public class SmsFrame extends Frame {
 	private List<String> textList;
 	
 	public SmsFrame(MainActivity main){
-		super(main, IdTranslator.ActionType.A_SMS);
+		super(main, ActionType.A_SMS);
 		contactList = new ArrayList<Contact>();
 		textList = new ArrayList<String>();
 	}
 	
-	public Frame fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
+	public Frame fill(List<String> wgroups, List<LabelsType> labels)
 	{
 		String newText = null;
 		
@@ -53,12 +55,12 @@ public class SmsFrame extends Frame {
 		
 		if (textList.size() == 0) {
 			response = "Что нужно написать?";
-			expParameter = IdTranslator.ParamsType.QUOTE;
+			expParameter = ParamsType.QUOTE;
 		}
 		else {
 			if (contactList.size() == 0) {
 				response = "Кому отправить смс?"; 
-				expParameter = IdTranslator.ParamsType.P_NAME;
+				expParameter = ParamsType.P_NAME;
 				isComplete = false;
 			}
 			else if (contactList.size() == 1) {
@@ -78,7 +80,7 @@ public class SmsFrame extends Frame {
 		        }
 		        response += "Кому отправить смс?";
 		        
-				expParameter = IdTranslator.ParamsType.P_NAME;
+				expParameter = ParamsType.P_NAME;
 				contactList = null;
 			}
 			

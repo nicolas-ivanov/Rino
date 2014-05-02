@@ -40,7 +40,7 @@ public class ParamsCompare {
 			
 			for (int i = 1; i < prIDs.length; i++)
 				mistakesWriter.write(String.format(" %-8s", 
-						IdTranslator.getParamEnum(Integer.parseInt(prIDs[i])).toString().toLowerCase(Locale.ENGLISH)));
+						IdTranslator.getLabelEnum(Integer.parseInt(prIDs[i])).toString().toLowerCase(Locale.ENGLISH)));
 			
 			mistakesWriter.write("\n\n");
 			
@@ -74,12 +74,12 @@ public class ParamsCompare {
 				
 
 				String originalsID = originalsMatcher.group(1).trim();
-				String originalsLabel = IdTranslator.getParamEnum(Integer.parseInt(originalsID)).toString().toLowerCase(Locale.ENGLISH);
+				String originalsLabel = IdTranslator.getLabelEnum(Integer.parseInt(originalsID)).toString().toLowerCase(Locale.ENGLISH);
 				String originalsParams = originalsMatcher.group(2).trim();
 				String originalsText = originalsMatcher.group(3).trim();
 				
 				String predictionsID = predictionsMatcher.group(1);
-				String predictionsLabel = IdTranslator.getParamEnum(Integer.parseInt(predictionsID)).toString().toLowerCase(Locale.ENGLISH);
+				String predictionsLabel = IdTranslator.getLabelEnum(Integer.parseInt(predictionsID)).toString().toLowerCase(Locale.ENGLISH);
 				String predictionsProb = predictionsMatcher.group(2);
 				
 				// Compare indices

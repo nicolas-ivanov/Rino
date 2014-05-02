@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 public class CommandFeaturesGetter {
 
 	private static final Pattern structurePattern = Pattern.compile("(\\w+)\\t+(\\w+)\\t+([^\\t~]+)");
-	private static final Pattern paramsLabelPattern = Pattern.compile("(\\w+):(\\w+)");
+	private static final Pattern paramsLabelPattern = Pattern.compile("(\\w+):([^\\t ]+)");
 
 	public float[] getVector(ExtendedCommand extCommand) {
 		try {
@@ -24,9 +24,9 @@ public class CommandFeaturesGetter {
 			int paramsNum = IdTranslator.getParamsNum();
 
 			int vFeaturesNum = semSetsNum	// number of semantic sets
-					+ actionsNum + 1 		// number of action types for prevType
-					+ 1 					// for prevComplete value
-					+ paramsNum + 1; 		// number of params types for expectedParam
+					  		 + actionsNum	// number of action types for prevType
+							 + 1 			// for prevComplete value
+							 + paramsNum;	// number of params types for expectedParam
 
 			String[] words = command.split(" ");
 			float[] pVector = new float[vFeaturesNum];
@@ -54,8 +54,8 @@ public class CommandFeaturesGetter {
 
 				while ((rawPattern = patternsReader.readLine()) != null) {
 
-					if (rawPattern.equals(""))
-						continue; // skip empty lines
+					if (rawPattern.equals("") || rawPattern.startsWith("#"))
+						continue; // skip empty lines and comments
 
 					Matcher structureMatcher = structurePattern.matcher(rawPattern);
 					// work only with correct type patterns
@@ -81,7 +81,7 @@ public class CommandFeaturesGetter {
 			// encode integer id of prevType as boolean vector
 			pVector[semSetsNum + 1 + extCommand.prevType] = 1;
 			// encode integer id of expParameter as boolean vector
-			pVector[semSetsNum+ 1 + actionsNum + extCommand.expParameter] = 1;	
+			pVector[semSetsNum + 1 + actionsNum + extCommand.expParameter] = 1;	
 			
 			return pVector;
 

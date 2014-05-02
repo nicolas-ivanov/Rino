@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.rinorecognizer.Frame;
-import ru.rinorecognizer.IdTranslator;
+import ru.rinorecognizer.IdTranslator.ActionType;
+import ru.rinorecognizer.IdTranslator.LabelsType;
+import ru.rinorecognizer.IdTranslator.ParamsType;
 import ru.rinorecognizer.MainActivity;
 import ru.rinorecognizer.parsers.SiteParser;
 import android.content.Intent;
@@ -15,11 +17,11 @@ public class SiteFrame extends Frame {
 	private List<Uri> wwwUriList;
 	
 	public SiteFrame(MainActivity main){
-		super(main, IdTranslator.ActionType.A_SITE);
+		super(main, ActionType.A_SITE);
 		wwwUriList = new ArrayList<Uri>();
 	}
 	
-	public Frame fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
+	public Frame fill(List<String> wgroups, List<LabelsType> labels)
 	{			
 		Uri siteUri = null;
 		
@@ -39,7 +41,7 @@ public class SiteFrame extends Frame {
 		// check
 		if (wwwUriList.size() == 0) {
 			response = "Какой сайт нужно открыть?"; 
-			expParameter = IdTranslator.ParamsType.P_SITE;
+			expParameter = ParamsType.P_SITE;
 		}
 		else if (wwwUriList.size() == 1) 
 		{
@@ -57,7 +59,7 @@ public class SiteFrame extends Frame {
 				response += "\t" + (i++) + ". " + uri.toString() + "\n";
 			
 			response += "Какой сайт нужно открыть?";
-			expParameter = IdTranslator.ParamsType.P_SITE;
+			expParameter = ParamsType.P_SITE;
 			wwwUriList = null;
 		}
 

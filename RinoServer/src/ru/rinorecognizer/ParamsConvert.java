@@ -94,7 +94,7 @@ public class ParamsConvert {
 					for (int k = 0; k < wordsVectors.length; k++) {
 	
 						float[] tVector = wordsVectors[k];
-						int startOfPrevLabelBlock = tVector.length - IdTranslator.getParamsNum();
+						int startOfPrevLabelBlock = tVector.length - IdTranslator.getLabelsNum();
 
 						// add encoded label id of the previous word at the end of each vector
 						tVector[startOfPrevLabelBlock + saved_label_ordinal] = 1;

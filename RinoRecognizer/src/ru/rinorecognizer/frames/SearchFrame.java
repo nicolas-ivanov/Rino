@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.rinorecognizer.Frame;
-import ru.rinorecognizer.IdTranslator;
+import ru.rinorecognizer.IdTranslator.ActionType;
+import ru.rinorecognizer.IdTranslator.LabelsType;
+import ru.rinorecognizer.IdTranslator.ParamsType;
 import ru.rinorecognizer.MainActivity;
 import ru.rinorecognizer.parsers.SearchParser;
 import ru.rinorecognizer.parsers.SiteParser;
@@ -18,12 +20,12 @@ public class SearchFrame extends Frame {
 	private List<String> searchList;
 	
 	public SearchFrame(MainActivity main) {
-		super(main, IdTranslator.ActionType.A_SEARCH);
+		super(main, ActionType.A_SEARCH);
 		wwwUriList = new ArrayList<Uri>();
 		searchList = new ArrayList<String>();
 	}
 	
-	public Frame fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
+	public Frame fill(List<String> wgroups, List<LabelsType> labels)
 	{			
 		Uri siteUri = null;		
 		String newText = null;
@@ -49,7 +51,7 @@ public class SearchFrame extends Frame {
 		
 		// check site
 		if (wwwUriList.size() == 0) {
-			expParameter = IdTranslator.ParamsType.P_SITE;
+			expParameter = ParamsType.P_SITE;
 			response = "Какой сайт нужно открыть?"; 
 		}
 		else if (wwwUriList.size() == 1) 
@@ -58,7 +60,7 @@ public class SearchFrame extends Frame {
 			
 			// check text;
 			if (searchList.size() == 0) {
-				expParameter = IdTranslator.ParamsType.QUOTE;
+				expParameter = ParamsType.QUOTE;
 				response += "Что нужно найти?";			
 			}
 			else if (searchList.size() == 1) {
@@ -82,7 +84,7 @@ public class SearchFrame extends Frame {
 					response += "\t" + (i++) + ". " + str + "\n";
 				
 				response += "Что нужно найти?";
-				expParameter = IdTranslator.ParamsType.QUOTE;
+				expParameter = ParamsType.QUOTE;
 				searchList.clear();
 			}
 		}
@@ -95,7 +97,7 @@ public class SearchFrame extends Frame {
 				response += "\t" + (i++) + ". " + uri.toString() + "\n";
 			
 			response += "Какой сайт нужно открыть?";
-			expParameter = IdTranslator.ParamsType.P_SITE;
+			expParameter = ParamsType.P_SITE;
 			wwwUriList = null;
 		}
 		

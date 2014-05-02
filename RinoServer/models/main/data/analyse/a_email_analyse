@@ -1,0 +1,32 @@
+#!/bin/bash #this line is for highlighting purpose only
+
+# words are missing
+a_email	email текстом QUOTE:здравствуйте
+a_email	email P_NAME:вася текстом
+a_email	напиши P_NAME:вася пожалуйста
+a_email	email QUOTE:почему QUOTE:не QUOTE:звонишь
+a_email	email P_NAME:вася QUOTE:напиши QUOTE:мне
+a_email	напиши P_NAME:вася e mail текстом QUOTE:найди QUOTE:будильник
+a_email	электронные письма QUOTE:браузер
+a_email	электронное письмо QUOTE:баланс
+a_email	напиши электронное письмо QUOTE:саша QUOTE:приехал
+a_email	напиши электрон письмо QUOTE:позвони QUOTE:на QUOTE:номер QUOTE:8 QUOTE:917 QUOTE:123 QUOTE:45 QUOTE:67
+a_email	напиши пожалуйста P_NAME:вася QUOTE:саша QUOTE:собака QUOTE:точка QUOTE:ком
+a_email	отправить электронное письмо QUOTE:завтра QUOTE:в QUOTE:семь QUOTE:часов
+a_email	набери email P_NAME:вася QUOTE:получил QUOTE:твое QUOTE:письмо
+a_email	P_EMAIL:собака P_EMAIL:точка P_EMAIL:ком
+
+# wrong recognition
+a_email	напиши мне QUOTE:вася
+a_email	напиши пожалуйста QUOTE:8
+a_email	напиши про P_NAME:василь P_NAME:иваныч электронное письмо
+a_email	напиши пожалуйста письмо про P_NAME:василь P_NAME:иваныча
+a_email	nfs текстом QUOTE:привет QUOTE:как QUOTE:дела
+a_email	где электронное письмо P_NAME:вася
+a_email	набери про P_NAME:василия P_NAME:ивановича
+a_email	набери странные письма про P_NAME:василия P_NAME:ивановича
+a_email	набери P_NAME:петрова 7 электронное письмо
+
+# other
+a_email	электронное письмо по адресу P_EMAIL:вася P_EMAIL:собака P_EMAIL:точка P_EMAIL:ком
+a_email	напиши мне письмо по адресу P_EMAIL:вася P_EMAIL:собака P_EMAIL:точка P_EMAIL:ком

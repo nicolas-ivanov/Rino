@@ -1,0 +1,24 @@
+#!/bin/bash #this line is for highlighting purpose only
+
+# words are missing
+a_search	определение QUOTE:яндекс
+a_search	найди пожалуйста P_SITE:яндекс QUOTE:лене
+a_search	найди пожалуйста QUOTE:пленников P_SITE:яндекс
+a_search	найти определение слова QUOTE:диана P_SITE:википедия
+a_search	яндекс QUOTE:буддизм
+a_search	будизм P_SITE:яндекс
+a_search	найди пожалуйста QUOTE:будильник
+a_search	найти определение понятия QUOTE:буддизм P_SITE:википедия
+a_search	найди что такое QUOTE:будильник P_SITE:яндекс
+a_search	определение слова QUOTE:статья
+a_search	пожалуйста яндекс кто такой QUOTE:вася
+a_search	найди пожалуйста QUOTE:система
+a_search	найди что нибудь QUOTE:василь QUOTE:иваныч
+a_search	найди мне теперь что такое QUOTE:собака
+a_search	найди мне теперь что такое QUOTE:яндекс
+
+# wrong recognition
+a_search	найди пожалуйста найти определение слова
+a_search	определение для QUOTE:гудима
+a_search	найди пожалуйста QUOTE:ленина QUOTE:будем P_SITE:яндекс
+a_search	найди пожалуйста в яндексе QUOTE:лене QUOTE:буддизма

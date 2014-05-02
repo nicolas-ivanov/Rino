@@ -101,6 +101,8 @@ public class ContactsDBHelper {
 	
 	private static String formatNumber(String number) {
 		
+		number = number.replaceAll(" ", "");
+		
 		if (number.matches("8\\d{10}"))
 			number = "+7" + number.substring(1);
 		

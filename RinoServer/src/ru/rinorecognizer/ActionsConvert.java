@@ -14,6 +14,8 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ru.rinorecognizer.IdTranslator.ActionType;
+
 
 public class ActionsConvert {
 
@@ -42,15 +44,15 @@ public class ActionsConvert {
 			    if (file.isFile())
 					dataReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 
-				int prevType = 0;
+				int prevType = IdTranslator.getActionID(IdTranslator.ActionType.A_CANCEL);
 				int prevComplete = 1;
 
 				while ((line = dataReader.readLine()) != null) {
 
 					// skip empty lines and comments
 					if (line.length() == 0 || line.charAt(0) == '#') {
-						prevType = 0;
-						prevComplete = 1;
+//						prevType = IdTranslator.getActionID(IdTranslator.ActionType.ACTION);
+//						prevComplete = 1;
 						
 //						if (line.length() != 0)
 //							verboseWriter.write("\n");
@@ -83,7 +85,7 @@ public class ActionsConvert {
 					if (comment.startsWith("&"))
 						extCommand.expParameter = IdTranslator.getParamOrdinal(comment.replaceFirst("& ", ""));
 					else
-						extCommand.expParameter = 0;
+						extCommand.expParameter = IdTranslator.getParamOrdinal(IdTranslator.ParamsType.OTHER);
 
 					CommandFeaturesGetter cfg = new CommandFeaturesGetter();
 					float[] pVector = cfg.getVector(extCommand);
@@ -125,7 +127,7 @@ public class ActionsConvert {
 					
 					if (comment.equals("")) {
 						prevComplete = 1;
-						prevType = 0;
+						prevType = IdTranslator.getActionID(IdTranslator.ActionType.A_CANCEL);
 //						System.out.println(sourceMatcher.group(3));
 					}
 					else {
@@ -159,11 +161,11 @@ public class ActionsConvert {
 	
 
 
-	public static void main(String[] args) {
-
-//		String path = "/home/nicolas/Dropbox/Diploma/svm/train/";
-//		String mode = "train";
-//		String data = "all";
+	public static void main(String[] args) 
+	{
+//		String path = "/home/nicolas/Develop/workspace/RinoServer/models/main/";
+//		String data = "test";
+//		String mode = "test";
 		
 		if (args.length != 2) {
 			System.out.println("ActionsConvert: wrong parameters number: " + args.length);

@@ -7,7 +7,9 @@ import java.util.List;
 import ru.rinorecognizer.Contact;
 import ru.rinorecognizer.ContactsDBHelper;
 import ru.rinorecognizer.Frame;
-import ru.rinorecognizer.IdTranslator;
+import ru.rinorecognizer.IdTranslator.ActionType;
+import ru.rinorecognizer.IdTranslator.LabelsType;
+import ru.rinorecognizer.IdTranslator.ParamsType;
 import ru.rinorecognizer.MainActivity;
 import ru.rinorecognizer.R;
 import android.content.Intent;
@@ -19,12 +21,12 @@ public class EmailFrame extends Frame {
 	private List<String> textList;
 	
 	public EmailFrame(MainActivity main){
-		super(main, IdTranslator.ActionType.A_EMAIL);
+		super(main, ActionType.A_EMAIL);
 		contactList = new ArrayList<Contact>();
 		textList = new ArrayList<String>();
 	}
 	
-	public Frame fill(List<String> wgroups, List<IdTranslator.ParamsType> labels)
+	public Frame fill(List<String> wgroups, List<LabelsType> labels)
 	{		
 		String newText = null;
 		
@@ -46,12 +48,12 @@ public class EmailFrame extends Frame {
 		
 		if (textList.size() == 0) {
 			response = "Что нужно написать?";
-			expParameter = IdTranslator.ParamsType.QUOTE;
+			expParameter = ParamsType.QUOTE;
 		}
 		else {
 			if (contactList.size() == 0) {
 				response = "Кому нужно отправить email?";
-				expParameter = IdTranslator.ParamsType.P_NAME;
+				expParameter = ParamsType.P_NAME;
 			}
 			else if (contactList.size() == 1) {
 				Contact c = contactList.get(0);
@@ -72,7 +74,7 @@ public class EmailFrame extends Frame {
 		        }
 		        response += "Кому отправить письмо?";
 		        
-				expParameter = IdTranslator.ParamsType.P_NAME;
+				expParameter = ParamsType.P_NAME;
 				contactList = null;
 			}
 		

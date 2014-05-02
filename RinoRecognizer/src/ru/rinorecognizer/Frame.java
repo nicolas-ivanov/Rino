@@ -2,6 +2,7 @@ package ru.rinorecognizer;
 
 import java.util.List;
 
+import ru.rinorecognizer.IdTranslator.ActionType;
 import ru.rinorecognizer.IdTranslator.ParamsType;
 import android.content.Intent;
 
@@ -12,8 +13,8 @@ public abstract class Frame {
 	protected Boolean isComplete;
 	protected String response;
 	protected Intent intent;
-	protected IdTranslator.ActionType type;
-	protected IdTranslator.ParamsType expParameter;
+	protected ActionType type;
+	protected ParamsType expParameter;
 	
 	public Frame(MainActivity main, IdTranslator.ActionType type)
 	{
@@ -25,7 +26,7 @@ public abstract class Frame {
 		this.response = "";
 	}
 	
-	public abstract Frame fill(List<String> wgroups, List<IdTranslator.ParamsType> labels);
+	public abstract Frame fill(List<String> wgroups, List<IdTranslator.LabelsType> labels);
 	protected abstract boolean check();	
 	
 	public String getResponse()	{

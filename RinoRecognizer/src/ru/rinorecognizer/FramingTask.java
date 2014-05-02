@@ -6,7 +6,7 @@ import java.util.ListIterator;
 import java.util.Locale;
 
 import ru.rinorecognizer.IdTranslator.ActionType;
-import ru.rinorecognizer.IdTranslator.ParamsType;
+import ru.rinorecognizer.IdTranslator.LabelsType;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -38,7 +38,7 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, Frame> {
 	    	CommandFeaturesGetter cfGetter = new CommandFeaturesGetter(); 
 	    	float[] cFeatures = cfGetter.getVector(extCommand);
 	    	
-	    	SvmClassifier svmAction = svmList.get(IdTranslator.getActionID(IdTranslator.ActionType.ACTION));
+	    	SvmClassifier svmAction = svmList.get(IdTranslator.ModelsType.ACTION.ordinal());
 			int actionID = svmAction.classify(cFeatures);
 			
 			
@@ -59,7 +59,7 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, Frame> {
 	    	WordsFeaturesGetter wfGetter = new WordsFeaturesGetter(); 
 	    	float[][] wFeatures = wfGetter.getVectors(extCommand);
 	
-			List<ParamsType> labels = new ArrayList<ParamsType>();
+			List<LabelsType> labels = new ArrayList<LabelsType>();
 			List<Integer> labels_id_list = new ArrayList<Integer>();
 	    	List<String> words = getWords(extCommand.curCommand);
 	    	
@@ -74,7 +74,7 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, Frame> {
 			
 			int saved_label_id = 0;
 			int saved_label_ordinal = 0;
-			int startOfPrevLabelBlock = wFeatures[0].length - IdTranslator.getParamsNum();
+			int startOfPrevLabelBlock = wFeatures[0].length - IdTranslator.getLabelsNum();
 			
 			for (int i = 0; i < wFeatures.length; i++) {
 				 // add the label id of the previous word at the end of feature vector 
@@ -128,7 +128,7 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, Frame> {
     }
 
     
-    private void makeGroups(List<String> words, List<ParamsType> labels) 
+    private void makeGroups(List<String> words, List<LabelsType> labels) 
     {
 		if (debugMode) {
 			publishLabels(labels);
@@ -140,20 +140,20 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, Frame> {
     }
     
     
-    private List<ParamsType> convertToEnum(List<Integer> p_type_id)
+    private List<LabelsType> convertToEnum(List<Integer> p_type_id)
     {
-		List<ParamsType> p_type = new ArrayList<ParamsType>();
+		List<LabelsType> p_type = new ArrayList<LabelsType>();
 		
     	for (int i = 0; i < p_type_id.size(); i++) {
-//    		p_type.add(IdTranslator.getParamEnumFromID(p_type_id.get(i)));
-    		p_type.add(IdTranslator.getParamEnum(p_type_id.get(i)));
+//    		p_type.add(IdTranslator.getParamEnum(p_type_id.get(i)));
+    		p_type.add(IdTranslator.getLabelEnum(p_type_id.get(i)));
     	}
     	
     	return p_type;
     }
     
     
-    private void publishLabels(List<ParamsType>labels)
+    private void publishLabels(List<LabelsType>labels)
     {
 		String labels_str = "";
 		for (int i = 0; i < labels.size(); i++)
@@ -162,16 +162,16 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, Frame> {
 		publishProgress(labels_str.toLowerCase(Locale.US));
     }
 	
-    private void group(List<String> words, List<ParamsType> labels)
+    private void group(List<String> words, List<LabelsType> labels)
     {
     	String prevWord = "";
-		ParamsType prevLabel = null;
+    	LabelsType prevLabel = null;
 		
     	String currWord = null;
-		ParamsType currLabel = null;
+    	LabelsType currLabel = null;
 		
 		ListIterator<String> wordsIterator = words.listIterator();
-		ListIterator<ParamsType> labelsIterator = labels.listIterator();
+		ListIterator<LabelsType> labelsIterator = labels.listIterator();
 		
 		while (wordsIterator.hasNext()) {
 			currWord = wordsIterator.next();
@@ -198,7 +198,7 @@ public class FramingTask extends AsyncTask<ExtendedCommand, String, Frame> {
 		}		
     }
     
-    private String swapSpecialWords(String word, ParamsType label)
+    private String swapSpecialWords(String word, LabelsType label)
     {
     	String resWord = word;
     	

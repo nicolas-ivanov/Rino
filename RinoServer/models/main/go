@@ -34,22 +34,22 @@ echo >> accuracy
 
 #~ models="./a_cancel"
 
-models="./action
-./a_call"
+#~ models="./action
+#~ ./a_call"
 
 #~ models="./action
 #~ ./a_call
 #~ ./a_sms"
 
-#~ models="./action
-#~ ./a_call
-#~ ./a_sms
-#~ ./a_email
-#~ ./a_search
-#~ ./a_site
-#~ ./a_alarm
-#~ ./a_balance
-#~ ./a_cancel"
+models="./action
+./a_call
+./a_sms
+./a_email
+./a_search
+./a_site
+./a_alarm
+./a_balance
+./a_cancel"
 
 
 train-predict (){
@@ -75,7 +75,7 @@ train-predict (){
 }
 
 # get train and test data sets
-java -classpath $server ru.rinorecognizer.SeparateData $trainData $testData 0.4
+#~ java -classpath $server ru.rinorecognizer.SeparateData $trainData $testData 0.6
 
 # get classification models
 for q in $models

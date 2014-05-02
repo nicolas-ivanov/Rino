@@ -1,0 +1,30 @@
+#!/bin/bash #this line is for highlighting purpose only
+
+# wrong parameter
+a_sms	напиши пожалуйста sms вася QUOTE:метро
+a_sms	напиши пожалуйста QUOTE:воспитала QUOTE:сына
+a_sms	sms P_NAME:петров P_NAME:васильева
+a_sms	напиши sms петров василий иванович
+
+# words are missing
+a_sms	смс QUOTE:привет QUOTE:как QUOTE:дела
+a_sms	sms текстом QUOTE:почему QUOTE:не QUOTE:звонишь
+a_sms	напиши sms вася текстом QUOTE:получил QUOTE:твое QUOTE:письмо
+a_sms	sms P_NAME:надя QUOTE:будильник
+a_sms	sms P_NAME:вася текстом QUOTE:пополни QUOTE:мой QUOTE:баланс
+a_sms	sms сообщение P_NAME:вася QUOTE:проверить QUOTE:баланс
+a_sms	напиши sms сообщение P_NAME:вася текстом QUOTE:привет QUOTE:от QUOTE:саши
+a_sms	напиши пожалуйста sms P_NAME:вася текстом QUOTE:саша QUOTE:собака QUOTE:gmail.com
+a_sms	набери sms P_NAME:вася текст QUOTE:получился QUOTE:письмо
+
+# wrong recognition
+a_sms	sms сообщение про P_NAME:василь P_NAME:иваныча
+a_sms	напиши sms сообщение про P_NAME:василия P_NAME:ивановича
+a_sms	напиши про P_NAME:василия ивановича sms сообщения
+a_sms	напиши пожалуйста сообщение про P_NAME:василия P_NAME:ивановича
+
+# other
+a_sms	набери пожалуйста с текстом QUOTE:саша QUOTE:собака QUOTE:gmail.com
+a_sms	набери sms сообщение про P_NAME:василь P_NAME:иваныч
+a_sms	напиши P_NAME:петров P_NAME:василий P_NAME:иванович sms
+a_sms	напиши P_NAME:петров sms сообщения

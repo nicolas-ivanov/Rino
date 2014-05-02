@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 public class WordsFeaturesGetter {
 
 	private static final Pattern structurePattern = Pattern.compile("(\\w+)\\t+(\\w+)\\t+([^\\t~]+)");
-	private static final Pattern paramsLabelPattern = Pattern.compile("(\\w+):(\\w+)");
+	private static final Pattern paramsLabelPattern = Pattern.compile("(\\w+):([^\\t ]+)");
 
 	
 	public int[] getLabels(ExtendedCommand extCommand) 
@@ -37,7 +37,7 @@ public class WordsFeaturesGetter {
 					Matcher paramsLabelMatcher = paramsLabelPattern.matcher(w);
 					
 					if (paramsLabelMatcher.matches()) {
-						wordsLabels[k] = IdTranslator.getParamOrdinal(paramsLabelMatcher.group(1));
+						wordsLabels[k] = IdTranslator.getLabelOrdinal(paramsLabelMatcher.group(1));
 						w = paramsLabelMatcher.group(2);
 						wordFound = true;
 					}
@@ -45,8 +45,8 @@ public class WordsFeaturesGetter {
 				
 				while ((rawPattern = patternsReader.readLine()) != null) {
 
-					if (rawPattern.equals(""))
-						continue;	// skip empty lines
+					if (rawPattern.equals("") || rawPattern.startsWith("#"))
+						continue; // skip empty lines and comments
 					
 					Matcher structureMatcher = structurePattern.matcher(rawPattern);
 					
@@ -62,7 +62,7 @@ public class WordsFeaturesGetter {
 					if (typeMatcher.matches()) {
 						
 						if (!wordFound) {
-							wordsLabels[k] = IdTranslator.getParamOrdinal(structureMatcher.group(2));
+							wordsLabels[k] = IdTranslator.getLabelOrdinal(structureMatcher.group(2));
 							wordFound  = true;
 						}
 					}
@@ -93,6 +93,7 @@ public class WordsFeaturesGetter {
 			
 			int semSetsNum = new PatternsHandler().getSemanticSetsNum();
 			int paramsNum = IdTranslator.getParamsNum();
+			int labelsNum = IdTranslator.getLabelsNum();
 			int wBlockLength = semSetsNum + 1; // number of semantic groups + a value relative position in command
 			
 			final int leftLeafSize = 2;
@@ -103,7 +104,7 @@ public class WordsFeaturesGetter {
 			int vLength = 
 					windowLength
 					+ paramsNum 	// for encoding expected parameter index
-					+ paramsNum;	// for encoding label id of the previous word
+					+ labelsNum;	// for encoding label id of the previous word
 
 			
 			/// Start of main section ///////////////////////////////////////////////////

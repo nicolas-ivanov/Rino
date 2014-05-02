@@ -18,8 +18,9 @@ public class PatternsHandler {
 		int paramsNum = 0;
 
 		while ((rawPattern = patternsReader.readLine()) != null) {
-			if (rawPattern.equals(""))
-				continue; // skip empty lines
+			
+			if (rawPattern.equals("") || rawPattern.startsWith("#"))
+				continue; // skip empty lines and comments
 
 			paramsNum++;
 		}
