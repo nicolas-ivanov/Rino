@@ -74,6 +74,11 @@ train-predict (){
 	#~ $l/svm-predict -q -b 1 $q/scaled_$trainData $q/model_$type $q/predicted_$trainData
 }
 
+
+# clean files
+rm "full_test"
+rm "full_train"
+
 # get train and test data sets
 #~ java -classpath $server ru.rinorecognizer.SeparateData $trainData $testData 0.6
 

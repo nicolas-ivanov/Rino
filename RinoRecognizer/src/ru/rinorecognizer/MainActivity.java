@@ -220,6 +220,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	    framingTask = new FramingTask(this, svmArrayList, savedFrame);
 	    ExtendedCommand extCommand = new ExtendedCommand();
 	    extCommand.curCommand = command;
+	    extCommand.prevType = IdTranslator.ActionType.ANY.ordinal();
 	    
 	    if (savedFrame != null) {
 		    extCommand.prevType = savedFrame.getTypeID();

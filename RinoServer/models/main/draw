@@ -1,0 +1,22 @@
+#!/bin/bash
+
+time_start=$(date +%s)
+
+models=".
+action
+a_call
+a_sms
+a_email
+a_search
+a_site
+a_alarm
+a_balance
+a_cancel"
+
+for m in $models
+do	
+	octave --silent --eval "drawVectors('$m')"
+done
+
+time_end=$(date +%s)
+echo Elapsed time:  $(($time_end - $time_start)) seconds

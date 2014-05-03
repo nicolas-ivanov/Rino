@@ -14,8 +14,6 @@ import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ru.rinorecognizer.IdTranslator.ActionType;
-
 
 public class ActionsConvert {
 
@@ -44,7 +42,7 @@ public class ActionsConvert {
 			    if (file.isFile())
 					dataReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 
-				int prevType = IdTranslator.getActionID(IdTranslator.ActionType.A_CANCEL);
+				int prevType = IdTranslator.getActionID(IdTranslator.ActionType.ANY);
 				int prevComplete = 1;
 
 				while ((line = dataReader.readLine()) != null) {
@@ -127,7 +125,7 @@ public class ActionsConvert {
 					
 					if (comment.equals("")) {
 						prevComplete = 1;
-						prevType = IdTranslator.getActionID(IdTranslator.ActionType.A_CANCEL);
+						prevType = IdTranslator.getActionID(IdTranslator.ActionType.ANY);
 //						System.out.println(sourceMatcher.group(3));
 					}
 					else {

@@ -5,9 +5,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,18 +20,20 @@ public class ParamsConvert {
 	
 	DecimalFormat cuteFormat = new DecimalFormat("#.#");
 
-	public void convert(String modelName, String trainDir, String outFile, String verboseFile, String allParamsFile)  
+	public void convert(String modelName, String trainDir, String outFile, String verboseFile, String fullFile, String allParamsFile)  
 	{   
 		
 		BufferedReader dataReader = null;
 		BufferedWriter fullWriter = null;
 		BufferedWriter paramsWriter = null;
 		BufferedWriter verboseWriter = null;
+		BufferedWriter allParamsWriter = null;
 		
 		try {			
-			fullWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(allParamsFile)));
-			paramsWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile)));
-			verboseWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(verboseFile)));
+			fullWriter = new BufferedWriter(new FileWriter(fullFile));
+			paramsWriter = new BufferedWriter(new FileWriter(outFile));
+			verboseWriter = new BufferedWriter(new FileWriter(verboseFile));
+			allParamsWriter = new BufferedWriter(new FileWriter(allParamsFile, true));
 			
 		
 			// Process every command
@@ -98,9 +102,7 @@ public class ParamsConvert {
 
 						// add encoded label id of the previous word at the end of each vector
 						tVector[startOfPrevLabelBlock + saved_label_ordinal] = 1;
-//						saved_label_ordinal = IdTranslator.getParamOrdinal(IdTranslator.getParamEnumFromID(wordsLabels[k]));
 						saved_label_ordinal = wordsLabels[k];
-//						saved_label_ordinal = 0;
 						
 						String fullString = wordsLabels[k] + "";
 						String paramsString = wordsLabels[k] + "";
@@ -119,6 +121,7 @@ public class ParamsConvert {
 						fullWriter.write(fullString + " \n");
 						paramsWriter.write(paramsString + "\n");
 						verboseWriter.write(String.format("%-70s # %s%n",verboseString, words[k]));
+						allParamsWriter.write(fullString + " \n");
 					}
 					verboseWriter.newLine();
 	
@@ -131,6 +134,7 @@ public class ParamsConvert {
 				fullWriter.flush();
 				paramsWriter.flush();
 				verboseWriter.flush();
+				allParamsWriter.flush();
 			
 			}
 		} 
@@ -144,6 +148,7 @@ public class ParamsConvert {
 				fullWriter.close();
 				paramsWriter.close();
 				verboseWriter.close();
+				allParamsWriter.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -172,9 +177,10 @@ public class ParamsConvert {
 		String trainDir = path + data;
 		String outFile = path + modelName + "/params_" + data;
 		String verboseFile = path + modelName + "/verbose_" + data;
-		String allParamsFile = path + modelName + "/full_" + data;
+		String fullFile = path + modelName + "/full_" + data;
+		String allParamsFile = path + "full_" + data;
 		
 		ParamsConvert c = new ParamsConvert();
-		c.convert(modelName, trainDir, outFile, verboseFile, allParamsFile);
+		c.convert(modelName, trainDir, outFile, verboseFile, fullFile, allParamsFile);
 	}
 }

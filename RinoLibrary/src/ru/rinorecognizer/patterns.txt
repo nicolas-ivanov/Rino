@@ -1,4 +1,3 @@
-a_cancel	action		отмена|неважно
 a_call		action		\p{InCyrillic}*звон\p{InCyrillic}+|соедин\p{InCyrillic}+|телефон\p{InCyrillic}*|номер\p{InCyrillic}*|выз\p{InCyrillic}+
 a_sms		action		нов\p{InCyrillic}*|смс\p{InCyrillic}*|sms|сообщени\p{InCyrillic}+
 a_email		action		e|e?mail|письм\p{InCyrillic}+|электрон\p{InCyrillic}+|почт\p{InCyrillic}+|адрес\p{InCyrillic}*
@@ -6,6 +5,7 @@ a_search	action		поиск\p{InCyrillic}*|найди|найти|ищи|иска
 a_site		action		откр\p{InCyrillic}+|браузер\p{InCyrillic}+
 a_alarm		action		будильник|постав\p{InCyrillic}+|установ\p{InCyrillic}+|заве\p{InCyrillic}+|разбуди\p{InCyrillic}*
 a_balance	action		баланс|определ\p{InCyrillic}*|день\p{InCyrillic}+|денег|средств\p{InCyrillic}*|оста\p{InCyrillic}+
+a_cancel	action		отмена|неважно
 
 d_dial		action		набрать|набер\p{InCyrillic}+|набир\p{InCyrillic}+
 d_write		action		напиш\p{InCyrillic}+|напис\p{InCyrillic}+|отправ\p{InCyrillic}+|перешл\p{InCyrillic}+|пересл\p{InCyrillic}+
@@ -24,7 +24,7 @@ p_site		p_site		Site|сайт|интернет\p{InCyrillic}*|\.|точка|ru|c
 p_time		p_time		Hour|\d+|час\p{InCyrillic}*|минут\p{InCyrillic}*|завтра|полчаса|утр\p{InCyrillic}+|вечер\p{InCyrillic}*
 
 s_text		q_mark		текст\p{InCyrillic}*
-s_search	q_mark		что|кто|тако\p{InCyrillic}*|нибудь|значит|слов\p{InCyrillic}*|поняти\p{InCyrillic}*|скольк\p{InCyrillic}*
+s_search	q_mark		что|кто|тако\p{InCyrillic}*|нибудь|значит|слов\p{InCyrillic}*|поняти\p{InCyrillic}*
 s_prepos	q_mark		о|об|про
-s_prepos	other		в|на
+s_prepos	prepos		в|на
 s_change	change		нет|лучше|хотя|вместо|впрочем
