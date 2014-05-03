@@ -10,18 +10,9 @@ server=/home/nicolas/Develop/workspace/RinoServer/bin/:/home/nicolas/Develop/wor
 r=/home/nicolas/Develop/workspace/RinoRecognizer/res/raw
 #~ cp ./patterns $r
 
-#~ trainData="collection"
-#~ testData="collection"
 trainData="train"
 testData="test"
-#~ trainData="collection_dialogs"
-#~ testData="collection_dialogs"
-
-# Differencies for trainData and testData files:
-# params_
-# scaled_
-# verbose_
-
+accuracy="accuracy"
 	
 echo $(date) > accuracy
 echo >> accuracy
@@ -56,6 +47,7 @@ train-predict (){
 	cs=$1
 	gs=$2
 	as=$3
+	model=$4
 	
 	$l/svm-train -c $cs -g $gs -b 1 -q $q/scaled_$trainData $q/model_$type
 	
@@ -64,81 +56,104 @@ train-predict (){
 		#~ printf "%-10s %-10s %-12s\n" $type $a3 $a4
 		printf "%-10s %-8s %-11s " $type $a3 $a4
 		printf "%-10s %s \n" $type $as >> accuracy
+		printf "%s " ${a3//[ %]/}  >> "$model/accuracy"
 	}
 	
 	# predict	
 	$l/svm-predict -b 1 $q/scaled_$trainData $q/model_$type $q/predicted_$trainData | { read a1 a2 a3 a4 a5
 		printf "%-8s %-12s " $a3 $a4
 		#~ printf "%-10s %s \n" $type $as >> accuracy
+		printf " %s\n" ${a3//[ %]/} >> "$model/accuracy"
 	}
 	#~ $l/svm-predict -q -b 1 $q/scaled_$trainData $q/model_$type $q/predicted_$trainData
 }
 
+########################################################################
 
 # clean files
-rm "full_test"
-rm "full_train"
+> "full_test"
+> "full_train"
+
+for q in $models
+do		
+	> "$q/accuracy"
+done
+
+ratio=0.7
 
 # get train and test data sets
-#~ java -classpath $server ru.rinorecognizer.SeparateData $trainData $testData 0.6
+rm -rf separated/train/*
+rm -rf separated/test/*
+java -classpath $server ru.rinorecognizer.SeparateData "data/$trainData" $ratio "separated/train" "test"
 
-# get classification models
-for q in $models
-do	
-	type=${q#./};
-	
-	if [ "$type" == action ]
-		then {
-			java -classpath $server ru.rinorecognizer.ActionsConvert $trainData "train"
-			java -classpath $server ru.rinorecognizer.ActionsConvert $testData "test"
-		}
-		else {
-			java -classpath $server ru.rinorecognizer.ParamsConvert $trainData $type
-			java -classpath $server ru.rinorecognizer.ParamsConvert $testData $type
-		}
-	fi
-	
-	
-	java -classpath $server ru.rinorecognizer.ScaleData $trainData $type
-	java -classpath $server ru.rinorecognizer.ScaleData $testData $type
+#~ for volume in 1; 
+for volume in `seq 0.1 0.1 1`; 
+do 
+	printf "train fraction: %s\n" $volume
+	rm -rf train/*
+	rm -rf dump/*
+	java -classpath $server ru.rinorecognizer.SeparateData "separated/train" $volume $trainData "dump"
+
+	# get classification models
+	for q in $models
+	do			
+		type=${q#./};
 		
-	
-	if [ "$mode" == "fast" ]
-	then {
-		read cs gs as < $q/cgamma_$type
-		train-predict $cs $gs $as
-	}
-	else {
-		python $t/grid.py -log2c -5,15,5 -log2g 5,-15,-1 -v 5 -gnuplot null -out null -png $q/grid.png $q/scaled_$trainData | grep -v [local] | { 
-			read cs gs as
-			echo $cs $gs $as > $q/cgamma_$type
-			train-predict $cs $gs $as
-		}
-	}
-	fi
-	
-	
-	if [ "$type" == action ]
-		then {
-			java -classpath $server ru.rinorecognizer.ActionsCompare $testData
-			java -classpath $server ru.rinorecognizer.ActionsSupport $trainData | { read a1 a2 a3
-				printf "%s  %s  %-8s" $a1 $a2 $a3
+		if [ "$type" == action ]
+			then {
+				java -classpath $server ru.rinorecognizer.ActionsConvert $trainData "train"
+				java -classpath $server ru.rinorecognizer.ActionsConvert $testData "test"
 			}
+			else {
+				java -classpath $server ru.rinorecognizer.ParamsConvert $trainData $type
+				java -classpath $server ru.rinorecognizer.ParamsConvert $testData $type
+			}
+		fi
+		
+		
+		java -classpath $server ru.rinorecognizer.ScaleData $trainData $type
+		java -classpath $server ru.rinorecognizer.ScaleData $testData $type
+			
+		
+		if [ "$mode" == "fast" ]
+		then {
+			read cs gs as < $q/cgamma_$type
+			train-predict $cs $gs $as $q
 		}
 		else {
-			java -classpath $server ru.rinorecognizer.ParamsCompare $testData $type
-			java -classpath $server ru.rinorecognizer.ParamsSupport $trainData $type | { read a1 a2 a3
-				printf "%s  %s  %-8s" $a1 $a2 $a3
+			python $t/grid.py -log2c -5,15,5 -log2g 5,-15,-1 -v 5 -gnuplot null -out null -png $q/grid.png $q/scaled_$trainData | grep -v [local] | { 
+				read cs gs as
+				echo $cs $gs $as > $q/cgamma_$type
+				train-predict $cs $gs $as $q
 			}
-		}	
-	fi		
+		}
+		fi
+		
+		
+		if [ "$type" == action ]
+			then {
+				java -classpath $server ru.rinorecognizer.ActionsCompare $testData
+				java -classpath $server ru.rinorecognizer.ActionsSupport $trainData | { read a1 a2 a3
+					printf "%s  %s  %-8s" $a1 $a2 $a3
+				}
+			}
+			else {
+				java -classpath $server ru.rinorecognizer.ParamsCompare $testData $type
+				java -classpath $server ru.rinorecognizer.ParamsSupport $trainData $type | { read a1 a2 a3
+					printf "%s  %s  %-8s" $a1 $a2 $a3
+				}
+			}	
+		fi		
+		
+		java -classpath $server ru.rinorecognizer.TestProbability $testData $type | { read a1 a2 a3
+			printf "%s  %s  %s\n" $a1 $a2 $a3
+		}
+		
+		cp $q/model_$type $r
+		cp $q/range_$trainData $r/range_$type
+	done
 	
-	java -classpath $server ru.rinorecognizer.TestProbability $testData $type | { read a1 a2 a3
-		printf "%s  %s  %s\n" $a1 $a2 $a3
-	}
-	
-	cp $q/model_$type $r
-	cp $q/range_$trainData $r/range_$type
+	printf "\n"
 done
 
 

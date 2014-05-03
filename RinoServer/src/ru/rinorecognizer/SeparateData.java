@@ -80,24 +80,19 @@ public class SeparateData {
 
 	
 	
-	public void separateFolder(String trainSourceDir, String testSourceDir, double sRatio) {
-
-		String trainDir = trainSourceDir;
-		String testDir = testSourceDir;
-		
+	public void separateFolder(String trainSourceDir, double sRatio, String trainPartDir, String testPartDir) {
+				
 		File folder = new File(trainSourceDir);
 		File[] listOfFiles = folder.listFiles();
 
 	    for (File f: listOfFiles) {
 
 			String sourceFile = f.getAbsolutePath();
-			trainDir = trainSourceDir + "../../train/";
-			testDir = trainSourceDir + "../../test/";
-			String trainTmpFile = trainDir + f.getName() + String.format("_%.1f", sRatio);
-			String testTmpFile = testDir + f.getName() + String.format("_%.1f", 1 - sRatio);
+			String trainTmpFile = trainPartDir + f.getName() + String.format("_%.1f", sRatio);
+			String testTmpFile = testPartDir + f.getName() + String.format("_%.1f", 1 - sRatio);
 			
-			new File(trainDir).mkdirs();
-			new File(testDir).mkdirs();
+			new File(trainPartDir).mkdirs();
+			new File(testPartDir).mkdirs();
 			
 			SeparateData sData = new SeparateData();
 			sData.separateFile(sourceFile, trainTmpFile, testTmpFile, sRatio);
@@ -108,23 +103,24 @@ public class SeparateData {
 	
 	public static void main(String[] args) 
 	{		
-//		String path = "/home/nicolas/Develop/workspace/RinoServer/models/main/saved/";
-//		String trainSourceDir = path + "train/";
-//		String testSourceDir = path + "test/";
+//		String path = "/home/nicolas/Develop/workspace/RinoServer/models/main/";
+//		String trainSourceDir = path + "data/train/"; 
+//		String trainPartDir = path + "separated/train/"; 
+//		String testPartDir = path + "separated/test/"; 
 //		double ratio = 0.5;
 		
-		if (args.length != 3) {
+		if (args.length != 4) {
 			System.out.println("SeparateData: wrong parameters number: " + args.length);
 			return;
 		}	
-		String path = "../main/data/";
-		String trainSourceDir = path + args[0] + "/"; 
-		String testSourceDir = path + args[1] + "/";
-		double ratio = new Double(args[2]);
-
+//		String path = "../main/data/";
+		String trainSourceDir = args[0] + "/"; 
+		String trainPartDir = args[2] + "/"; 
+		String testPartDir = args[3] + "/"; 
+		double ratio = new Double(args[1].replaceFirst(",", "."));
 
 		SeparateData s = new SeparateData();
-		s.separateFolder(trainSourceDir, testSourceDir, ratio);
+		s.separateFolder(trainSourceDir, ratio, trainPartDir, testPartDir);
 	}
 
 }
