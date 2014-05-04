@@ -12,6 +12,7 @@ RinoServer/models/main/a_site/
 RinoServer/models/main/a_search/
 RinoServer/models/main/a_alarm/
 RinoServer/models/main/a_balance/
+RinoServer/models/main/a_cancel/
 
 RinoRecognizer/res/raw/
 RinoServer/models/main/test/

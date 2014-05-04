@@ -15,7 +15,8 @@ a_cancel"
 
 for m in $models
 do	
-	octave --silent --eval "drawVectors('$m')"
+	#~ octave --silent --eval "drawVectors('$m')"
+	octave --silent --eval "drawLearningCurve('$m')"
 done
 
 time_end=$(date +%s)
